@@ -16,7 +16,10 @@
     <string name="LOGGEDIN">loggedin</string>
     <string name="LOGIN_PREFS">team14.tacoma.uw.edu.husky_cooking.PREFS</string>
     <string name="LOGIN_FILE">team14.tacoma.uw.edu.husky_cooking.LOGIN_FILE</string>
+    <string name="LOGIN_URL">http://cssgate.insttech.washington.edu/~_450atm14/husky_cooking/login.php?</string>
 
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 
 </resources>

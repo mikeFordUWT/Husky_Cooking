@@ -1,6 +1,7 @@
 package team14.tacoma.uw.edu.husky_cooking.authenticate;
 
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
@@ -20,9 +21,22 @@ public class LogInFragment extends Fragment {
     private static final String LOGIN_URL =
             "http://cssgate.insttech.washington.edu/~_450atm14/husky_cooking/login.php?";
 
+    private static final String TAG_SUCCESS = "success";
+    private static final String TAG_MESSAGE = "message";
+    private Button mLoginButton;
+    private EditText mUserName, mPwd;
+
+
     public LogInFragment() {
         // Required empty public constructor
     }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState){
+        super.onCreate(savedInstanceState);
+
+    }
+
 
 
     @Override
@@ -76,6 +90,17 @@ public class LogInFragment extends Fragment {
     }
 
 
+//    class LoginTask extends AsyncTask<String, String, String> {
+//        boolean failure = false;
+//
+//        @Override
+//        protected  void onPreExecute(){
+//            super.onPreExecute();
+//
+//        }
+//
+//
+//    }
 
 
 }

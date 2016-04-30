@@ -166,7 +166,7 @@ public class RecipeListFragment extends Fragment {
             if(!mRecipeList.isEmpty()){
                 mRecyclerView.setAdapter(new MyRecipeRecyclerViewAdapter(mRecipeList, mListener));
 
-                //todo convert code from webservices lab at line 222
+                //todo convert code from webservices lab at line 222 for on phone  database
             }
         }
     }
