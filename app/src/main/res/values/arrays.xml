@@ -1,0 +1,58 @@
+<resources>
+
+
+    <string-array name="measurement_type_array">
+        <item></item>
+        <item>cup</item>
+        <item>gallon</item>
+        <item>gram</item>
+        <item>kilogram</item>
+        <item>liter</item>
+        <item>milliliter</item>
+        <item>ounce</item>
+        <item>pound</item>
+        <item>quart</item>
+        <item>stick</item>
+        <item>tablespoon</item>
+        <item>teaspoon</item>
+    </string-array>
+    <integer-array name="one_to_ten">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+    </integer-array>
+
+    <integer-array name="five_to_120">
+        <item>5</item>
+        <item>10</item>
+        <item>15</item>
+        <item>20</item>
+        <item>25</item>
+        <item>30</item>
+        <item>35</item>
+        <item>40</item>
+        <item>45</item>
+        <item>50</item>
+        <item>55</item>
+        <item>60</item>
+        <item>65</item>
+        <item>70</item>
+        <item>75</item>
+        <item>80</item>
+        <item>85</item>
+        <item>90</item>
+        <item>95</item>
+        <item>100</item>
+        <item>105</item>
+        <item>110</item>
+        <item>115</item>
+        <item>120</item>
+    </integer-array>
+</resources>

@@ -129,16 +129,16 @@ public class SignInActivity extends AppCompatActivity
         }
 
 
-        @Override
-        protected void onPostExecute(String result) {
-            if(result.startsWith("Unable to")){
-                Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG)
-                        .show();
-                return;
-            }
-            String user;
-            result =
-        }
+//        @Override
+//        protected void onPostExecute(String result) {
+//            if(result.startsWith("Unable to")){
+//                Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG)
+//                        .show();
+//                return;
+//            }
+//            String user;
+//            result =
+//        }
     }
 
 }
