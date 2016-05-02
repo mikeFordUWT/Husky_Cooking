@@ -8,6 +8,8 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -29,8 +31,17 @@ import team14.tacoma.uw.edu.husky_cooking.RegisterUserFragment;
 public class SignInActivity extends AppCompatActivity
         implements LogInFragment.LoginInteractionListener
         , RegisterUserFragment.UserAddListener{
+
+    private static final String LOGIN_URL =
+            "http://cssgate.insttech.washington.edu/~_450atm14/husky_cooking/login.php?";
+
+    private static final String USER_ADD_URL =
+            "http://cssgate.insttech.washington.edu/~_450atm14/husky_cooking/addUser.php?";
+
+    private static final String TAG = "SignInActivity";
+
     private SharedPreferences  mSharedPreferences;
-    private EditText mUserName, mPwd;
+    private EditText mUserName, mPwd, mRegisterEmail, mRegisterPassword;
     private Button mLoginButton;
     private Button mRegisterButton;
 
@@ -42,6 +53,9 @@ public class SignInActivity extends AppCompatActivity
 
 
         setContentView(R.layout.activity_sign_in);
+
+        mRegisterEmail = (EditText) findViewById(R.id.new_user_email);
+        mRegisterPassword = (EditText) findViewById(R.id.new_user_password);
         mUserName = (EditText) findViewById(R.id.user_id);
         mPwd = (EditText) findViewById(R.id.pwd);
         mLoginButton = (Button) findViewById(R.id.signin_button);
@@ -67,6 +81,10 @@ public class SignInActivity extends AppCompatActivity
 
 
 
+
+    }
+
+    public void signup(String url){
 
     }
 
@@ -111,6 +129,8 @@ public class SignInActivity extends AppCompatActivity
         startActivity(i);
         finish();
     }
+
+
 
 
     private class AddUserTask extends AsyncTask<String, Void, String> {

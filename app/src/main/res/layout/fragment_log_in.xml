@@ -9,7 +9,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Welcome!"
+        android:text="\nLOGIN"
         android:layout_gravity="center"/>
 
     <EditText
@@ -47,4 +47,33 @@
             android:text="@string/login_in_button"
             android:layout_gravity="right"/>
     </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/register_text_label"
+        android:layout_gravity="center"
+        android:textAppearance="?android:attr/textAppearanceLarge"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/new_user_email"
+        android:hint="@string/hint_email"
+        android:layout_gravity="left"
+        android:inputType="textEmailAddress"
+        />
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/new_user_password"
+        android:hint="@string/hint_password"
+        android:layout_gravity="left"
+        android:inputType="textPassword"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/new_user_register_button"
+        android:text="@string/register_button_label"
+        android:layout_gravity="right"/>
 </LinearLayout>
