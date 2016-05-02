@@ -34,8 +34,9 @@
         android:id="@+id/cook_time_spinner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:entries="@array/five_to_120"
+
         />
+    <!--android:entries="@array/five_to_120"-->
 
     <TextView
         android:layout_width="wrap_content"
@@ -47,7 +48,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/servings_spinner"
-        android:entries="@array/one_to_ten"/>
+
+        />
+    <!--android:entries="@array/one_to_ten"-->
+
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

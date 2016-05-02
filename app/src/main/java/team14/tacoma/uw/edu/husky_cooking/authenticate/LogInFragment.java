@@ -1,7 +1,6 @@
 package team14.tacoma.uw.edu.husky_cooking.authenticate;
 
 
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
@@ -13,6 +12,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import team14.tacoma.uw.edu.husky_cooking.R;
+import team14.tacoma.uw.edu.husky_cooking.RegisterUserFragment;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -82,11 +82,25 @@ public class LogInFragment extends Fragment {
 
             }
         });
+
+        Button signUpButton = (Button)v.findViewById(R.id.sign_up_button);
+        signUpButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                RegisterUserFragment registerUserFragment = new RegisterUserFragment();
+
+                getFragmentManager().beginTransaction().replace(R.id.sign_in_fragment_container
+                        , registerUserFragment).addToBackStack(null).commit();
+
+
+            }
+        });
         return v;
     }
 
     public interface LoginInteractionListener {
         public void login(String userId, String pwd);
+
     }
 
 

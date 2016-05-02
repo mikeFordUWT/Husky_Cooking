@@ -38,10 +38,12 @@ public class RecipeActivity extends AppCompatActivity
                 || getSupportFragmentManager().findFragmentById(R.id.list) == null){
             RecipeListFragment recipeListFragment = new RecipeListFragment();
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.fragment_container, recipeListFragment)
+                    .add(R.id.sign_in_fragment_container, recipeListFragment)
                     .commit();
         }
     }
+
+
 
     @Override
     public void onListFragmentInteraction(Recipe item){
@@ -51,7 +53,7 @@ public class RecipeActivity extends AppCompatActivity
         recipeDetailFragment.setArguments(args);
 
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, recipeDetailFragment)
+                .replace(R.id.sign_in_fragment_container, recipeDetailFragment)
                 .addToBackStack(null)
                 .commit();
     }
@@ -76,7 +78,8 @@ public class RecipeActivity extends AppCompatActivity
 
         if(id == R.id.action_logout){
             SharedPreferences sharedPreferences =
-                    getSharedPreferences(getString(R.string.LOGIN_PREFS), Context.MODE_PRIVATE);
+                    getSharedPreferences(getString(R.string.LOGIN_PREFS),
+                            Context.MODE_PRIVATE);
             sharedPreferences.edit().putBoolean(getString(R.string.LOGGEDIN), false)
                     .commit();
 
@@ -88,4 +91,6 @@ public class RecipeActivity extends AppCompatActivity
 
         return super.onOptionsItemSelected(item);
     }
+
+
 }
