@@ -197,7 +197,7 @@ public class SignInActivity extends AppCompatActivity
     }
 
 
-    class LoginTask extends AsyncTask<String, Void, String> {
+    private class LoginTask extends AsyncTask<String, Void, String> {
         boolean failure= false;
 
         @Override

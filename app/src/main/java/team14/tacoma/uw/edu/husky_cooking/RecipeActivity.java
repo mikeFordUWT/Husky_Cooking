@@ -3,6 +3,7 @@ package team14.tacoma.uw.edu.husky_cooking;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -11,12 +12,27 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 import team14.tacoma.uw.edu.husky_cooking.authenticate.SignInActivity;
 import team14.tacoma.uw.edu.husky_cooking.model.Recipe;
 
 public class RecipeActivity extends AppCompatActivity
-        implements RecipeListFragment.OnListFragmentInteractionListener{
+        implements RecipeListFragment.OnListFragmentInteractionListener,
+        AddRecipeFragment.AddRecipeInteractionListener{
+
+    //todo add url
+    public static final String ADD_RECIPE_URL =
+            "http://cssgate.insttech.washington.edu/~_450atm14/husky_cooking/addRecipe.php?";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +60,9 @@ public class RecipeActivity extends AppCompatActivity
     }
 
 
+    public void addRecipe(String url){
 
+    }
     @Override
     public void onListFragmentInteraction(Recipe item){
         RecipeDetailFragment recipeDetailFragment = new RecipeDetailFragment();
@@ -93,4 +111,58 @@ public class RecipeActivity extends AppCompatActivity
     }
 
 
+    private class AddRecipeTask extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected void onPreExecute() {super.onPreExecute();}
+
+        @Override
+        protected String doInBackground(String... urls){
+            String response ="";
+            HttpURLConnection urlConnection = null;
+            for(String url: urls){
+                try{
+                    URL urlObject = new URL(url);
+                    urlConnection = (HttpURLConnection) urlObject.openConnection();
+
+                    InputStream content = urlConnection.getInputStream();
+
+                    BufferedReader buffer = new BufferedReader(new InputStreamReader(content));
+                    String s = "";
+                    while((s = buffer.readLine())!= null){
+                        response += s;
+                    }
+                }catch (Exception e) {
+                    response = "Unable to add recipe, Reason: "
+                            + e.getMessage();
+                }finally {
+                    if(urlConnection != null){
+                        urlConnection.disconnect();
+                    }
+                }
+            }
+            return response;
+        }
+
+        @Override
+        protected void onPostExecute(String result){
+            try{
+                JSONObject jsonObject = new JSONObject(result);
+                String status = (String) jsonObject.get("result");
+                if(status.equals("success")){
+                    Toast.makeText(getApplicationContext(), "Recipe successfully added!",
+                            Toast.LENGTH_LONG)
+                            .show();
+                }else {
+                    Toast.makeText(getApplicationContext(), "Failed to add: "
+                                    + jsonObject.get("error")
+                            ,Toast.LENGTH_LONG)
+                            .show();
+                }
+            }catch(JSONException e){
+                Toast.makeText(getApplicationContext(), "Something wrong with the data" +
+                        e.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        }
+    }
 }
