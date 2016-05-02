@@ -24,33 +24,18 @@
         android:hint="@string/recipe_descript_hint"
         android:id="@+id/recipe_description"/>
 
-    <TextView
-        android:layout_width="wrap_content"
+    <EditText
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Cooking Time:" />
-
-    <Spinner
-        android:id="@+id/cook_time_spinner"
-        android:layout_width="wrap_content"
+        android:hint="@string/servings_hint"
+        android:id="@+id/new_recipe_servings"
+        android:inputType="number"/>
+    <EditText
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
-        />
-    <!--android:entries="@array/five_to_120"-->
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Servings:" />
-
-    <Spinner
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/servings_spinner"
-
-        />
-    <!--android:entries="@array/one_to_ten"-->
+        android:hint="@string/cook_time_hint"
+        android:id="@+id/new_recipe_cook_time"
+        android:inputType="number"/>
 
     <Button
         android:layout_width="wrap_content"

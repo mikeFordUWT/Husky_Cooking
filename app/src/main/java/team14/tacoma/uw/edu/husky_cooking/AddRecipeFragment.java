@@ -3,31 +3,24 @@ package team14.tacoma.uw.edu.husky_cooking;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Spinner;
-
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import android.widget.Toast;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class AddRecipeFragment extends Fragment {
-    private static final ArrayList<Integer> COOK_TIMES
-            = new ArrayList<Integer>(Arrays.asList(5,10,15,20,25,30,35,40, 45,50,55,60,65,70,75,80
-                ,85,90,95,100,105,110,115,120));
-    private static final ArrayList<Integer> SERVINGS
-            = new ArrayList<Integer>(Arrays.asList(1,2,3,4,5,6,7,8,9,10));
+    public static final String ADD_RECIPE_URL =
+            "http://cssgate.insttech.washington.edu/~_450atm14/husky_cooking/addRecipe.php?";
 
-    private EditText mRecipeName, mRecipeDescript, mCookingTime;
-    private Spinner mCookTimeSpin, mServingsSpin;
+    public static final String TAG = "AddRecipeFragment";
+    private EditText mRecipeName, mRecipeDescript, mServings, mCookTime;
 
 
 
@@ -36,6 +29,9 @@ public class AddRecipeFragment extends Fragment {
     }
 
 
+    public interface AddRecipeInteractionListener{
+        public void addRecipe(String url);
+    }
 
 
     @Override
@@ -47,8 +43,11 @@ public class AddRecipeFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_add_recipe, container, false);
         mRecipeName = (EditText) v.findViewById(R.id.recipe_name);
         mRecipeDescript = (EditText) v.findViewById(R.id.recipe_description);
-        mCookTimeSpin = (Spinner) v.findViewById(R.id.cook_time_spinner);
-        mServingsSpin = (Spinner) v.findViewById(R.id.servings_spinner);
+        mCookTime = (EditText) v.findViewById(R.id.new_recipe_cook_time);
+        mServings = (EditText) v.findViewById(R.id.new_recipe_servings);
+
+
+
 
         Button addRecipeButton = (Button) v.findViewById(R.id.add_recipe_button);
 
@@ -57,17 +56,47 @@ public class AddRecipeFragment extends Fragment {
             public void onClick(View v) {
                 String recipeName = mRecipeName.getText().toString();
                 String recipeDescript = mRecipeDescript.getText().toString();
+                int recipeServing = Integer.parseInt(mServings.getText().toString());
+                int recipeCookTime = Integer.parseInt(mCookTime.getText().toString());
             }
         });
+
+        return v;
     }
 
-    private void populateCooktimeSpinner(){
 
+
+
+    private String buildRecipeUrl(View v){
+        StringBuilder sb = new StringBuilder(ADD_RECIPE_URL);
+
+        try {
+            String name = mRecipeName.getText().toString();
+            sb.append("recipe_name=");
+            sb.append(name);
+
+            String description = mRecipeDescript.getText().toString();
+            sb.append("&description=");
+            sb.append(description);
+
+            int cookTime = Integer.parseInt(mCookTime.getText().toString());
+            sb.append("&cook_time=");
+            sb.append(cookTime);
+
+            int servings = Integer.parseInt(mServings.getText().toString());
+            sb.append("&servings=");
+            sb.append(servings);
+
+            Log.i(TAG, sb.toString());
+        }catch (Exception e) {
+            Toast.makeText(v.getContext(), "Something wrong with the url " + e.getMessage(),
+                    Toast.LENGTH_LONG).show();
+        }
+
+        return sb.toString();
     }
 
-    private void populateServingSpinner(){
 
-    }
 
 
 }
