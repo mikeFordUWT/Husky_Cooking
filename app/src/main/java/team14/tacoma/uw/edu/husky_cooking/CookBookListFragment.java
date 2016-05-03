@@ -1,3 +1,8 @@
+/*
+ * Mike Ford and Ian Skyles
+ * TCSS450 – Spring 2016
+ * Recipe Project
+ */
 package team14.tacoma.uw.edu.husky_cooking;
 
 import android.content.Context;
@@ -26,20 +31,26 @@ import java.util.List;
 import team14.tacoma.uw.edu.husky_cooking.model.Recipe;
 
 /**
- * A fragment representing a list of Items.
- * <p/>
- * Activities containing this fragment MUST implement the {@link OnCookFragmentInteractionListener}
- * interface.
+ * This fragment/class will be used to represent a list of recipes
+ * held in a users cookbook on our database hosted on CSSGATE.
+ *
+ * @author Mike Ford
+ * @author Ian Skyles
+ * @version 5/2/2016
  */
 public class CookBookListFragment extends Fragment {
     private static final String COOKBOOK_URL =
             "http://cssgate.insttech.washington.edu/~_450atm14/husky_cooking/cookbook.php?user=";
 
+    /** how many columns to make the list */
     private int mColumnCount = 1;
 
+    /** Listener for cookbook */
     private OnCookFragmentInteractionListener mListener;
+    /** List of recipes in cookbook.*/
     private List<Recipe> mRecipeList;
 
+    /** A recyclerView to view our cookbook */
     private RecyclerView mRecyclerView;
 
     /**
@@ -49,12 +60,25 @@ public class CookBookListFragment extends Fragment {
     public CookBookListFragment() {
     }
 
+    /**
+     * Saves instance on creation of method of fragment/app.
+     * @param savedInstanceState
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
     }
 
+    /**
+     * Creates the view that will be shown to the user.
+     * Attaches listeners to the buttons defined in the XML.
+     * It sets up recycler view and displays toast if no network connection.
+     * @param inflater instantiate layout XML file into its corresponding View object
+     * @param container item to contain other views
+     * @param savedInstanceState save state so we can resume later
+     * @return The view (user interface)
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -90,7 +114,10 @@ public class CookBookListFragment extends Fragment {
         return view;
     }
 
-
+    /**
+     * Attaches cookbook list fragment interaction listener to mlistener.
+     * @param context what to attach
+     */
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -101,7 +128,10 @@ public class CookBookListFragment extends Fragment {
                     + " must implement OnListFragmentInteractionListener");
         }
     }
-
+    /**
+     * makes cookbook listener (removes listener)
+     * null if onDetach() is called.
+     */
     @Override
     public void onDetach() {
         super.onDetach();
@@ -109,20 +139,21 @@ public class CookBookListFragment extends Fragment {
     }
 
     /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
+     * An interface which requires implementing
+     * onCookBookFragmentInteraction(Recipe).
+     * It is used to ensure the cookbook listener
+     * is in place.
      */
     public interface OnCookFragmentInteractionListener {
         // TODO: Update argument type and name
         void onCookBookFragmentInteraction(Recipe recipe);
     }
 
+    /**
+     * Downloads recipes for user cookbook
+     * Asynchronously (in the background) from
+     * our db/webservice hosted on cssgate.
+     */
     private class DownloadCookbookTask extends AsyncTask<String, Void, String>{
         @Override
         protected String doInBackground(String... urls) {
