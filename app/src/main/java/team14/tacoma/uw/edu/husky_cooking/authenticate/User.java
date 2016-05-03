@@ -5,13 +5,8 @@
  */
 package team14.tacoma.uw.edu.husky_cooking.authenticate;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.List;
 
 import team14.tacoma.uw.edu.husky_cooking.model.Recipe;
 
@@ -80,22 +75,18 @@ public class User implements Serializable{
      * @param userList A list of users
      * @return null if successfully parsed JSON or the reason it failed as a string
      */
-    public static String parseUserJSON(String userJSON, List<User> userList){
+    public static Boolean parseUserJSON(String userJSON){
         String reason = null;
+        Boolean toReturn = false;
         if(userJSON !=null){
-            try{
-                JSONArray arr = new JSONArray(userJSON);
-                for(int i =0; i<arr.length(); i++){
-                    JSONObject obj = arr.getJSONObject(i);
-                    User user = new User(obj.getInt(User.ID), obj.getString(User.EMAIL));
-                    userList.add(user);
-                }
-
-            }catch (JSONException e){
-                reason = "Unable to parse data, Reason: " + e.getMessage();
+            if(userJSON.contains("success")){
+                return true;
+            }else{
+                return false;
             }
+
         }
-        return reason;
+        return toReturn;
     }
 
 
