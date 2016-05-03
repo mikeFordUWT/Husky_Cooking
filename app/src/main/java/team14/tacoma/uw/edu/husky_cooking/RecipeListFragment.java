@@ -1,3 +1,8 @@
+/*
+ * Mike Ford and Ian Skyles
+ * TCSS450 – Spring 2016
+ * Recipe Project
+ */
 package team14.tacoma.uw.edu.husky_cooking;
 
 import android.content.Context;
@@ -25,22 +30,30 @@ import java.util.List;
 import team14.tacoma.uw.edu.husky_cooking.model.Recipe;
 
 /**
- * A fragment representing a list of Items.
- * <p/>
- * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
- * interface.
+ * This fragment/class will be used to represent a list of recipes.
+ * @author Mike Ford
+ * @author Ian Skyles
+ * @version 5/2/2016
  */
 public class RecipeListFragment extends Fragment {
     //what php/SQL query to run
 
     // TODO: Customize parameters
+    /** the Number of columns in the list. */
     private int mColumnCount = 1;
 
+    /** Listens for interactions with list */
     private OnListFragmentInteractionListener mListener;
+    /** List of recipes */
     private List<Recipe> mRecipeList;
 
+    /** A flexible view for providing a limited window into
+     * a large number of recipes (all in db)*/
     public RecyclerView mRecyclerView;
 
+    /**
+     * the url where the recipes are stored
+     */
     private static final String RECIPE_URL =
             "http://cssgate.insttech.washington.edu/~_450atm14/husky_cooking/test.php?cmd=recipes";
 
@@ -51,12 +64,25 @@ public class RecipeListFragment extends Fragment {
     public RecipeListFragment() {
     }
 
+    /**
+     * Saves instance on creation of method of fragment/app.
+     * @param savedInstanceState
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
     }
 
+    /**
+     * Creates the view that will be shown to the user.
+     * Attaches listeners to the buttons defined in the XML.
+     * Manages mRecyclerView layout and ensures network connectivity.
+     * @param inflater instantiate layout XML file into its corresponding View object
+     * @param container item to contain other views
+     * @param savedInstanceState save state so we can resume later
+     * @return The view (user interface)
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -89,6 +115,10 @@ public class RecipeListFragment extends Fragment {
     }
 
 
+    /**
+     * Attaches list fragment intreacrion listener to mlistener.
+     * @param context what to attach
+     */
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -100,6 +130,9 @@ public class RecipeListFragment extends Fragment {
         }
     }
 
+    /**
+     * makes mListener null if onDetach() is called.
+     */
     @Override
     public void onDetach() {
         super.onDetach();
@@ -120,6 +153,10 @@ public class RecipeListFragment extends Fragment {
         void onListFragmentInteraction(Recipe recipe);
     }
 
+    /**
+     * Downloads recipes Asynchronously (in the background) from
+     * our db/webservice hosted on cssgate.
+     */
     private class DownloadRecipesTask extends AsyncTask<String, Void, String>{
 
         @Override
@@ -147,6 +184,11 @@ public class RecipeListFragment extends Fragment {
             return response;
         }
 
+        /**
+         * Does appropriate actions to set/replace
+         * recycler view and adapter.
+         * @param result
+         */
         @Override
         protected void onPostExecute(String result) {
             if(result.startsWith("Unable to")){
