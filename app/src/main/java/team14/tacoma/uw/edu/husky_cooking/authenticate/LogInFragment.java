@@ -120,7 +120,7 @@ public class LogInFragment extends Fragment {
                     return;
                 }
                 String url = buildLogInURL(v);
-                ((SignInActivity) getActivity()).login(url);
+                ((SignInActivity) getActivity()).login(url, userId);
 
             }
         });
@@ -148,7 +148,7 @@ public class LogInFragment extends Fragment {
      * signup (both accepting Strings).
      */
     public interface LoginInteractionListener {
-        public void login(String url);
+        public void login(String url, String user);
         public void signup(String url);
 
     }

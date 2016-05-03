@@ -65,7 +65,7 @@ public class UserHomeFragment extends Fragment {
                 Fragment newFragment = new RecipeListFragment();
                 FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
 
-                transaction.replace(R.id.list, newFragment);
+                transaction.replace(R.id.fragment_container, newFragment);
                 transaction.addToBackStack(null);
 
                 transaction.commit();
@@ -79,7 +79,7 @@ public class UserHomeFragment extends Fragment {
                 Fragment newFragment = new RecipeListFragment();
                 FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
 
-                transaction.replace(R.id.list, newFragment);
+                transaction.replace(R.id.fragment_container, newFragment);
                 transaction.addToBackStack(null);
 
                 transaction.commit();
@@ -90,10 +90,10 @@ public class UserHomeFragment extends Fragment {
             @Override
             public void onClick(View view) {
 
-                Fragment newFragment = new RecipeListFragment();
+                Fragment newFragment = new CookBookListFragment();
                 FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
 
-                transaction.replace(R.id.list, newFragment);
+                transaction.replace(R.id.fragment_container, newFragment);
                 transaction.addToBackStack(null);
 
                 transaction.commit();
@@ -107,7 +107,7 @@ public class UserHomeFragment extends Fragment {
                 Fragment newFragment = new RecipeListFragment();
                 FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
 
-                transaction.replace(R.id.list, newFragment);
+                transaction.replace(R.id.fragment_container, newFragment);
                 transaction.addToBackStack(null);
 
                 transaction.commit();
@@ -118,13 +118,10 @@ public class UserHomeFragment extends Fragment {
             @Override
             public void onClick(View view) {
 
-                Fragment newFragment = new RecipeListFragment();
-                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-
-                transaction.replace(R.id.list, newFragment);
-                transaction.addToBackStack(null);
-
-                transaction.commit();
+                AddRecipeFragment addRecipeFragment = new AddRecipeFragment();
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, addRecipeFragment)
+                        .addToBackStack(null).commit();
             }
         });
         return v;

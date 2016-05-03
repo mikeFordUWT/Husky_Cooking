@@ -5,13 +5,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
 
 import org.json.JSONException;
@@ -28,7 +25,8 @@ import team14.tacoma.uw.edu.husky_cooking.model.Recipe;
 
 public class RecipeActivity extends AppCompatActivity
         implements RecipeListFragment.OnListFragmentInteractionListener,
-        AddRecipeFragment.AddRecipeInteractionListener{
+        AddRecipeFragment.AddRecipeInteractionListener,
+        CookBookListFragment.OnCookFragmentInteractionListener{
 
     //todo add url
     public static final String ADD_RECIPE_URL =
@@ -41,27 +39,29 @@ public class RecipeActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+//        fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
+//            }
+//        });
 
         if(savedInstanceState == null
-                || getSupportFragmentManager().findFragmentById(R.id.list) == null){
-            RecipeListFragment recipeListFragment = new RecipeListFragment();
+                || getSupportFragmentManager().findFragmentById(R.id.user_home) == null){
+            UserHomeFragment userHomeFragment = new UserHomeFragment();
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.fragment_container, recipeListFragment)
+                    .add(R.id.fragment_container, userHomeFragment)
                     .commit();
         }
     }
 
 
     public void addRecipe(String url){
-
+        AddRecipeTask task = new AddRecipeTask();
+        task.execute(new String[]{url.toString()});
+        getSupportFragmentManager().popBackStackImmediate();
     }
     @Override
     public void onListFragmentInteraction(Recipe item){
@@ -75,6 +75,20 @@ public class RecipeActivity extends AppCompatActivity
                 .addToBackStack(null)
                 .commit();
     }
+
+    @Override
+    public void onCookBookFragmentInteraction(Recipe recipe){
+        RecipeDetailFragment recipeDetailFragment = new RecipeDetailFragment();
+        Bundle args = new Bundle();
+        args.putSerializable(RecipeDetailFragment.RECIPE_ITEM_SELECTED, recipe);
+        recipeDetailFragment.setArguments(args);
+
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, recipeDetailFragment)
+                .addToBackStack(null)
+                .commit();
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -99,6 +113,10 @@ public class RecipeActivity extends AppCompatActivity
                     getSharedPreferences(getString(R.string.LOGIN_PREFS),
                             Context.MODE_PRIVATE);
             sharedPreferences.edit().putBoolean(getString(R.string.LOGGEDIN), false)
+                    .commit();
+            sharedPreferences.edit().putString(getString(R.string.LOGGED_USER), "")
+                    .commit();
+            sharedPreferences.edit().putString(getString(R.string.CURRENT_RECIPE), "")
                     .commit();
 
             Intent i  = new Intent(this, SignInActivity.class);
