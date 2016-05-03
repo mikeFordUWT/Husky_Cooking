@@ -18,12 +18,22 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/recipe_cook_time"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text = "\nDirections:"/>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/recipe_directions"/>
 
-
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/add_to_cookbook_button"
+        android:text="@string/add_to_cook_text"/>
 
 
 </LinearLayout>

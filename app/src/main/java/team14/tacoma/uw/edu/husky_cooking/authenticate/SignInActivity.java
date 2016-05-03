@@ -95,7 +95,7 @@ public class SignInActivity extends AppCompatActivity
 
 
 
-    public void login(String url){
+    public void login(String url, String user){
 
 
         ConnectivityManager connMgr = (ConnectivityManager)
@@ -138,6 +138,10 @@ public class SignInActivity extends AppCompatActivity
             mSharedPreferences
                     .edit()
                     .putBoolean(getString(R.string.LOGGEDIN), true)
+                    .commit();
+            mSharedPreferences
+                    .edit()
+                    .putString(getString(R.string.LOGGED_USER), user)
                     .commit();
             Intent i  = new Intent(this, RecipeActivity.class);
             startActivity(i);
