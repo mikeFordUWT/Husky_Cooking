@@ -56,7 +56,6 @@ public class UserHomeFragment extends Fragment {
         Button CreateRecipes = (Button) v.findViewById(R.id.create_recipe_button);
 
 
-        //TODO UPDATE WHERE BUTTONS TAKE USER AND WHAT FRAGMENTS THEY START
         //set on click listener for cookbook
         Cookbook.setOnClickListener( new View.OnClickListener() {
             @Override
@@ -75,14 +74,14 @@ public class UserHomeFragment extends Fragment {
         ShoppingList.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                Fragment newFragment = new RecipeListFragment();
-                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-
-                transaction.replace(R.id.fragment_container, newFragment);
-                transaction.addToBackStack(null);
-
-                transaction.commit();
+//
+//                Fragment newFragment = new RecipeListFragment();
+//                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+//
+//                transaction.replace(R.id.fragment_container, newFragment);
+//                transaction.addToBackStack(null);
+//
+//                transaction.commit();
             }
         });
         //set on click listener for cookbook

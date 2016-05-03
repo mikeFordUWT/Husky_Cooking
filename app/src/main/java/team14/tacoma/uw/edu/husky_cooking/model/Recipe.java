@@ -128,19 +128,29 @@ public class Recipe implements Serializable {
     public static String parseRecipeJSON(String recipeJSON, List<Recipe> recipeList){
         String reason = null;
         if(recipeJSON != null){
-            try{
-                JSONArray arr = new JSONArray(recipeJSON);
-                for(int i =0; i<arr.length(); i++){
-                    JSONObject obj = arr.getJSONObject(i);
-                    Recipe recipe = new Recipe(obj.getInt(Recipe.ID),
-                            obj.getString(Recipe.NAME), obj.getString(Recipe.DESC),
-                            obj.getInt(Recipe.MINS), obj.getInt(Recipe.SERVINGS));
-                    recipeList.add(recipe);
+
+            if(recipeJSON.equals("")){
+                reason = "You don't have any recipes in your Cookbook yet!";
+            }else{
+                try{
+                    JSONArray arr = new JSONArray(recipeJSON);
+
+                    for(int i =0; i<arr.length(); i++){
+                        JSONObject obj = arr.getJSONObject(i);
+                        Recipe recipe = new Recipe(obj.getInt(Recipe.ID),
+                                obj.getString(Recipe.NAME), obj.getString(Recipe.DESC),
+                                obj.getInt(Recipe.MINS), obj.getInt(Recipe.SERVINGS));
+                        recipeList.add(recipe);
+                    }
+                }catch (JSONException e){
+                    reason = "Unable to parse data, Reason:" + e.getMessage();
                 }
-            }catch (JSONException e){
-                reason = "Unable to parse data, Reason:" + e.getMessage();
             }
+
         }
+
+
+
         return reason;
     }
 }
