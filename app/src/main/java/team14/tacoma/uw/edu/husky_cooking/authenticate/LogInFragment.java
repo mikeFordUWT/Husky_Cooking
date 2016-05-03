@@ -1,3 +1,8 @@
+/*
+ * Mike Ford and Ian Skyles
+ * TCSS450 – Spring 2016
+ * Recipe Project
+ */
 package team14.tacoma.uw.edu.husky_cooking.authenticate;
 
 
@@ -16,26 +21,46 @@ import team14.tacoma.uw.edu.husky_cooking.R;
 import team14.tacoma.uw.edu.husky_cooking.RegisterUserFragment;
 
 /**
- * A simple {@link Fragment} subclass.
+ * This class controls the user logging into our application.
+ * It interfaces with our database hosted on CSSGATE.
+ * It is the class that is used to display the sign in
+ * forms dispalyed on the app.
+ *
+ * @author Mike Ford
+ * @author Ian Skyles
+ * @version 5/2/2016
  */
 public class LogInFragment extends Fragment {
+    /** CSSGATE login url */
     private static final String LOGIN_URL =
             "http://cssgate.insttech.washington.edu/~_450atm14/husky_cooking/login.php?";
-
+    /** CSSGATE user add url url */
     private static final String USER_ADD_URL =
             "http://cssgate.insttech.washington.edu/~_450atm14/husky_cooking/addUser.php?";
-
+    /** A tag for debugging */
     private static final String TAG = "LogInFragment";
+    /** A tag for succesful debugging */
     private static final String TAG_SUCCESS = "success";
+    /** A tag for debugging */
     private static final String TAG_MESSAGE = "message";
 
+    /**
+     * Edit Text for allowing entry by user of username and password.
+     */
     private EditText mUserName, mPwd,mRegisterEmail, mRegisterPassword;
 
 
+    /**
+     * Required empty public constructor
+     */
     public LogInFragment() {
         // Required empty public constructor
     }
 
+    /**
+     * Saves instance on creation of method of fragment/app.
+     * @param savedInstanceState
+     */
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -43,7 +68,16 @@ public class LogInFragment extends Fragment {
     }
 
 
-
+    /**
+     * Creates the view that will be shown to the user.
+     * Attaches listeners to the buttons defined in the XML.
+     * Gives users toasts to notify them of various things such has
+     * them entering no user/pass or an invalid one.
+     * @param inflater instantiate layout XML file into its corresponding View object
+     * @param container item to contain other views
+     * @param savedInstanceState save state so we can resume later
+     * @return The view (user interface)
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -109,6 +143,10 @@ public class LogInFragment extends Fragment {
         return v;
     }
 
+    /**
+     * An interface which requires implementing login and
+     * signup (both accepting Strings).
+     */
     public interface LoginInteractionListener {
         public void login(String url, String user);
         public void signup(String url);
@@ -116,7 +154,11 @@ public class LogInFragment extends Fragment {
     }
 
 
-
+    /**
+     * This builds a url for user login based on email and password
+     * @param v the view to display error toasts in
+     * @return String of the url for logging in
+     */
     private String buildLogInURL(View v){
         StringBuilder sb = new StringBuilder(LOGIN_URL);
         try{

@@ -72,7 +72,6 @@ public class User implements Serializable{
     /**
      * Works with Serializable to parse a json item.
      * @param userJSON Javascript object representing user
-     * @param userList A list of users
      * @return null if successfully parsed JSON or the reason it failed as a string
      */
     public static Boolean parseUserJSON(String userJSON){
