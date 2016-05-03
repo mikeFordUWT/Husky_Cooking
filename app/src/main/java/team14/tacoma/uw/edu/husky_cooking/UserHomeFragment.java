@@ -90,7 +90,7 @@ public class UserHomeFragment extends Fragment {
             @Override
             public void onClick(View view) {
 
-                Fragment newFragment = new RecipeListFragment();
+                Fragment newFragment = new CookBookListFragment();
                 FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
 
                 transaction.replace(R.id.fragment_container, newFragment);

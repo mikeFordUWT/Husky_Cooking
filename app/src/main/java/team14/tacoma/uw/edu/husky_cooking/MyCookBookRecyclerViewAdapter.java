@@ -12,15 +12,15 @@ import team14.tacoma.uw.edu.husky_cooking.model.Recipe;
 
 /**
  * {@link RecyclerView.Adapter} that can display a {@link Recipe} and makes a call to the
- * specified {@link RecipeListFragment.OnListFragmentInteractionListener}.
+ * specified {@link CookBookListFragment.OnCookFragmentInteractionListener}.
  *
  */
-public class MyRecipeRecyclerViewAdapter extends RecyclerView.Adapter<MyRecipeRecyclerViewAdapter.ViewHolder> {
+public class MyCookBookRecyclerViewAdapter extends RecyclerView.Adapter<MyCookBookRecyclerViewAdapter.ViewHolder> {
 
     private final List<Recipe> mValues;
-    private final RecipeListFragment.OnListFragmentInteractionListener mListener;
+    private final CookBookListFragment.OnCookFragmentInteractionListener mListener;
 
-    public MyRecipeRecyclerViewAdapter(List<Recipe> items, RecipeListFragment.OnListFragmentInteractionListener listener) {
+    public MyCookBookRecyclerViewAdapter(List<Recipe> items, CookBookListFragment.OnCookFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
     }
@@ -37,14 +37,13 @@ public class MyRecipeRecyclerViewAdapter extends RecyclerView.Adapter<MyRecipeRe
         holder.mItem = mValues.get(position);
         holder.mContentView.setText(mValues.get(position).getName());
 
-
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (null != mListener) {
                     // Notify the active callbacks interface (the activity, if the
                     // fragment is attached to one) that an item has been selected.
-                    mListener.onListFragmentInteraction(holder.mItem);
+                    mListener.onCookBookFragmentInteraction(holder.mItem);
                 }
             }
         });
