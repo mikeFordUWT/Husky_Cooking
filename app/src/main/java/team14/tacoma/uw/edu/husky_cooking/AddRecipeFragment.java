@@ -11,6 +11,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.net.URLEncoder;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -54,10 +56,14 @@ public class AddRecipeFragment extends Fragment {
         addRecipeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String recipeName = mRecipeName.getText().toString();
-                String recipeDescript = mRecipeDescript.getText().toString();
-                int recipeServing = Integer.parseInt(mServings.getText().toString());
-                int recipeCookTime = Integer.parseInt(mCookTime.getText().toString());
+//                String recipeName = mRecipeName.getText().toString();
+//                String recipeDescript = mRecipeDescript.getText().toString();
+//                int recipeServing = Integer.parseInt(mServings.getText().toString());
+//                int recipeCookTime = Integer.parseInt(mCookTime.getText().toString());
+
+
+                String url = buildRecipeUrl(v);
+                ((RecipeActivity) getActivity()).addRecipe(url);
             }
         });
 
@@ -73,19 +79,19 @@ public class AddRecipeFragment extends Fragment {
         try {
             String name = mRecipeName.getText().toString();
             sb.append("recipe_name=");
-            sb.append(name);
+            sb.append(URLEncoder.encode(name, "UTF-8"));
 
             String description = mRecipeDescript.getText().toString();
             sb.append("&description=");
-            sb.append(description);
+            sb.append(URLEncoder.encode(description, "UTF-8"));
 
-            int cookTime = Integer.parseInt(mCookTime.getText().toString());
+            String cookTime = mCookTime.getText().toString();
             sb.append("&cook_time=");
-            sb.append(cookTime);
+            sb.append(URLEncoder.encode(cookTime, "UTF-8"));
 
-            int servings = Integer.parseInt(mServings.getText().toString());
+            String servings = mServings.getText().toString();
             sb.append("&servings=");
-            sb.append(servings);
+            sb.append(URLEncoder.encode(servings, "UTF-8"));
 
             Log.i(TAG, sb.toString());
         }catch (Exception e) {

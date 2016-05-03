@@ -111,8 +111,8 @@ public class SignInActivity extends AppCompatActivity
                                 , Context.MODE_PRIVATE));
                 outputStreamWriter.write(url);
                 outputStreamWriter.close();
-                Toast.makeText(this,"Stored in File Successfully!", Toast.LENGTH_LONG)
-                        .show();
+//                Toast.makeText(this,"Stored in File Successfully!", Toast.LENGTH_LONG)
+//                        .show();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -123,10 +123,7 @@ public class SignInActivity extends AppCompatActivity
             return;
         }
 
-        mSharedPreferences
-                .edit()
-                .putBoolean(getString(R.string.LOGGEDIN), true)
-                .commit();
+
 
         LoginTask task = new LoginTask();
         String result = null;
@@ -138,6 +135,10 @@ public class SignInActivity extends AppCompatActivity
             e.printStackTrace();
         }
         if(result.contains("success")){
+            mSharedPreferences
+                    .edit()
+                    .putBoolean(getString(R.string.LOGGEDIN), true)
+                    .commit();
             Intent i  = new Intent(this, RecipeActivity.class);
             startActivity(i);
             finish();
