@@ -1,3 +1,8 @@
+/*
+ * Mike Ford and Ian Skyles
+ * TCSS450 – Spring 2016
+ * Recipe Project
+ */
 package team14.tacoma.uw.edu.husky_cooking;
 
 
@@ -12,20 +17,36 @@ import team14.tacoma.uw.edu.husky_cooking.model.Recipe;
 
 
 /**
- * A simple {@link Fragment} subclass.
+ * This fragment is used to populate the recipe item text views. Also, it is
+ * used to update them.
+ * @author Mike Ford
+ * @author Ian Skyles
+ * @version 5/2/2016
  */
 public class RecipeDetailFragment extends Fragment {
-    private TextView mRecipeNameTextView;
-    private TextView mServingsTextView;
-    private TextView mCookTimeTextView;
-    private TextView mDirectionsTextView;
-
+    /** Used to update view on start */
     public static final String RECIPE_ITEM_SELECTED = "RecipeItemSelected";
 
+    /** TextView that displays recipe name */
+    private TextView mRecipeNameTextView;
+    /** TextView that displays recipe servings */
+    private TextView mServingsTextView;
+    /** TextView that displays recipe cook time */
+    private TextView mCookTimeTextView;
+    /** TextView that displays recipe directions */
+    private TextView mDirectionsTextView;
+
+
+    /**
+     * Required empty constructor.
+     */
     public RecipeDetailFragment() {
         // Required empty public constructor
     }
 
+    /**
+     * Updates view with recipe item/ Serializable on starting this fragment.
+     */
     @Override
     public void onStart(){
         super.onStart();
@@ -36,6 +57,15 @@ public class RecipeDetailFragment extends Fragment {
         }
     }
 
+    /**
+     * Creates the view that will be shown to the user.
+     * Attaches listeners to the buttons defined in the XML.
+     * Sets the TextViews with appropriate data to display to
+     * @param inflater instantiate layout XML file into its corresponding View object
+     * @param container item to contain other views
+     * @param savedInstanceState save state so we can resume later
+     * @return The view (user interface)
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -50,6 +80,10 @@ public class RecipeDetailFragment extends Fragment {
 
     }
 
+    /**
+     * Allows the recipe to update the view.
+     * @param recipe recipe to add
+     */
     public void updateView(Recipe recipe){
         mRecipeNameTextView.setText(recipe.getName());
         mServingsTextView.setText(recipe.getServings()+ " servings");
