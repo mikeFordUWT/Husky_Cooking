@@ -99,6 +99,10 @@ public class RecipeActivity extends AppCompatActivity
                             Context.MODE_PRIVATE);
             sharedPreferences.edit().putBoolean(getString(R.string.LOGGEDIN), false)
                     .commit();
+            sharedPreferences.edit().putString(getString(R.string.LOGGED_USER), "")
+                    .commit();
+            sharedPreferences.edit().putString(getString(R.string.CURRENT_RECIPE), "")
+                    .commit();
 
             Intent i  = new Intent(this, SignInActivity.class);
             startActivity(i);

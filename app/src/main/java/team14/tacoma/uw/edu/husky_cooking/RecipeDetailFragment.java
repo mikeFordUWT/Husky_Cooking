@@ -6,6 +6,8 @@
 package team14.tacoma.uw.edu.husky_cooking;
 
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -89,6 +91,12 @@ public class RecipeDetailFragment extends Fragment {
         mServingsTextView.setText(recipe.getServings()+ " servings");
         mCookTimeTextView.setText(recipe.getCookTime() + " minutes");
         mDirectionsTextView.setText("\n" + recipe.getDescription());
+
+        SharedPreferences sharedPreferences =
+                getActivity().getSharedPreferences(getString(R.string.LOGIN_PREFS),
+                        Context.MODE_PRIVATE);
+        sharedPreferences.edit().putString(getString(R.string.CURRENT_RECIPE), recipe.getName())
+                .commit();
     }
 
 }
