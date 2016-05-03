@@ -1,3 +1,8 @@
+/*
+ * Mike Ford and Ian Skyles
+ * TCSS450 – Spring 2016
+ * Recipe Project
+ */
 package team14.tacoma.uw.edu.husky_cooking;
 
 
@@ -17,27 +22,48 @@ import team14.tacoma.uw.edu.husky_cooking.authenticate.SignInActivity;
 
 
 /**
- * A simple {@link Fragment} subclass.
+ * This class will be the splash screen for users when
+ * they go to register.
+ * From here they can type in user and password
+ * and be registered for an account.
+ * @author Mike Ford
+ * @author Ian Skyles
+ * @version 5/2/2016
  */
 public class RegisterUserFragment extends Fragment {
+    /** Web url address for backend storage of users. */
     private final static String USER_ADD_URL =
             "http://cssgate.insttech.washington.edu/~_450atm14/husky_cooking/addUser.php?";
 
+    /** Tag for debugging using log */
     private final static String TAG = "UserAddFragment";
 
+    /** Allows user to enter email */
     private EditText mUserEmail;
+    /** Allows user to enter password */
     private EditText mPassword;
+    /** Listener interface for adding user. */
     private UserAddListener mListener;
 
+    /**
+     * Required constructor.
+     */
     public RegisterUserFragment() {
         // Required empty public constructor
     }
 
+    /**
+     * Interface that requires implementing addUser
+     */
     public interface UserAddListener{
         public void addUser(String url);
 
     }
 
+    /**
+     * Attaches add user
+     * @param context what to attach
+     */
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -49,6 +75,16 @@ public class RegisterUserFragment extends Fragment {
         }
     }
 
+    /**
+     * Creates the view that will be shown to the user.
+     * Attaches listeners to the buttons defined in the XML.
+     * Gives users toasts to notify them of various things such has
+     * invalid password/user or an error due to connection.
+     * @param inflater instantiate layout XML file into its corresponding View object
+     * @param container item to contain other views
+     * @param savedInstanceState save state so we can resume later
+     * @return The view (user interface)
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -105,6 +141,12 @@ public class RegisterUserFragment extends Fragment {
         return v;
     }
 
+    /**
+     * Builds a url (for the database/users php)
+     * based on email and password.
+     * @param v to create a toast incase of error
+     * @return
+     */
     private String buildUserUrl(View v) {
         StringBuilder sb = new StringBuilder(USER_ADD_URL);
 
