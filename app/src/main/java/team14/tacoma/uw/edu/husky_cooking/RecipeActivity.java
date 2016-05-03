@@ -54,7 +54,7 @@ public class RecipeActivity extends AppCompatActivity
                 || getSupportFragmentManager().findFragmentById(R.id.list) == null){
             RecipeListFragment recipeListFragment = new RecipeListFragment();
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.sign_in_fragment_container, recipeListFragment)
+                    .add(R.id.fragment_container, recipeListFragment)
                     .commit();
         }
     }
@@ -71,7 +71,7 @@ public class RecipeActivity extends AppCompatActivity
         recipeDetailFragment.setArguments(args);
 
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.sign_in_fragment_container, recipeDetailFragment)
+                .replace(R.id.fragment_container, recipeDetailFragment)
                 .addToBackStack(null)
                 .commit();
     }

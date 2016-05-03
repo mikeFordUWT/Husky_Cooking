@@ -12,7 +12,7 @@
     <string name="cook_time_hint">How long will this take?(in minutes)</string>
 
     <string name="add_recipe_but_text">Add Recipe</string>
-
+    <string name="add_to_cook_text">Add to Cook Book</string>
 
     <string name="action_logout">LOG OUT</string>
     <string name="LOGGEDIN">loggedin</string>

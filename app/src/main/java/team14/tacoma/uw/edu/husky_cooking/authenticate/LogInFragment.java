@@ -12,8 +12,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import org.w3c.dom.Text;
-
 import team14.tacoma.uw.edu.husky_cooking.R;
 import team14.tacoma.uw.edu.husky_cooking.RegisterUserFragment;
 
@@ -30,7 +28,7 @@ public class LogInFragment extends Fragment {
     private static final String TAG = "LogInFragment";
     private static final String TAG_SUCCESS = "success";
     private static final String TAG_MESSAGE = "message";
-    private Button mLoginButton;
+
     private EditText mUserName, mPwd,mRegisterEmail, mRegisterPassword;
 
 
@@ -87,101 +85,55 @@ public class LogInFragment extends Fragment {
                     mPwd.requestFocus();
                     return;
                 }
-                ((SignInActivity) getActivity()).login(userId, pwd);
+                String url = buildLogInURL(v);
+                ((SignInActivity) getActivity()).login(url);
 
+            }
+        });
+
+        Button signUp = (Button) v.findViewById(R.id.sign_up_button);
+        signUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                RegisterUserFragment regUser = new RegisterUserFragment();
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container,regUser)
+                        .addToBackStack(null)
+                        .commit();
             }
         });
 
         mRegisterEmail = (EditText) v.findViewById(R.id.new_user_email);
         mRegisterPassword = (EditText) v.findViewById(R.id.new_user_password);
-        Button regButton = (Button) v.findViewById(R.id.new_user_register_button);
-        regButton.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-                String userId = mRegisterEmail.getText().toString();
-                String pwd = mRegisterPassword.getText().toString();
-                if(TextUtils.isEmpty(userId)){
-                    Toast.makeText(v.getContext(), "Enter a userid",
-                            Toast.LENGTH_SHORT).show();
-                    mRegisterEmail.requestFocus();
-                    return;
-                }
 
-                if(!userId.contains("@")){
-                    Toast.makeText(v.getContext(), "Enter a valid email address",
-                            Toast.LENGTH_SHORT).show();
-                    mRegisterEmail.requestFocus();
-                    return;
-                }
-
-                if(TextUtils.isEmpty(pwd)){
-                    Toast.makeText(v.getContext(), "Enter a password",
-                            Toast.LENGTH_SHORT).show();
-                    mRegisterPassword.requestFocus();
-                    return;
-                }
-
-                if(pwd.length() < 6){
-                    Toast.makeText(v.getContext(), "Enter a password of at least 6 characters"
-                            , Toast.LENGTH_SHORT)
-                            .show();
-                    mRegisterPassword.requestFocus();
-                    return;
-                }
-                String url = buildUserUrl(v);
-                ((SignInActivity) getActivity()).addUser(url);
-                Toast.makeText(v.getContext(), "Success! Now feel free to login"
-                        , Toast.LENGTH_SHORT).show();
-                mRegisterEmail.setText(null);
-                mRegisterPassword.setText(null);
-            }
-        });
         return v;
     }
 
     public interface LoginInteractionListener {
-        public void login(String userId, String pwd);
+        public void login(String url);
         public void signup(String url);
 
     }
 
 
-//    class LoginTask extends AsyncTask<String, String, String> {
-//        boolean failure = false;
-//
-//        @Override
-//        protected  void onPreExecute(){
-//            super.onPreExecute();
-//
-//        }
-//
-//
-//    }
 
-    private String buildUserUrl(View v) {
-        StringBuilder sb = new StringBuilder(USER_ADD_URL);
-
+    private String buildLogInURL(View v){
+        StringBuilder sb = new StringBuilder(LOGIN_URL);
         try{
-            String email = mRegisterEmail.getText().toString();
+            String email = mUserName.getText().toString();
             sb.append("email=");
             sb.append(email);
 
-            String pwd = mRegisterPassword.getText().toString();
+            String pwd = mPwd.getText().toString();
             sb.append("&pwd=");
             sb.append(pwd);
 
-            Log.i(TAG, sb.toString());
+            Log.e("LogInFragment", sb.toString());
         }catch (Exception e) {
             Toast.makeText(v.getContext(), "Something wrong with the url " + e.getMessage(),
                     Toast.LENGTH_LONG).show();
         }
-
         return sb.toString();
     }
-
-    //// TODO: 5/1/16 BUild a login url
-//    private String buildLogInURL(){
-//
-//    }
 
 }

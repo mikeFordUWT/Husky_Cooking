@@ -13,6 +13,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import team14.tacoma.uw.edu.husky_cooking.authenticate.SignInActivity;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -51,54 +53,54 @@ public class RegisterUserFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.fragment_add_recipe, container, false);
+        View v = inflater.inflate(R.layout.fragment_register_user, container, false);
         mUserEmail = (EditText) v.findViewById(R.id.new_user_email);
         mPassword = (EditText) v.findViewById(R.id.new_user_password);
 
-        Button addUserButton = (Button) v.findViewById(R.id.new_user_register_button);
-//        addUserButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                String userId = mUserEmail.getText().toString();
-//                String pwd = mPassword.getText().toString();
-//
-//                if(TextUtils.isEmpty(userId)){
-//                    Toast.makeText(v.getContext(), "Enter userid"
-//                            , Toast.LENGTH_SHORT)
-//                            .show();
-//                    mUserEmail.requestFocus();
-//                    return;
-//                }
-//
-//                if(!userId.contains("@")){
-//                    Toast.makeText(v.getContext(), "Enter a valid email adresss"
-//                            , Toast.LENGTH_SHORT).show();
-//                    mUserEmail.requestFocus();
-//                    return;
-//                }
-//
-//                if(TextUtils.isEmpty(pwd)){
-//                    Toast.makeText(v.getContext(), "Enter a password"
-//                            , Toast.LENGTH_SHORT)
-//                            .show();
-//                    mPassword.requestFocus();
-//                    return;
-//                }
-//
-//                if(pwd.length() < 6){
-//                    Toast.makeText(v.getContext(), "Enter a passwork of at least 6 characters"
-//                            , Toast.LENGTH_SHORT)
-//                            .show();
-//                    mPassword.requestFocus();
-//                    return;
-//                }
-//
-//                String url = buildUserUrl(v);
-//                mListener.addUser(url);
-//
-//
-//            }
-//        });
+        Button addUserButton = (Button) v.findViewById(R.id.register_button);
+        addUserButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String userId = mUserEmail.getText().toString();
+                String pwd = mPassword.getText().toString();
+
+                if(TextUtils.isEmpty(userId)){
+                    Toast.makeText(v.getContext(), "Enter userid"
+                            , Toast.LENGTH_SHORT)
+                            .show();
+                    mUserEmail.requestFocus();
+                    return;
+                }
+
+                if(!userId.contains("@")){
+                    Toast.makeText(v.getContext(), "Enter a valid email adresss"
+                            , Toast.LENGTH_SHORT).show();
+                    mUserEmail.requestFocus();
+                    return;
+                }
+
+                if(TextUtils.isEmpty(pwd)){
+                    Toast.makeText(v.getContext(), "Enter a password"
+                            , Toast.LENGTH_SHORT)
+                            .show();
+                    mPassword.requestFocus();
+                    return;
+                }
+
+                if(pwd.length() < 6){
+                    Toast.makeText(v.getContext(), "Enter a passwork of at least 6 characters"
+                            , Toast.LENGTH_SHORT)
+                            .show();
+                    mPassword.requestFocus();
+                    return;
+                }
+
+                String url = buildUserUrl(v);
+                ((SignInActivity) getActivity()).addUser(url);
+
+
+            }
+        });
 
         return v;
     }

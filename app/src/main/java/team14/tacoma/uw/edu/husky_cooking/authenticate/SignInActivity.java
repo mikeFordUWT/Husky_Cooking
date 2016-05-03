@@ -8,6 +8,7 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -21,6 +22,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.concurrent.ExecutionException;
 
 import team14.tacoma.uw.edu.husky_cooking.R;
 import team14.tacoma.uw.edu.husky_cooking.RecipeActivity;
@@ -45,6 +47,7 @@ public class SignInActivity extends AppCompatActivity
 
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,7 +67,7 @@ public class SignInActivity extends AppCompatActivity
                 , Context.MODE_PRIVATE);
         if(!mSharedPreferences.getBoolean(getString(R.string.LOGGEDIN), false)) {
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.sign_in_fragment_container, new LogInFragment())
+                    .add(R.id.fragment_container, new LogInFragment())
                     .commit();
             mRegisterButton = (Button) findViewById(R.id.sign_up_button);
 
@@ -82,17 +85,19 @@ public class SignInActivity extends AppCompatActivity
 
     }
 
+
+
     public void signup(String url){
 
+
+
     }
 
-    public void addUser(String url){
-        AddUserTask task = new AddUserTask();
-        task.execute(new String[]{url.toString()});
-        getSupportFragmentManager().popBackStackImmediate();
-    }
 
-    public void login(String userId, String pwd){
+
+    public void login(String url){
+
+
         ConnectivityManager connMgr = (ConnectivityManager)
                 getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
@@ -104,7 +109,7 @@ public class SignInActivity extends AppCompatActivity
                 OutputStreamWriter outputStreamWriter = new OutputStreamWriter(
                         openFileOutput(getString(R.string.LOGIN_FILE)
                                 , Context.MODE_PRIVATE));
-                outputStreamWriter.write("email = " + userId + ";");
+                outputStreamWriter.write(url);
                 outputStreamWriter.close();
                 Toast.makeText(this,"Stored in File Successfully!", Toast.LENGTH_LONG)
                         .show();
@@ -123,9 +128,29 @@ public class SignInActivity extends AppCompatActivity
                 .putBoolean(getString(R.string.LOGGEDIN), true)
                 .commit();
 
-        Intent i  = new Intent(this, RecipeActivity.class);
-        startActivity(i);
-        finish();
+        LoginTask task = new LoginTask();
+        String result = null;
+        try {
+            result = task.execute(url).get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        if(result.contains("success")){
+            Intent i  = new Intent(this, RecipeActivity.class);
+            startActivity(i);
+            finish();
+        }else{
+            Toast.makeText(getApplicationContext(), "Log in failed!", Toast.LENGTH_LONG).show();
+        }
+
+    }
+
+    public void addUser(String url){
+        AddUserTask task = new AddUserTask();
+        task.execute(new String[]{url.toString()});
+        getSupportFragmentManager().popBackStackImmediate();
     }
 
 
@@ -179,12 +204,14 @@ public class SignInActivity extends AppCompatActivity
                 JSONObject jsonObject = new JSONObject(result);
                 String status = (String) jsonObject.get("result");
                 if(status.equals("success")){
-                    Toast.makeText(getApplicationContext(), "User successfully added!",
+                    Toast.makeText(getApplicationContext(), "User successfully added!\n" +
+                            "Feel free to LOG IN!",
                             Toast.LENGTH_LONG)
                             .show();
+
                 }else {
                     Toast.makeText(getApplicationContext(), "Failed to add: "
-                                    + jsonObject.get("error")
+                                    + jsonObject.get("error") + "\nPlease enter a different e-mail adress"
                             ,Toast.LENGTH_LONG)
                             .show();
                 }
@@ -233,16 +260,23 @@ public class SignInActivity extends AppCompatActivity
         }
 
 
-//        @Override
-//        protected void onPostExecute(String result) {
-//            if(result.startsWith("Unable to")){
-//                Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG)
-//                        .show();
-//                return;
-//            }
-//            String user;
-//            result =
-//        }
+        @Override
+        protected void onPostExecute(String result) {
+            if(result.startsWith("Unable to")){
+                Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG)
+                        .show();
+                return;
+            }
+
+            if(result!=null){
+                Log.e("SignInActivity", result.toString());
+            }
+
+            if(User.parseUserJSON(result)){
+
+//                startActivity(new Intent(this, RecipeActivity.class));
+            }
+        }
     }
 
 }
