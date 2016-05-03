@@ -116,7 +116,7 @@ public class RecipeListFragment extends Fragment {
 
 
     /**
-     * Attaches list fragment intreacrion listener to mlistener.
+     * Attaches list fragment interaction listener to mlistener.
      * @param context what to attach
      */
     @Override
