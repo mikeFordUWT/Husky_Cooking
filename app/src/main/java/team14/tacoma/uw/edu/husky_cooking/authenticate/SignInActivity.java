@@ -1,3 +1,8 @@
+/*
+ * Mike Ford and Ian Skyles
+ * TCSS450 – Spring 2016
+ * Recipe Project
+ */
 package team14.tacoma.uw.edu.husky_cooking.authenticate;
 
 import android.content.Context;
@@ -28,26 +33,45 @@ import team14.tacoma.uw.edu.husky_cooking.R;
 import team14.tacoma.uw.edu.husky_cooking.RecipeActivity;
 import team14.tacoma.uw.edu.husky_cooking.RegisterUserFragment;
 
+
+/**
+ * This class controls the user signing into our application.
+ * It interfaces with our database hosted on CSSGATE.
+ *
+ * @author Mike Ford
+ * @author Ian Skyles
+ * @version 5/2/2016
+ */
 public class SignInActivity extends AppCompatActivity
         implements LogInFragment.LoginInteractionListener
         , RegisterUserFragment.UserAddListener{
 
+    /** CSSGATE login url */
     private static final String LOGIN_URL =
             "http://cssgate.insttech.washington.edu/~_450atm14/husky_cooking/login.php?";
-
+    /** CSSGATE add user url */
     private static final String USER_ADD_URL =
             "http://cssgate.insttech.washington.edu/~_450atm14/husky_cooking/addUser.php?";
-
+    /** A tag for debugging */
     private static final String TAG = "SignInActivity";
 
+    /** Interface for accessing and modifying preference data */
     private SharedPreferences  mSharedPreferences;
+    /** These EditTexts allow the user to enter Username,
+     * Password, RegisterPassword. and Email.*/
     private EditText mUserName, mPwd, mRegisterEmail, mRegisterPassword;
+
+    /** Button to login*/
     private Button mLoginButton;
+    /** Button to register*/
     private Button mRegisterButton;
 
 
 
-
+    /**
+     * Saves instance on creation of method of fragment/app.
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,7 +118,12 @@ public class SignInActivity extends AppCompatActivity
     }
 
 
-
+    /**
+     * This method ensures network connectivity and
+     * checks if login and password are valid.
+     * User will be logged in if valid.
+     * @param url - the place to log in at on the cssgate server
+     */
     public void login(String url){
 
 
@@ -147,6 +176,10 @@ public class SignInActivity extends AppCompatActivity
 
     }
 
+    /**
+     * Used to add a user DB.
+     * @param url
+     */
     public void addUser(String url){
         AddUserTask task = new AddUserTask();
         task.execute(new String[]{url.toString()});
@@ -154,8 +187,9 @@ public class SignInActivity extends AppCompatActivity
     }
 
 
-
-
+    /**
+     * Adds the user to our database asynchronously.
+     */
     private class AddUserTask extends AsyncTask<String, Void, String> {
 
         @Override
@@ -224,6 +258,9 @@ public class SignInActivity extends AppCompatActivity
     }
 
 
+    /**
+     * Logs our user into the database asynchronously.
+     */
     private class LoginTask extends AsyncTask<String, Void, String> {
         boolean failure= false;
 
