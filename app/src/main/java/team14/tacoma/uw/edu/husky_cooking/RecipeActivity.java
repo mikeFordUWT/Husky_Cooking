@@ -1,3 +1,8 @@
+/*
+ * Mike Ford and Ian Skyles
+ * TCSS450 – Spring 2016
+ * Recipe Project
+ */
 package team14.tacoma.uw.edu.husky_cooking;
 
 import android.content.Context;
@@ -24,15 +29,27 @@ import java.net.URL;
 import team14.tacoma.uw.edu.husky_cooking.authenticate.SignInActivity;
 import team14.tacoma.uw.edu.husky_cooking.model.Recipe;
 
+/**
+ * This activity controls adding a recipe.
+ *
+ * @author Mike Ford
+ * @author Ian Skyles
+ * @version 5/2/2016
+ */
 public class RecipeActivity extends AppCompatActivity
         implements RecipeListFragment.OnListFragmentInteractionListener,
         AddRecipeFragment.AddRecipeInteractionListener,
         CookBookListFragment.OnCookFragmentInteractionListener{
 
     //todo add url
+    /** base url to add a recipe to our database */
     public static final String ADD_RECIPE_URL =
             "http://cssgate.insttech.washington.edu/~_450atm14/husky_cooking/addRecipe.php?";
 
+    /**
+     * Saves instance on creation of method of fragment/app.
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,11 +77,21 @@ public class RecipeActivity extends AppCompatActivity
     }
 
 
+    /**
+     * Makes appropriate calls to add a recipe.
+     * @param url where to add the recipe (how to access db)
+     */
     public void addRecipe(String url){
         AddRecipeTask task = new AddRecipeTask();
         task.execute(new String[]{url.toString()});
         getSupportFragmentManager().popBackStackImmediate();
     }
+
+    /**
+     * Controls what happens when interacting with adding recipe.
+     * Changes fragment smoothly.
+     * @param item
+     */
     @Override
     public void onListFragmentInteraction(Recipe item){
         RecipeDetailFragment recipeDetailFragment = new RecipeDetailFragment();
@@ -78,6 +105,12 @@ public class RecipeActivity extends AppCompatActivity
                 .commit();
     }
 
+    /**
+     * Controls what happens when interacting with adding recipe
+     * to cookbook.
+     * Changes fragment smoothly.
+     * @param recipe
+     */
     @Override
     public void onCookBookFragmentInteraction(Recipe recipe){
         RecipeDetailFragment recipeDetailFragment = new RecipeDetailFragment();
@@ -91,6 +124,11 @@ public class RecipeActivity extends AppCompatActivity
                 .commit();
     }
 
+    /**
+     * Updates (menu view) to show options bar..
+     * @param menu
+     * @return
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -98,6 +136,11 @@ public class RecipeActivity extends AppCompatActivity
         return true;
     }
 
+    /**
+     * Handle action bar item clicks here.
+     * @param item from action bar
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -131,6 +174,9 @@ public class RecipeActivity extends AppCompatActivity
     }
 
 
+    /**
+     * Adds the recipe to our database asynchronously.
+     */
     private class AddRecipeTask extends AsyncTask<String, Void, String> {
 
         @Override

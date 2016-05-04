@@ -1,3 +1,8 @@
+/*
+ * Mike Ford and Ian Skyles
+ * TCSS450 – Spring 2016
+ * Recipe Project
+ */
 package team14.tacoma.uw.edu.husky_cooking;
 
 import android.support.v7.widget.RecyclerView;
@@ -11,27 +16,48 @@ import java.util.List;
 import team14.tacoma.uw.edu.husky_cooking.model.Recipe;
 
 /**
- * {@link RecyclerView.Adapter} that can display a {@link Recipe} and makes a call to the
- * specified {@link RecipeListFragment.OnListFragmentInteractionListener}.
+ * Binds data to our app / view for the view all recipes page
+ * .A flexible view for providing a limited window into a
+ * large data set.
+ * The data it binds is from all recipes on our DB.
  *
+ * @author Mike Ford
+ * @author Ian Skyles
+ * @version 5/2/2016
  */
 public class MyRecipeRecyclerViewAdapter extends RecyclerView.Adapter<MyRecipeRecyclerViewAdapter.ViewHolder> {
-
+    /** A list of recipes (which have values, in cookbook or not). */
     private final List<Recipe> mValues;
+    /** Listener for the view recycler containing all recipes. */
     private final RecipeListFragment.OnListFragmentInteractionListener mListener;
 
+    /**
+     * Creates a recycler view adapter for all of our recipes.
+     * @param items items for our recycle view.
+     * @param listener listens for interaction with recycle view.
+     */
     public MyRecipeRecyclerViewAdapter(List<Recipe> items, RecipeListFragment.OnListFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
     }
-
+    /**
+     * Creates a view holder on creation.
+     * @param parent where to put our view
+     * @param viewType type of view to
+     * @return a view holder for recycle view
+     */
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.fragment_recipe, parent, false);
         return new ViewHolder(view);
     }
-
+    /**
+     * Display the recipe data at the specified position.
+     * @param holder where to put our view
+     * @param position type of view to
+     * @return a view holder for recycle view
+     */
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
@@ -49,18 +75,28 @@ public class MyRecipeRecyclerViewAdapter extends RecyclerView.Adapter<MyRecipeRe
             }
         });
     }
-
+    /**
+     * Gets item (total recipe display) count
+     * @return item count
+     */
     @Override
     public int getItemCount() {
         return mValues.size();
     }
 
+    /**
+     * An item view and metadata about its place within the RecyclerView.
+     */
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
         public final TextView mIdView;
         public final TextView mContentView;
         public Recipe mItem;
 
+        /**
+         * instantiate the view holder with a given view.
+         * @param view for RecyclerView
+         */
         public ViewHolder(View view) {
             super(view);
             mView = view;
