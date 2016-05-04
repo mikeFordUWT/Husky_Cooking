@@ -39,7 +39,7 @@ import team14.tacoma.uw.edu.husky_cooking.model.Recipe;
 public class RecipeActivity extends AppCompatActivity
         implements RecipeListFragment.OnListFragmentInteractionListener,
         AddRecipeFragment.AddRecipeInteractionListener,
-        CookBookListFragment.OnCookFragmentInteractionListener{
+        CookBookListFragment.OnCookFragmentInteractionListener {
 
     //todo add url
     /** base url to add a recipe to our database */
@@ -51,7 +51,7 @@ public class RecipeActivity extends AppCompatActivity
      * @param savedInstanceState
      */
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -153,7 +153,7 @@ public class RecipeActivity extends AppCompatActivity
             return true;
         }
 
-        if(id == R.id.action_logout){
+        if (id == R.id.action_logout){
             SharedPreferences sharedPreferences =
                     getSharedPreferences(getString(R.string.LOGIN_PREFS),
                             Context.MODE_PRIVATE);
@@ -195,7 +195,7 @@ public class RecipeActivity extends AppCompatActivity
 
                     BufferedReader buffer = new BufferedReader(new InputStreamReader(content));
                     String s = "";
-                    while((s = buffer.readLine())!= null){
+                    while ((s = buffer.readLine()) != null) {
                         response += s;
                     }
                 }catch (Exception e) {
@@ -231,4 +231,5 @@ public class RecipeActivity extends AppCompatActivity
             }
         }
     }
+
 }
