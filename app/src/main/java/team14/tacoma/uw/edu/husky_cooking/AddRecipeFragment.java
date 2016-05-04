@@ -8,6 +8,7 @@ package team14.tacoma.uw.edu.husky_cooking;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,7 +45,9 @@ public class AddRecipeFragment extends Fragment {
     private EditText mRecipeName, mRecipeDescript, mServings, mCookTime;
 
 
-
+    /**
+     * Empty class constructor
+     */
     public AddRecipeFragment() {
         // Required empty public constructor
     }
@@ -78,22 +81,25 @@ public class AddRecipeFragment extends Fragment {
         mCookTime = (EditText) v.findViewById(R.id.new_recipe_cook_time);
         mServings = (EditText) v.findViewById(R.id.new_recipe_servings);
 
-
-
-
+        //Add button from xml
         Button addRecipeButton = (Button) v.findViewById(R.id.add_recipe_button);
 
         addRecipeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //checks for valid user input
-                if(mRecipeName.getText().toString().equals("")){
+                if(TextUtils.isEmpty(mRecipeName.getText().toString())){
                     Toast.makeText(v.getContext(), "Please enter a recipe name.",
                             Toast.LENGTH_LONG).show();
                     mRecipeName.requestFocus();
                     return;
+                }else if(mRecipeName.getText().toString().length()<2){
+                    Toast.makeText(v.getContext(), "Recipe name must be at least 2 characters.",
+                            Toast.LENGTH_LONG).show();
+                    mRecipeName.requestFocus();
+                    return;
                 }
-                if(mRecipeDescript.getText().toString().equals("")){
+                if(TextUtils.isEmpty(mRecipeDescript.getText().toString())){
                     Toast.makeText(v.getContext(), "Please enter recipe directions.",
                             Toast.LENGTH_LONG).show();
                     mRecipeDescript.requestFocus();
@@ -102,14 +108,16 @@ public class AddRecipeFragment extends Fragment {
                     Toast.makeText(v.getContext(), "Recipe directions must be longer than 20 " +
                             "characters.",
                             Toast.LENGTH_LONG).show();
+                    mRecipeDescript.requestFocus();
+                    return;
                 }
-                if(mServings.getText().toString().equals("")){
+                if(TextUtils.isEmpty(mServings.getText().toString())){
                     Toast.makeText(v.getContext(), "Please enter servings amount.",
                             Toast.LENGTH_LONG).show();
                     mServings.requestFocus();
                     return;
                 }
-                if(mCookTime.getText().toString().equals("")){
+                if(TextUtils.isEmpty(mCookTime.getText().toString())){
                     Toast.makeText(v.getContext(), "Please enter a cook time.",
                             Toast.LENGTH_LONG).show();
                     mCookTime.requestFocus();
