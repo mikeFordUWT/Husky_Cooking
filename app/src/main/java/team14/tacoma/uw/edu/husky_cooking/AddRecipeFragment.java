@@ -54,7 +54,7 @@ public class AddRecipeFragment extends Fragment {
      * It is used for a listener.
      */
     public interface AddRecipeInteractionListener{
-        public void addRecipe(String url);
+        void addRecipe(String url);
     }
 
     /**
@@ -86,13 +86,37 @@ public class AddRecipeFragment extends Fragment {
         addRecipeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                String recipeName = mRecipeName.getText().toString();
-//                String recipeDescript = mRecipeDescript.getText().toString();
-//                int recipeServing = Integer.parseInt(mServings.getText().toString());
-//                int recipeCookTime = Integer.parseInt(mCookTime.getText().toString());
-
-
+                //checks for valid user input
+                if(mRecipeName.getText().toString().equals("")){
+                    Toast.makeText(v.getContext(), "Please enter a recipe name.",
+                            Toast.LENGTH_LONG).show();
+                    mRecipeName.requestFocus();
+                    return;
+                }
+                if(mRecipeDescript.getText().toString().equals("")){
+                    Toast.makeText(v.getContext(), "Please enter recipe directions.",
+                            Toast.LENGTH_LONG).show();
+                    mRecipeDescript.requestFocus();
+                    return;
+                }else if(mRecipeDescript.getText().toString().length()<=20){
+                    Toast.makeText(v.getContext(), "Recipe directions must be longer than 20 " +
+                            "characters.",
+                            Toast.LENGTH_LONG).show();
+                }
+                if(mServings.getText().toString().equals("")){
+                    Toast.makeText(v.getContext(), "Please enter servings amount.",
+                            Toast.LENGTH_LONG).show();
+                    mServings.requestFocus();
+                    return;
+                }
+                if(mCookTime.getText().toString().equals("")){
+                    Toast.makeText(v.getContext(), "Please enter a cook time.",
+                            Toast.LENGTH_LONG).show();
+                    mCookTime.requestFocus();
+                    return;
+                }
                 String url = buildRecipeUrl(v);
+
                 ((RecipeActivity) getActivity()).addRecipe(url);
             }
         });
