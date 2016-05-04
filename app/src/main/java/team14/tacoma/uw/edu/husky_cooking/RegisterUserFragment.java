@@ -28,7 +28,7 @@ import team14.tacoma.uw.edu.husky_cooking.authenticate.SignInActivity;
  * and be registered for an account.
  * @author Mike Ford
  * @author Ian Skyles
- * @version 5/2/2016
+ * @version 5/4/2016
  */
 public class RegisterUserFragment extends Fragment {
     /** Web url address for backend storage of users. */
@@ -56,7 +56,7 @@ public class RegisterUserFragment extends Fragment {
      * Interface that requires implementing addUser
      */
     public interface UserAddListener{
-        public void addUser(String url);
+        void addUser(String url);
 
     }
 
@@ -145,7 +145,7 @@ public class RegisterUserFragment extends Fragment {
      * Builds a url (for the database/users php)
      * based on email and password.
      * @param v to create a toast incase of error
-     * @return
+     * @return the url for adding a new user to the database
      */
     private String buildUserUrl(View v) {
         StringBuilder sb = new StringBuilder(USER_ADD_URL);

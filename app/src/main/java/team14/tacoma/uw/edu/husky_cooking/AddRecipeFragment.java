@@ -26,7 +26,7 @@ import java.net.URLEncoder;
  *
  * @author Mike Ford
  * @author Ian Skyles
- * @version 5/2/2016
+ * @version 5/4/2016
  */
 public class AddRecipeFragment extends Fragment {
     /**
@@ -43,7 +43,6 @@ public class AddRecipeFragment extends Fragment {
      * Edit Text for allowing entry of the recipe name, recipe description, servings, and cook time.
      */
     private EditText mRecipeName, mRecipeDescript, mServings, mCookTime;
-
 
     /**
      * Empty class constructor
@@ -72,8 +71,6 @@ public class AddRecipeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_add_recipe, container, false);
         mRecipeName = (EditText) v.findViewById(R.id.recipe_name);
@@ -132,8 +129,6 @@ public class AddRecipeFragment extends Fragment {
         return v;
     }
 
-
-
     /**
      * This builds a url for recipe. It includes details on name,
      * cook time, description, and servings.
@@ -168,8 +163,4 @@ public class AddRecipeFragment extends Fragment {
 
         return sb.toString();
     }
-
-
-
-
 }

@@ -24,7 +24,6 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.concurrent.ExecutionException;
@@ -70,13 +69,11 @@ public class SignInActivity extends AppCompatActivity
 
     /**
      * Saves instance on creation of method of fragment/app.
-     * @param savedInstanceState
+     * @param savedInstanceState state of the instance to be saved
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
         setContentView(R.layout.activity_sign_in);
 
         mRegisterEmail = (EditText) findViewById(R.id.new_user_email);
@@ -84,39 +81,22 @@ public class SignInActivity extends AppCompatActivity
         mUserName = (EditText) findViewById(R.id.user_id);
         mPwd = (EditText) findViewById(R.id.pwd);
         mLoginButton = (Button) findViewById(R.id.signin_button);
-
-
-
         mSharedPreferences = getSharedPreferences(getString(R.string.LOGIN_PREFS)
                 , Context.MODE_PRIVATE);
+
+        //Checks to see if a user is logged in from last time
         if(!mSharedPreferences.getBoolean(getString(R.string.LOGGEDIN), false)) {
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.fragment_container, new LogInFragment())
                     .commit();
             mRegisterButton = (Button) findViewById(R.id.sign_up_button);
-
-
         }else{
+            //Launches Recipe Activity
             Intent i = new Intent(this, RecipeActivity.class);
             startActivity(i);
             finish();
-
         }
-
-
-
-
-
     }
-
-
-
-    public void signup(String url){
-
-
-
-    }
-
 
     /**
      * This method ensures network connectivity and
@@ -125,28 +105,52 @@ public class SignInActivity extends AppCompatActivity
      * @param url - the place to log in at on the cssgate server
      */
     public void login(String url, String user){
-
-
         ConnectivityManager connMgr = (ConnectivityManager)
                 getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
         if (networkInfo != null && networkInfo.isConnected()) {
-            //Check if the login and password are valid
-
-//            new LoginTask().execute(url);
+            LoginTask task = new LoginTask();
+            String result = null;
             try {
-                OutputStreamWriter outputStreamWriter = new OutputStreamWriter(
-                        openFileOutput(getString(R.string.LOGIN_FILE)
-                                , Context.MODE_PRIVATE));
-                outputStreamWriter.write(url);
-                outputStreamWriter.close();
-//                Toast.makeText(this,"Stored in File Successfully!", Toast.LENGTH_LONG)
-//                        .show();
-            } catch (Exception e) {
+                result = task.execute(url).get();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
                 e.printStackTrace();
             }
-        }
-        else {
+            if(result != null && result.contains("success")){
+                mSharedPreferences
+                        .edit()
+                        .putBoolean(getString(R.string.LOGGEDIN), true)
+                        .apply();
+                mSharedPreferences
+                        .edit()
+                        .putString(getString(R.string.LOGGED_USER), user)
+                        .apply();
+                //for greeting a user
+//                try {
+//                    OutputStreamWriter outputStreamWriter = new OutputStreamWriter(
+//                            openFileOutput(getString(R.string.LOGIN_FILE)
+//                                    , Context.MODE_PRIVATE));
+//                    outputStreamWriter.write(url);
+//                    outputStreamWriter.close();
+//                    String welcome = "Welcome, "+ mUserName.getText().toString() + "!";
+//                    Toast.makeText(this,welcome, Toast.LENGTH_LONG)
+//                            .show();
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+                Intent i  = new Intent(this, RecipeActivity.class);
+                startActivity(i);
+
+                finish();
+            }else{
+                Toast.makeText(getApplicationContext(), "Log in failed!", Toast.LENGTH_LONG).show();
+                return;
+            }
+
+
+        } else {
             Toast.makeText(this, "No network connection available. Cannot authenticate user",
                     Toast.LENGTH_SHORT) .show();
             return;
@@ -154,35 +158,10 @@ public class SignInActivity extends AppCompatActivity
 
 
 
-        LoginTask task = new LoginTask();
-        String result = null;
-        try {
-            result = task.execute(url).get();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
-        if(result.contains("success")){
-            mSharedPreferences
-                    .edit()
-                    .putBoolean(getString(R.string.LOGGEDIN), true)
-                    .commit();
-            mSharedPreferences
-                    .edit()
-                    .putString(getString(R.string.LOGGED_USER), user)
-                    .commit();
-            Intent i  = new Intent(this, RecipeActivity.class);
-            startActivity(i);
-            finish();
-        }else{
-            Toast.makeText(getApplicationContext(), "Log in failed!", Toast.LENGTH_LONG).show();
-        }
-
     }
 
     /**
-     * Used to add a user DB.
+     * Used to add a user to Database.
      * @param url
      */
     public void addUser(String url){
@@ -264,7 +243,7 @@ public class SignInActivity extends AppCompatActivity
 
 
     /**
-     * Logs our user into the database asynchronously.
+     * Confirms if is a user is in the database.
      */
     private class LoginTask extends AsyncTask<String, Void, String> {
         boolean failure= false;
@@ -275,6 +254,11 @@ public class SignInActivity extends AppCompatActivity
 
         }
 
+        /**
+         * Finds out if the user is in the database
+         * @param urls A url to run in the background
+         * @return repsonse string
+         */
         @Override
         protected String doInBackground(String... urls){
             String response = "";
@@ -297,13 +281,16 @@ public class SignInActivity extends AppCompatActivity
                     }
                 }
             }
-
             return response;
         }
 
-
+        /**
+         * Checks the String returned from doInBackground to see if the log in was successful.
+         * @param result
+         */
         @Override
         protected void onPostExecute(String result) {
+
             if(result.startsWith("Unable to")){
                 Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG)
                         .show();
@@ -313,12 +300,6 @@ public class SignInActivity extends AppCompatActivity
             if(result!=null){
                 Log.e("SignInActivity", result.toString());
             }
-
-            if(User.parseUserJSON(result)){
-
-//                startActivity(new Intent(this, RecipeActivity.class));
-            }
         }
     }
-
 }

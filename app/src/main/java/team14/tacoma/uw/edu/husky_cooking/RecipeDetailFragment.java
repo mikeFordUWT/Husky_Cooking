@@ -37,7 +37,7 @@ import team14.tacoma.uw.edu.husky_cooking.model.Recipe;
  *
  * @author Mike Ford
  * @author Ian Skyles
- * @version 5/2/2016
+ * @version 5/4/2016
  */
 public class RecipeDetailFragment extends Fragment {
     /**
@@ -161,11 +161,13 @@ public class RecipeDetailFragment extends Fragment {
         return sb.toString();
     }
 
+    /**
+     * A class for adding a recipe to the User's Cookbook.
+     */
     private class AddToCookTask extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... urls) {
             String response = "";
-            //TODO
             HttpURLConnection urlConnection = null;
             for (String url : urls) {
                 try {

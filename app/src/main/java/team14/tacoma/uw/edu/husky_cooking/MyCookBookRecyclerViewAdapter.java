@@ -22,7 +22,7 @@ import team14.tacoma.uw.edu.husky_cooking.model.Recipe;
  *
  * @author Mike Ford
  * @author Ian Skyles
- * @version 5/2/2016
+ * @version 5/4/2016
  */
 public class MyCookBookRecyclerViewAdapter extends RecyclerView.Adapter<MyCookBookRecyclerViewAdapter.ViewHolder> {
 
@@ -60,7 +60,6 @@ public class MyCookBookRecyclerViewAdapter extends RecyclerView.Adapter<MyCookBo
      * Display the data at the specified position.
      * @param holder where to put our view
      * @param position type of view to
-     * @return a view holder for recycle view
      */
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {

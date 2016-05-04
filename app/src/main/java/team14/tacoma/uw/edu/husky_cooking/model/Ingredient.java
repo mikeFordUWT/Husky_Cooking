@@ -14,10 +14,6 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * Created by Mike on 4/30/16.
- */
-
-/**
  * This class was designed to model an ingredient for a recipe.
  * Ingredients will consist of the name, type, and amount.
  * @author Mike Ford
@@ -76,35 +72,30 @@ public class Ingredient implements Serializable{
      * A method to get the ingredient ID.
      * @return ingredient id number
      */
-    public int getmIngredientId() {
+    public int getIngredientId() {
         return mIngredientId;
     }
-    /**
-     * A method to set the ingredient ID.
-     * @param mIngredientId id number of ingredient
-     */
-    public void setmIngredientId(int mIngredientId) {
-        this.mIngredientId = mIngredientId;
-    }
+
     /**
      * A method to get the ingredient name.
      * @return ingredient name
      */
-    public String getmIngredientName() {
+    public String getIngredientName() {
         return mIngredientName;
     }
+
     /**
      * A method to set the ingredient name.
      * @param mIngredientName name of ingredients
      */
-    public void setmIngredientName(String mIngredientName) {
+    public void setIngredientName(String mIngredientName) {
         this.mIngredientName = mIngredientName;
     }
     /**
      * A method to get the measurement type.
      * @return measurement type
      */
-    public String getmMeasurementType() {
+    public String getMeasurementType() {
         if(mMeasurementType == null){
             return "";
         }else{
@@ -116,21 +107,21 @@ public class Ingredient implements Serializable{
      * A method to set an ingredients measurement type
      * @param mMeasurementType name of ingredients
      */
-    public void setmMeasurementType(String mMeasurementType) {
+    public void setMeasurementType(String mMeasurementType) {
         this.mMeasurementType = mMeasurementType;
     }
     /**
      * A method to get the amount of an ingredient needed for a recipe.
      * @return amount needed for recipe
      */
-    public String getmAmount() {
+    public String getAmount() {
         return mAmount;
     }
     /**
      * A method to set the amouint of an ingredient that is necessary for a recipe.
      * @param mAmount name of ingredients
      */
-    public void setmAmount(String mAmount) {
+    public void setAmount(String mAmount) {
         this.mAmount = mAmount;
     }
 
@@ -167,12 +158,11 @@ public class Ingredient implements Serializable{
     @Override
     public String toString() {
         String toReturn;
-        if(mMeasurementType==null){
-            toReturn = mAmount + " "+ mMeasurementType;
+        if(mMeasurementType == null){
+            toReturn = mAmount + " "+ mIngredientName;
         }else{
             toReturn = mAmount +" " + mMeasurementType + " " + mIngredientName;
         }
-
         return toReturn;
     }
 }

@@ -34,21 +34,20 @@ import team14.tacoma.uw.edu.husky_cooking.model.Recipe;
  *
  * @author Mike Ford
  * @author Ian Skyles
- * @version 5/2/2016
+ * @version 5/4/2016
  */
 public class RecipeActivity extends AppCompatActivity
         implements RecipeListFragment.OnListFragmentInteractionListener,
         AddRecipeFragment.AddRecipeInteractionListener,
         CookBookListFragment.OnCookFragmentInteractionListener {
 
-    //todo add url
     /** base url to add a recipe to our database */
     public static final String ADD_RECIPE_URL =
             "http://cssgate.insttech.washington.edu/~_450atm14/husky_cooking/addRecipe.php?";
 
     /**
      * Saves instance on creation of method of fragment/app.
-     * @param savedInstanceState
+     * @param savedInstanceState the instance that will be saved in it's current state
      */
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -57,15 +56,11 @@ public class RecipeActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        //hide the default mail icon button
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.hide();
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            }
-//        });
+        if(fab!=null){
+            fab.hide();
+        }
 
         if(savedInstanceState == null
                 || getSupportFragmentManager().findFragmentById(R.id.user_home) == null){
@@ -75,7 +70,6 @@ public class RecipeActivity extends AppCompatActivity
                     .commit();
         }
     }
-
 
     /**
      * Makes appropriate calls to add a recipe.
@@ -90,7 +84,7 @@ public class RecipeActivity extends AppCompatActivity
     /**
      * Controls what happens when interacting with adding recipe.
      * Changes fragment smoothly.
-     * @param item
+     * @param item the Recipe object to be used for the RecipeDetailFragment
      */
     @Override
     public void onListFragmentInteraction(Recipe item){
@@ -109,7 +103,7 @@ public class RecipeActivity extends AppCompatActivity
      * Controls what happens when interacting with adding recipe
      * to cookbook.
      * Changes fragment smoothly.
-     * @param recipe
+     * @param recipe the Recipe to be used for the RecipeDetailFragment
      */
     @Override
     public void onCookBookFragmentInteraction(Recipe recipe){
@@ -126,8 +120,8 @@ public class RecipeActivity extends AppCompatActivity
 
     /**
      * Updates (menu view) to show options bar..
-     * @param menu
-     * @return
+     * @param menu menu to be inflated
+     * @return boolean
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -139,7 +133,7 @@ public class RecipeActivity extends AppCompatActivity
     /**
      * Handle action bar item clicks here.
      * @param item from action bar
-     * @return
+     * @return boolean
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -158,11 +152,11 @@ public class RecipeActivity extends AppCompatActivity
                     getSharedPreferences(getString(R.string.LOGIN_PREFS),
                             Context.MODE_PRIVATE);
             sharedPreferences.edit().putBoolean(getString(R.string.LOGGEDIN), false)
-                    .commit();
+                    .apply();
             sharedPreferences.edit().putString(getString(R.string.LOGGED_USER), "")
-                    .commit();
+                    .apply();
             sharedPreferences.edit().putString(getString(R.string.CURRENT_RECIPE), "")
-                    .commit();
+                    .apply();
 
             Intent i  = new Intent(this, SignInActivity.class);
             startActivity(i);

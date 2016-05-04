@@ -146,11 +146,7 @@ public class Recipe implements Serializable {
                     reason = "Unable to parse data, Reason:" + e.getMessage();
                 }
             }
-
         }
-
-
-
         return reason;
     }
 }

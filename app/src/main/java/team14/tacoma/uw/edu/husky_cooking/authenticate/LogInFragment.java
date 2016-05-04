@@ -59,7 +59,7 @@ public class LogInFragment extends Fragment {
 
     /**
      * Saves instance on creation of method of fragment/app.
-     * @param savedInstanceState
+     * @param savedInstanceState state of the instance to be saved
      */
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -148,11 +148,8 @@ public class LogInFragment extends Fragment {
      * signup (both accepting Strings).
      */
     public interface LoginInteractionListener {
-        public void login(String url, String user);
-        public void signup(String url);
-
+        void login(String url, String user);
     }
-
 
     /**
      * This builds a url for user login based on email and password

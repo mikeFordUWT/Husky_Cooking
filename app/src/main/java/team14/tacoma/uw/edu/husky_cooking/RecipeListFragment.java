@@ -33,7 +33,7 @@ import team14.tacoma.uw.edu.husky_cooking.model.Recipe;
  * This fragment/class will be used to represent a list of recipes.
  * @author Mike Ford
  * @author Ian Skyles
- * @version 5/2/2016
+ * @version 5/4/2016
  */
 public class RecipeListFragment extends Fragment {
     /**
@@ -42,7 +42,6 @@ public class RecipeListFragment extends Fragment {
     private static final String RECIPE_URL =
             "http://cssgate.insttech.washington.edu/~_450atm14/husky_cooking/test.php?cmd=recipes";
 
-    // TODO: Customize parameters
     /** the Number of columns in the list. */
     private int mColumnCount = 1;
 
@@ -66,7 +65,7 @@ public class RecipeListFragment extends Fragment {
 
     /**
      * Saves instance on creation of method of fragment/app.
-     * @param savedInstanceState
+     * @param savedInstanceState state of the instance to be saved
      */
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -187,7 +186,7 @@ public class RecipeListFragment extends Fragment {
         /**
          * Does appropriate actions to set/replace
          * recycler view and adapter.
-         * @param result
+         * @param result result string to be be checked
          */
         @Override
         protected void onPostExecute(String result) {
@@ -196,7 +195,7 @@ public class RecipeListFragment extends Fragment {
                         .show();
                 return;
             }
-            List<Recipe> mRecipeList = new ArrayList<Recipe>();
+            List<Recipe> mRecipeList = new ArrayList<>();
             result = Recipe.parseRecipeJSON(result, mRecipeList);
             //Something wrong with JSON returned
             if(result != null){
@@ -208,7 +207,7 @@ public class RecipeListFragment extends Fragment {
             if(!mRecipeList.isEmpty()){
                 mRecyclerView.setAdapter(new MyRecipeRecyclerViewAdapter(mRecipeList, mListener));
 
-                //todo convert code from webservices lab at line 222 for on phone  database
+                //will store recipes on local SQLite Database
             }
         }
     }

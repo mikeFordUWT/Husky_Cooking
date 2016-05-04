@@ -36,7 +36,7 @@ import team14.tacoma.uw.edu.husky_cooking.model.Recipe;
  *
  * @author Mike Ford
  * @author Ian Skyles
- * @version 5/2/2016
+ * @version 5/4/2016
  */
 public class CookBookListFragment extends Fragment {
     private static final String COOKBOOK_URL =
@@ -62,7 +62,7 @@ public class CookBookListFragment extends Fragment {
 
     /**
      * Saves instance on creation of method of fragment/app.
-     * @param savedInstanceState
+     * @param savedInstanceState state of the saved instance
      */
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -104,7 +104,6 @@ public class CookBookListFragment extends Fragment {
                 String cookURL = COOKBOOK_URL + user;
                 DownloadCookbookTask task = new DownloadCookbookTask();
                 task.execute(new String[]{cookURL});
-                //todo use download cookbook task to populate list
             }else{
                 Toast.makeText(view.getContext(),
                         "No network connection available. Cannot display courses",
@@ -145,7 +144,6 @@ public class CookBookListFragment extends Fragment {
      * is in place.
      */
     public interface OnCookFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onCookBookFragmentInteraction(Recipe recipe);
     }
 
@@ -183,7 +181,7 @@ public class CookBookListFragment extends Fragment {
         /**
          * Does appropriate actions to set/replace
          * recycler view and adapter.
-         * @param result
+         * @param result result string to execute on
          */
         @Override
         protected void onPostExecute(String result) {
@@ -203,11 +201,7 @@ public class CookBookListFragment extends Fragment {
 
             if(!mRecipeList.isEmpty()){
                 mRecyclerView.setAdapter(new MyCookBookRecyclerViewAdapter(mRecipeList, mListener));
-
-                //todo convert code from webservices lab at line 222 for on phone  database
             }
         }
-
-
     }
 }

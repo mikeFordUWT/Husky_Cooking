@@ -10,39 +10,47 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="HOME\n"
+        android:text="@string/home_screen_label"
         android:layout_gravity="center"/>
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Cookbook"
+        android:text="@string/cookbook_button_label"
         android:id="@+id/cookbook_button"
 
-        android:layout_gravity="center_horizontal" />
+        android:layout_gravity="center_horizontal"
+        android:background="@color/colorAccent1"
+        android:layout_marginBottom="10dp"/>
 
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Shopping List(NOT YET FUNCTIONAL)"
+        android:text="@string/shopping_list_button_label"
         android:id="@+id/shopping_list_button"
         android:textStyle="bold"
-        android:layout_gravity="center_horizontal"/>
+        android:layout_gravity="center_horizontal"
+        android:background="@color/colorAccent"
+        android:layout_marginBottom="10dp"/>
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="All Recipes"
+        android:text="@string/all_recipes_button_label"
         android:id="@+id/all_recipe_button"
-        android:layout_gravity="center_horizontal" />
+        android:layout_gravity="center_horizontal"
+        android:background="@color/colorAccent1"
+        android:layout_marginBottom="10dp"/>
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Create Recipe"
+        android:text="@string/create_recipe_button_label"
         android:id="@+id/create_recipe_button"
-        android:layout_gravity="center_horizontal" />
+        android:layout_gravity="center_horizontal"
+        android:background="@color/colorAccent"
+        android:layout_marginBottom="10dp"/>
 
 
 </LinearLayout>
