@@ -204,8 +204,10 @@ public class RecipeDetailFragment extends Fragment {
                             Toast.LENGTH_LONG)
                             .show();
                 } else {
+                    String error = jsonObject.get("error").toString();
+                    String minusP = error.substring(0,error.length()-1);
                     Toast.makeText(getActivity().getApplicationContext(), "Failed to add: "
-                                    + jsonObject.get("error")
+                                    + minusP +" in your Cookbook"
                             , Toast.LENGTH_LONG)
                             .show();
                 }
