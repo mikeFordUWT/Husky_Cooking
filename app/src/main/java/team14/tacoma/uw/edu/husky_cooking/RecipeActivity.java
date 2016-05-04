@@ -34,7 +34,7 @@ public class RecipeActivity extends AppCompatActivity
             "http://cssgate.insttech.washington.edu/~_450atm14/husky_cooking/addRecipe.php?";
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -50,8 +50,8 @@ public class RecipeActivity extends AppCompatActivity
 //            }
 //        });
 
-        if (savedInstanceState == null
-                || getSupportFragmentManager().findFragmentById(R.id.user_home) == null) {
+        if(savedInstanceState == null
+                || getSupportFragmentManager().findFragmentById(R.id.user_home) == null){
             UserHomeFragment userHomeFragment = new UserHomeFragment();
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.fragment_container, userHomeFragment)
@@ -60,14 +60,13 @@ public class RecipeActivity extends AppCompatActivity
     }
 
 
-    public void addRecipe(String url) {
+    public void addRecipe(String url){
         AddRecipeTask task = new AddRecipeTask();
         task.execute(new String[]{url.toString()});
         getSupportFragmentManager().popBackStackImmediate();
     }
-
     @Override
-    public void onListFragmentInteraction(Recipe item) {
+    public void onListFragmentInteraction(Recipe item){
         RecipeDetailFragment recipeDetailFragment = new RecipeDetailFragment();
         Bundle args = new Bundle();
         args.putSerializable(RecipeDetailFragment.RECIPE_ITEM_SELECTED, item);
@@ -80,7 +79,7 @@ public class RecipeActivity extends AppCompatActivity
     }
 
     @Override
-    public void onCookBookFragmentInteraction(Recipe recipe) {
+    public void onCookBookFragmentInteraction(Recipe recipe){
         RecipeDetailFragment recipeDetailFragment = new RecipeDetailFragment();
         Bundle args = new Bundle();
         args.putSerializable(RecipeDetailFragment.RECIPE_ITEM_SELECTED, recipe);
@@ -111,7 +110,7 @@ public class RecipeActivity extends AppCompatActivity
             return true;
         }
 
-        if (id == R.id.action_logout) {
+        if (id == R.id.action_logout){
             SharedPreferences sharedPreferences =
                     getSharedPreferences(getString(R.string.LOGIN_PREFS),
                             Context.MODE_PRIVATE);
@@ -122,7 +121,7 @@ public class RecipeActivity extends AppCompatActivity
             sharedPreferences.edit().putString(getString(R.string.CURRENT_RECIPE), "")
                     .commit();
 
-            Intent i = new Intent(this, SignInActivity.class);
+            Intent i  = new Intent(this, SignInActivity.class);
             startActivity(i);
             finish();
             return true;
@@ -135,16 +134,14 @@ public class RecipeActivity extends AppCompatActivity
     private class AddRecipeTask extends AsyncTask<String, Void, String> {
 
         @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
+        protected void onPreExecute() {super.onPreExecute();}
 
         @Override
-        protected String doInBackground(String... urls) {
-            String response = "";
+        protected String doInBackground(String... urls){
+            String response ="";
             HttpURLConnection urlConnection = null;
-            for (String url : urls) {
-                try {
+            for(String url: urls){
+                try{
                     URL urlObject = new URL(url);
                     urlConnection = (HttpURLConnection) urlObject.openConnection();
 
@@ -155,11 +152,11 @@ public class RecipeActivity extends AppCompatActivity
                     while ((s = buffer.readLine()) != null) {
                         response += s;
                     }
-                } catch (Exception e) {
+                }catch (Exception e) {
                     response = "Unable to add recipe, Reason: "
                             + e.getMessage();
-                } finally {
-                    if (urlConnection != null) {
+                }finally {
+                    if(urlConnection != null){
                         urlConnection.disconnect();
                     }
                 }
@@ -168,21 +165,21 @@ public class RecipeActivity extends AppCompatActivity
         }
 
         @Override
-        protected void onPostExecute(String result) {
-            try {
+        protected void onPostExecute(String result){
+            try{
                 JSONObject jsonObject = new JSONObject(result);
                 String status = (String) jsonObject.get("result");
-                if (status.equals("success")) {
+                if(status.equals("success")){
                     Toast.makeText(getApplicationContext(), "Recipe successfully added!",
                             Toast.LENGTH_LONG)
                             .show();
-                } else {
+                }else {
                     Toast.makeText(getApplicationContext(), "Failed to add: "
                                     + jsonObject.get("error")
-                            , Toast.LENGTH_LONG)
+                            ,Toast.LENGTH_LONG)
                             .show();
                 }
-            } catch (JSONException e) {
+            }catch(JSONException e){
                 Toast.makeText(getApplicationContext(), "Something wrong with the data" +
                         e.getMessage(), Toast.LENGTH_LONG).show();
             }
