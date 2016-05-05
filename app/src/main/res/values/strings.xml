@@ -19,6 +19,7 @@
     <string name="shopping_list_button_label">Shopping List(NOT YET FUNCTIONAL)</string>
     <string name="all_recipes_button_label">View All Recipes</string>
     <string name="create_recipe_button_label">Create a new Recipe</string>
+    <string name="cook_book_upper_label">Your Cookbook </string>
 
     <string name="action_logout">LOG OUT</string>
     <string name="LOGGEDIN">loggedin</string>
