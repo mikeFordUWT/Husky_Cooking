@@ -153,6 +153,11 @@ public class CookBookListFragment extends Fragment {
      * our db/webservice hosted on cssgate.
      */
     private class DownloadCookbookTask extends AsyncTask<String, Void, String>{
+        /**
+         * Tells it to connect and read http responses for the cookbook.
+         * @param urls where recipes are stored
+         * @return list of recipes
+         */
         @Override
         protected String doInBackground(String... urls) {
             String response = "";

@@ -165,6 +165,11 @@ public class RecipeDetailFragment extends Fragment {
      * A class for adding a recipe to the User's Cookbook.
      */
     private class AddToCookTask extends AsyncTask<String, Void, String> {
+        /**
+         * Tells it to connect and read http responses for the cookbook.
+         * @param urls where to download recipe details
+         * @return string of recipe details
+         */
         @Override
         protected String doInBackground(String... urls) {
             String response = "";
@@ -195,7 +200,11 @@ public class RecipeDetailFragment extends Fragment {
 
             return response;
         }
-
+        /**
+         * Does appropriate actions to set/replace
+         * recycler view and adapter.
+         * @param result result string to be be checked
+         */
         @Override
         protected void onPostExecute(String result) {
             try {

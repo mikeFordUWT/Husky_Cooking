@@ -180,7 +180,11 @@ public class SignInActivity extends AppCompatActivity
         protected void onPreExecute(){
             super.onPreExecute();
         }
-
+        /**
+         * Tells it to connect and read http responses for the sign in.
+         * @param urls where each sign in should be added or is stored
+         * @return response from serve
+         */
         @Override
         protected String doInBackground(String... urls){
             String response ="";
