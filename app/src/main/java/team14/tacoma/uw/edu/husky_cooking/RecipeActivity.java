@@ -173,9 +173,16 @@ public class RecipeActivity extends AppCompatActivity
      */
     private class AddRecipeTask extends AsyncTask<String, Void, String> {
 
+        /**
+         * calls super on pre execute.
+         */
         @Override
         protected void onPreExecute() {super.onPreExecute();}
-
+        /**
+         * Adds recipe to our database.
+         * @param urls where to add recipe
+         * @return string of response details
+         */
         @Override
         protected String doInBackground(String... urls){
             String response ="";
@@ -204,6 +211,12 @@ public class RecipeActivity extends AppCompatActivity
             return response;
         }
 
+        /**
+         * Does appropriate actions to set/replace
+         * recycler view and adapter.
+         * Lets user know if it was successful or unsuccessfully added.
+         * @param result result string to be be checked
+         */
         @Override
         protected void onPostExecute(String result){
             try{

@@ -107,6 +107,10 @@ public class MyCookBookRecyclerViewAdapter extends RecyclerView.Adapter<MyCookBo
             mContentView = (TextView) view.findViewById(R.id.content);
         }
 
+        /**
+         * Returns string containing text from content view.
+         * @return String representing recipe recycler view.
+         */
         @Override
         public String toString() {
             return super.toString() + " '" + mContentView.getText() + "'";
