@@ -30,7 +30,6 @@ import java.util.concurrent.ExecutionException;
 
 import team14.tacoma.uw.edu.husky_cooking.R;
 import team14.tacoma.uw.edu.husky_cooking.RecipeActivity;
-import team14.tacoma.uw.edu.husky_cooking.RegisterUserFragment;
 
 
 /**

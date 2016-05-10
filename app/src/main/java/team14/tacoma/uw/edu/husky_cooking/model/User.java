@@ -3,7 +3,7 @@
  * TCSS450 – Spring 2016
  * Recipe Project
  */
-package team14.tacoma.uw.edu.husky_cooking.authenticate;
+package team14.tacoma.uw.edu.husky_cooking.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;

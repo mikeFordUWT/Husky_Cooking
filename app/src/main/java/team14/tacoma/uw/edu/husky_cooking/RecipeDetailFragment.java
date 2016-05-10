@@ -211,7 +211,7 @@ public class RecipeDetailFragment extends Fragment {
                 JSONObject jsonObject = new JSONObject(result);
                 String status = (String) jsonObject.get("result");
                 if (status.equals("success")) {
-                    Toast.makeText(getActivity().getApplicationContext(), "Recipe successfully added!",
+                    Toast.makeText(getActivity().getApplicationContext(), "Recipe successfully added to your Cookbook!",
                             Toast.LENGTH_LONG)
                             .show();
                 } else {

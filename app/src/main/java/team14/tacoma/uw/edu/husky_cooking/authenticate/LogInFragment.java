@@ -18,7 +18,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import team14.tacoma.uw.edu.husky_cooking.R;
-import team14.tacoma.uw.edu.husky_cooking.RegisterUserFragment;
 
 /**
  * This class controls the user logging into our application.
