@@ -19,7 +19,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import team14.tacoma.uw.edu.husky_cooking.R;
-import team14.tacoma.uw.edu.husky_cooking.authenticate.SignInActivity;
 
 
 /**
@@ -43,6 +42,8 @@ public class RegisterUserFragment extends Fragment {
     private EditText mUserEmail;
     /** Allows user to enter password */
     private EditText mPassword;
+    /** Confirms password entered is correct*/
+    private EditText mConfirmPassword;
     /** Listener interface for adding user. */
     private UserAddListener mListener;
 
@@ -93,6 +94,7 @@ public class RegisterUserFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_register_user, container, false);
         mUserEmail = (EditText) v.findViewById(R.id.new_user_email);
         mPassword = (EditText) v.findViewById(R.id.new_user_password);
+        mConfirmPassword = (EditText) v.findViewById(R.id.confirm_user_password);
 
         Button addUserButton = (Button) v.findViewById(R.id.register_button);
         addUserButton.setOnClickListener(new View.OnClickListener() {
@@ -100,6 +102,7 @@ public class RegisterUserFragment extends Fragment {
             public void onClick(View v) {
                 String userId = mUserEmail.getText().toString();
                 String pwd = mPassword.getText().toString();
+                String confirmPWD = mConfirmPassword.getText().toString();
 
                 if(TextUtils.isEmpty(userId)){
                     Toast.makeText(v.getContext(), "Enter userid"
@@ -129,6 +132,17 @@ public class RegisterUserFragment extends Fragment {
                             , Toast.LENGTH_SHORT)
                             .show();
                     mPassword.requestFocus();
+                    mPassword.setText("");
+                    return;
+                }
+
+                if(!pwd.equals(confirmPWD)){
+                    Toast.makeText(v.getContext(), "Passwords don't match, please try again"
+                            , Toast.LENGTH_SHORT)
+                            .show();
+                    mPassword.requestFocus();
+                    mPassword.setText("");
+                    mConfirmPassword.setText("");
                     return;
                 }
 
