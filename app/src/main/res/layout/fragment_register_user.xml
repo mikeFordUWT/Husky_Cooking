@@ -27,6 +27,14 @@
         android:hint="@string/hint_password"
         android:layout_gravity="left"
         android:inputType="textPassword"/>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/confirm_user_password"
+        android:hint="@string/hint_confirm_password"
+        android:layout_gravity="left"
+        android:inputType="textPassword"
+        />
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

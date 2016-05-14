@@ -10,6 +10,7 @@
 
     <string name="hint_email">Enter your email</string>
     <string name="hint_password">Enter your password</string>
+    <string name="hint_confirm_password">Confirm your password</string>
     <string name="servings_hint">How many servings?</string>
     <string name="cook_time_hint">How long will this take?(in minutes)</string>
 
