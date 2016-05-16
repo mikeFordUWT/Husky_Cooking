@@ -25,10 +25,8 @@ public class UserTest extends TestCase {
     }
 
     public void testParseUserJSON() {
-        String userJSON = "[{\"id\":\"TCSS450\",\"shortDesc\":\"Mobile App Programming\"," +
-                "\"longDesc\":\"Covers mobile principles\",\"prereqs\":\"TCSS360\"}," +
-                "{\"id\":\"TCSS445\",\"shortDesc\":\"Database Systems Design\"," +
-                "\"longDesc\":\"Covers database principles\",\"prereqs\":\"TCSS342\"}]";
+        String userJSON = "[{\"id\":\"test\",\"email\":\"test@test.com\"," +
+                "\"cookbook\":\"null\",\"status\":\"success\"}]";
         Boolean message =  User.parseUserJSON(userJSON);
         assertTrue("JSON With Valid String", message == true);
     }
