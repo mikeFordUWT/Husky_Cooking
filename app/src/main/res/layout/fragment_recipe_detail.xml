@@ -37,9 +37,9 @@
         android:layout_height="wrap_content"
         android:id="@+id/recipe_directions"/>
     <ListView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/ingredients_detail"
+        android:id="@+id/ingredients_detail_list_view"
         >
 
     </ListView>
