@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -64,6 +65,10 @@ public class RecipeDetailFragment extends Fragment {
      * TextView that displays recipe directions
      */
     private TextView mDirectionsTextView;
+    /**
+     * ListView that will display ingredients
+     */
+    private ListView mIngredientsListView;
 
 
     /**
@@ -105,6 +110,8 @@ public class RecipeDetailFragment extends Fragment {
         mServingsTextView = (TextView) view.findViewById(R.id.recipe_servings);
         mCookTimeTextView = (TextView) view.findViewById(R.id.recipe_cook_time);
         mDirectionsTextView = (TextView) view.findViewById(R.id.recipe_directions);
+        mIngredientsListView = (ListView) view.findViewById(R.id.ingredients_detail_list_view);
+
         Button addToCookBook = (Button) view.findViewById(R.id.add_to_cookbook_button);
 
         addToCookBook.setOnClickListener(new View.OnClickListener() {
@@ -229,4 +236,70 @@ public class RecipeDetailFragment extends Fragment {
         }
     }
 
+
+    /**
+     * A class for retrieving ingredients for recipe.
+     */
+    private class GetIngredients extends AsyncTask<String, Void, String> {
+        /**
+         * Tells it to connect and read http responses for the cookbook.
+         * @param urls where to download recipe details
+         * @return string of recipe details
+         */
+        @Override
+        protected String doInBackground(String... urls) {
+            String response = "";
+            HttpURLConnection urlConnection = null;
+            for (String url : urls) {
+                try {
+                    URL urlObject = new URL(url);
+                    urlConnection = (HttpURLConnection) urlObject.openConnection();
+
+                    InputStream content = urlConnection.getInputStream();
+
+                    BufferedReader buffer = new BufferedReader(new InputStreamReader(content));
+                    String s = "";
+                    while ((s = buffer.readLine()) != null) {
+                        response += s;
+                    }
+                } catch (Exception e) {
+                    response = "Unable to add recipe to Cookbook, Reason: "
+                            + e.getMessage();
+                } finally {
+                    if (urlConnection != null) {
+                        urlConnection.disconnect();
+                    }
+                }
+
+
+            }
+
+            return response;
+        }
+        /**
+         * Does appropriate actions to set/replace
+         * recycler view and adapter.
+         * @param result result string to be be checked
+         */
+        @Override
+        protected void onPostExecute(String result) {
+            try {
+                JSONObject jsonObject = new JSONObject(result);
+                String status = (String) jsonObject.get("result");
+                if (status.equals("success")) {
+
+                } else {
+                    String error = jsonObject.get("error").toString();
+                    String minusP = error.substring(0,error.length()-1);
+                    Toast.makeText(getActivity().getApplicationContext(), "Could not retrieve ingredients: "
+                                    + minusP +" in your Cookbook"
+                            , Toast.LENGTH_LONG)
+                            .show();
+                }
+            } catch (JSONException e) {
+                Toast.makeText(getActivity().getApplicationContext(), "Something wrong with the data" +
+                        e.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        }
+    }
 }
