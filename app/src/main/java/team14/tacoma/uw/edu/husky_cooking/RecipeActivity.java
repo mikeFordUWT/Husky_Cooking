@@ -43,7 +43,8 @@ public class RecipeActivity extends AppCompatActivity
         implements RecipeListFragment.OnListFragmentInteractionListener,
         AddRecipeFragment.AddRecipeInteractionListener,
         CookBookListFragment.OnCookFragmentInteractionListener,
-        ShoppingListFragment.OnShoppingListFragmentInteractionListener{
+        ShoppingListFragment.OnShoppingListFragmentInteractionListener,
+        IngredientFromRecipeListFragment.OnRecipeIngredientListFragmentInteractionListener{
 
     /** base url to add a recipe to our database */
     public static final String ADD_RECIPE_URL =
@@ -122,6 +123,18 @@ public class RecipeActivity extends AppCompatActivity
                 .commit();
     }
 
+
+    @Override
+    public void onIngredientListFragmentInteraction(Ingredient ingredient){
+        IngredientFromRecipeListFragment ingredientFrom = new IngredientFromRecipeListFragment();
+        Bundle args = new Bundle();
+        args.putSerializable(IngredientFromRecipeListFragment.INGREDIENT_ITEM_SELECTED, ingredient);
+        ingredientFrom.setArguments(args);
+
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, ingredientFrom)
+                .commit();
+    }
 
     @Override
     public void onShopListFragmentInteraction(Ingredient ingredient){

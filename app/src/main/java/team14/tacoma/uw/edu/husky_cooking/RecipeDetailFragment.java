@@ -122,6 +122,17 @@ public class RecipeDetailFragment extends Fragment {
                 task.execute(url);
             }
         });
+
+        Button viewIngredients = (Button) view.findViewById(R.id.view_ingredients_button);
+        viewIngredients.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                IngredientFromRecipeListFragment ingredients = new IngredientFromRecipeListFragment();
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, ingredients)
+                        .addToBackStack(null).commit();
+            }
+        });
         return view;
 
     }
