@@ -11,6 +11,7 @@
         android:text="@string/cook_book_upper_label"
         android:layout_gravity="center"/>
 
+
     <TextView
         android:id="@+id/id"
         android:layout_width="wrap_content"

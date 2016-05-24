@@ -45,6 +45,7 @@
     <string name="remove_from_shopping">Remove From Shopping List</string>
     <string name="add_to_shopping_list">Add To Shopping List</string>
     <string name="ingredient_detail">Ingredient Details</string>
+    <string name="view_ingredients">View Ingredients</string>
 
 </resources>
 
