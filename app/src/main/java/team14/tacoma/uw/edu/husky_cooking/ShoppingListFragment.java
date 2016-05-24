@@ -68,7 +68,7 @@ public class ShoppingListFragment extends Fragment {
         // Set the adapter
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
-            RecyclerView recyclerView = (RecyclerView) view;
+            mRecyclerView = (RecyclerView) view;
             if (mColumnCount <= 1) {
                 mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
             } else {
@@ -123,8 +123,7 @@ public class ShoppingListFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnShoppingListFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onListFragmentInteraction(Ingredient item);
+        void onShopListFragmentInteraction(Ingredient item);
     }
 
     /**

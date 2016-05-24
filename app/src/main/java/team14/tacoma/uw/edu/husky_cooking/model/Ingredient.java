@@ -139,14 +139,10 @@ public class Ingredient implements Serializable{
                 for(int i = 0; i<arr.length(); i++){
                     JSONObject obj = arr.getJSONObject(i);
                     Ingredient ingredient;
-                    if(obj.getString(Ingredient.MEASURE_TYPE).equals("null")){
+
                         ingredient = new Ingredient(obj.getInt(Ingredient.ID),
                                 obj.getString(Ingredient.NAME), obj.getString(Ingredient.AMOUNT));
-                    }else {
-                        ingredient = new Ingredient(obj.getInt(Ingredient.ID),
-                                obj.getString(Ingredient.NAME),obj.getString(Ingredient.MEASURE_TYPE),
-                                obj.getString(Ingredient.AMOUNT));
-                    }
+
 
                     ingredientList.add(ingredient);
                 }

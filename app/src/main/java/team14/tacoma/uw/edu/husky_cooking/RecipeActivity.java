@@ -122,10 +122,15 @@ public class RecipeActivity extends AppCompatActivity
 
 
     @Override
-    public void OnShoppingListFragmentInteractionListener(Ingredient ingredient){
-        IngredientDetailFragment ingredientDetailFragment = new IngredientDetailFragment();
+    public void onShopListFragmentInteraction(Ingredient ingredient){
+        IngredientInShoppingListFragment ingredientInShoppingListFragment = new IngredientInShoppingListFragment();
         Bundle args = new Bundle();
-        args.putSerializable(IngredientDetailFragment.I);
+        args.putSerializable(IngredientInShoppingListFragment.INGREDIENT_ITEM_SELECTED, ingredient);
+        ingredientInShoppingListFragment.setArguments(args);
+
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, ingredientInShoppingListFragment)
+                .commit();
     }
 
     /**
@@ -171,6 +176,8 @@ public class RecipeActivity extends AppCompatActivity
 
         return super.onOptionsItemSelected(item);
     }
+
+
 
 
     /**

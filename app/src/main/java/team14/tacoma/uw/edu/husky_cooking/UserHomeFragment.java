@@ -74,6 +74,11 @@ public class UserHomeFragment extends Fragment {
         ShoppingList.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                ShoppingListFragment newFragment = new ShoppingListFragment();
+                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.fragment_container, newFragment);
+                transaction.addToBackStack(null);
+                transaction.commit();
 //
 //                Fragment newFragment = new RecipeListFragment();
 //                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
