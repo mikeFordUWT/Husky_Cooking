@@ -123,7 +123,9 @@ public class RecipeActivity extends AppCompatActivity
 
     @Override
     public void OnShoppingListFragmentInteractionListener(Ingredient ingredient){
-
+        IngredientDetailFragment ingredientDetailFragment = new IngredientDetailFragment();
+        Bundle args = new Bundle();
+        args.putSerializable(IngredientDetailFragment.I);
     }
 
     /**
