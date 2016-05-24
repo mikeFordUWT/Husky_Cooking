@@ -11,8 +11,10 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -177,7 +179,25 @@ public class RecipeActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-
+    @Override
+    public void onBackPressed(){
+        Fragment f = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+        if(f instanceof IngredientInShoppingListFragment){
+            Log.d("IngredientInList", "NOO!!!");
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ShoppingListFragment()).addToBackStack(null).commit();
+        }else if(f instanceof ShoppingListFragment){
+            Log.d("ShoppingList", "YAY!!");
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new UserHomeFragment()).addToBackStack(null).commit();
+        }else if(f instanceof UserHomeFragment){
+            Intent intent = new Intent();
+            intent.setAction(Intent.ACTION_MAIN);
+            intent.addCategory(Intent.CATEGORY_HOME);
+            startActivity(intent);
+        }
+        else{
+            super.onBackPressed();
+        }
+    }
 
 
     /**

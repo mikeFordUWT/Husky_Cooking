@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,7 +34,6 @@ public class IngredientInShoppingListFragment extends Fragment {
 
     public static final String INGREDIENT_ITEM_SELECTED = "IngredientItemSelected";
 
-//    TODO get remove from shopping list url
     private static final String REMOVE_FROM_SHOPPING_LIST_URL = "http://cssgate.insttech.washington.edu/~_450atm14/husky_cooking/remove_shopping_list.php?";
 
 
@@ -71,15 +71,25 @@ public class IngredientInShoppingListFragment extends Fragment {
         mIngredientNameTextView = (TextView) view.findViewById(R.id.ingredient_name_in_list);
         mMeasurementTypeTextView = (TextView) view.findViewById(R.id.ingredient_measurement_type_in_list);
 
-        Button removeFromShoppingList = (Button) view.findViewById(R.id.delete_from_shopping_list_button);
+        final Button removeFromShoppingList = (Button) view.findViewById(R.id.delete_from_shopping_list_button);
 
         removeFromShoppingList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                ShoppingListFragment newFrag = new ShoppingListFragment();
+
                 String url = buildRemoveUrl(v);
                 RemoveIngredientFromListTask task = new RemoveIngredientFromListTask();
                 task.execute(url);
+//                ViewGroup layout = (ViewGroup) removeFromShoppingList.getParent();
+//                if(null!= layout){
+//                    layout.removeView(removeFromShoppingList);
+//                }
 
+                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.fragment_container, newFrag).addToBackStack(null);
+                transaction.commit();
+//                getActivity().getSupportFragmentManager().popBackStack();
             }
         });
         return view;
@@ -127,6 +137,7 @@ public class IngredientInShoppingListFragment extends Fragment {
 
         return sb.toString();
     }
+
 
 
 
@@ -178,7 +189,7 @@ public class IngredientInShoppingListFragment extends Fragment {
             try {
                 JSONObject jsonObject = new JSONObject(result);
                 String status = (String) jsonObject.get("result");
-                if (status.equals("success")) {
+                if (status.contains("success")) {
                     Toast.makeText(getActivity().getApplicationContext(), "Recipe successfully added to your Cookbook!",
                             Toast.LENGTH_LONG)
                             .show();
@@ -191,8 +202,10 @@ public class IngredientInShoppingListFragment extends Fragment {
                             .show();
                 }
             } catch (JSONException e) {
-                Toast.makeText(getActivity().getApplicationContext(), "Something wrong with the data" +
-                        e.getMessage(), Toast.LENGTH_LONG).show();
+                if(e.getMessage().contains("1")){
+                    Toast.makeText(getActivity().getApplicationContext(), "Item removed from your shopping List!", Toast.LENGTH_LONG).show();
+                }
+
             }
         }
 

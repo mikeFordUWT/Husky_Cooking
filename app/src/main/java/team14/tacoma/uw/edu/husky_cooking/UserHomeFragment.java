@@ -94,7 +94,7 @@ public class UserHomeFragment extends Fragment {
             @Override
             public void onClick(View view) {
 
-                Fragment newFragment = new CookBookListFragment();
+                CookBookListFragment newFragment = new CookBookListFragment();
                 FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
 
                 transaction.replace(R.id.fragment_container, newFragment);
@@ -108,7 +108,7 @@ public class UserHomeFragment extends Fragment {
             @Override
             public void onClick(View view) {
 
-                Fragment newFragment = new RecipeListFragment();
+                RecipeListFragment newFragment = new RecipeListFragment();
                 FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
 
                 transaction.replace(R.id.fragment_container, newFragment);
