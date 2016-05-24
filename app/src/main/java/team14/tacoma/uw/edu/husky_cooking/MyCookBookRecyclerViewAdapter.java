@@ -34,7 +34,7 @@ public class MyCookBookRecyclerViewAdapter extends RecyclerView.Adapter<MyCookBo
     private final CookBookListFragment.OnCookFragmentInteractionListener mListener;
 
     /**
-     * Creates a coook book recycler view adapter.
+     * Creates a cook book recycler view adapter.
      * @param items items for our recycle view.
      * @param listener listens for interaction with recycle view.
      */

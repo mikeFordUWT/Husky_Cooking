@@ -6,23 +6,27 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import team14.tacoma.uw.edu.husky_cooking.ItemFragment.OnListFragmentInteractionListener;
-import team14.tacoma.uw.edu.husky_cooking.dummy.DummyContent.DummyItem;
-import team14.tacoma.uw.edu.husky_cooking.model.Ingredient;
-
 import java.util.List;
 
+import team14.tacoma.uw.edu.husky_cooking.model.Ingredient;
+
 /**
- * {@link RecyclerView.Adapter} that can display a {@link DummyItem} and makes a call to the
- * specified {@link IngredientListFragment.OnShoppingListFragmentInteractionListener}.
+ * {@link RecyclerView.Adapter} that can display a {@link Ingredient} and makes a call to the
+ * specified {@link ShoppingListFragment.OnShoppingListFragmentInteractionListener}.
  * TODO: Replace the implementation with code for your data type.
  */
-public class MyIngredientListRecyclerViewAdapter extends RecyclerView.Adapter<MyIngredientListRecyclerViewAdapter.ViewHolder> {
+public class MyShoppingListRecyclerViewAdapter extends RecyclerView.Adapter<MyShoppingListRecyclerViewAdapter.ViewHolder> {
 
-    private final List<DummyItem> mValues;
-    private final IngredientListFragment.OnShoppingListFragmentInteractionListener mListener;
+    private final List<Ingredient> mValues;
+    private final ShoppingListFragment.OnShoppingListFragmentInteractionListener mListener;
 
-    public MyIngredientListRecyclerViewAdapter(List<Ingredient> items, IngredientListFragment.OnShoppingListFragmentInteractionListener listener) {
+
+    /**
+     * Creates a shopping list recycler view adapter.
+     * @param items items for our recycle view.
+     * @param listener listens for interaction with recycle view.
+     */
+    public MyShoppingListRecyclerViewAdapter(List<Ingredient> items, ShoppingListFragment.OnShoppingListFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
     }
@@ -43,8 +47,7 @@ public class MyIngredientListRecyclerViewAdapter extends RecyclerView.Adapter<My
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).);
-        holder.mContentView.setText(mValues.get(position).content);
+        holder.mContentView.setText(mValues.get(position).getIngredientName());
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -67,8 +70,12 @@ public class MyIngredientListRecyclerViewAdapter extends RecyclerView.Adapter<My
         public final View mView;
         public final TextView mIdView;
         public final TextView mContentView;
-        public DummyItem mItem;
+        public Ingredient mItem;
 
+        /**
+         * instantiate the view holder with a given view.
+         * @param view for RecyclerView
+         */
         public ViewHolder(View view) {
             super(view);
             mView = view;
@@ -76,6 +83,10 @@ public class MyIngredientListRecyclerViewAdapter extends RecyclerView.Adapter<My
             mContentView = (TextView) view.findViewById(R.id.content);
         }
 
+        /**
+         * Returns string containing text from content view.
+         * @return String representing recipe recycler view.
+         */
         @Override
         public String toString() {
             return super.toString() + " '" + mContentView.getText() + "'";

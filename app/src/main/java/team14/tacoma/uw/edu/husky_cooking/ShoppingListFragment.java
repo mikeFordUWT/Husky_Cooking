@@ -24,7 +24,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import team14.tacoma.uw.edu.husky_cooking.model.Ingredient;
-import team14.tacoma.uw.edu.husky_cooking.model.Recipe;
 
 /**
  * A fragment representing a list of Items.
@@ -32,7 +31,7 @@ import team14.tacoma.uw.edu.husky_cooking.model.Recipe;
  * Activities containing this fragment MUST implement the {@link OnShoppingListFragmentInteractionListener}
  * interface.
  */
-public class IngredientListFragment extends Fragment {
+public class ShoppingListFragment extends Fragment {
     private static final String SHOPPING_LIST_URL=
             "http://cssgate.insttech.washington.edu/~_450atm14/husky_cooking/shopping_list.php?user=";
 
@@ -52,7 +51,7 @@ public class IngredientListFragment extends Fragment {
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public IngredientListFragment() {
+    public ShoppingListFragment() {
     }
 
     @Override
@@ -75,7 +74,7 @@ public class IngredientListFragment extends Fragment {
             } else {
                 mRecyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-//            recyclerView.setAdapter(new MyIngredientListRecyclerViewAdapter(mIngredientList.ITEMS, mListener));
+//            recyclerView.setAdapter(new MyShoppingListRecyclerViewAdapter(mIngredientList.ITEMS, mListener));
             ConnectivityManager connMgr = (ConnectivityManager) getActivity()
                     .getSystemService(Context.CONNECTIVITY_SERVICE);
             NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
@@ -83,8 +82,13 @@ public class IngredientListFragment extends Fragment {
                 SharedPreferences sharedPreferences = getActivity()
                         .getSharedPreferences(getString(R.string.LOGIN_PREFS), Context.MODE_PRIVATE);
                 String user = sharedPreferences.getString(getString(R.string.LOGGED_USER), "");
-                String shoppingList = SHOPPING_LIST_URL + user;
-
+                String shoppingListURL = SHOPPING_LIST_URL + user;
+                DownloadShoppingListTask task = new DownloadShoppingListTask();
+                task.execute(new String[]{shoppingListURL});
+            }else{
+                Toast.makeText(view.getContext(),
+                        "No network connection available. Cannot display courses",
+                        Toast.LENGTH_SHORT).show();
             }
         }
         return view;
@@ -171,8 +175,8 @@ public class IngredientListFragment extends Fragment {
                         .show();
                 return;
             }
-            List<Ingredient> mRecipeList = new ArrayList<Ingredient>();
-            result = Ingredient.parseRecipeJSON(result, mRecipeList);
+            List<Ingredient> mIngredientList = new ArrayList<Ingredient>();
+            result = Ingredient.parseIngredientJSON(result, mIngredientList);
             //Something wrong with JSON returned
             if(result != null){
                 Toast.makeText(getActivity().getApplicationContext(), result, Toast.LENGTH_LONG)
@@ -180,8 +184,8 @@ public class IngredientListFragment extends Fragment {
                 return;
             }
 
-            if(!mRecipeList.isEmpty()){
-                mRecyclerView.setAdapter(new MyCookBookRecyclerViewAdapter(mRecipeList, mListener));
+            if(!mIngredientList.isEmpty()){
+                mRecyclerView.setAdapter(new MyShoppingListRecyclerViewAdapter(mIngredientList, mListener));
             }
         }
     }

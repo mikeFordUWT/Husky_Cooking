@@ -27,6 +27,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import team14.tacoma.uw.edu.husky_cooking.authenticate.SignInActivity;
+import team14.tacoma.uw.edu.husky_cooking.model.Ingredient;
 import team14.tacoma.uw.edu.husky_cooking.model.Recipe;
 
 /**
@@ -39,7 +40,8 @@ import team14.tacoma.uw.edu.husky_cooking.model.Recipe;
 public class RecipeActivity extends AppCompatActivity
         implements RecipeListFragment.OnListFragmentInteractionListener,
         AddRecipeFragment.AddRecipeInteractionListener,
-        CookBookListFragment.OnCookFragmentInteractionListener {
+        CookBookListFragment.OnCookFragmentInteractionListener,
+        ShoppingListFragment.OnShoppingListFragmentInteractionListener{
 
     /** base url to add a recipe to our database */
     public static final String ADD_RECIPE_URL =
@@ -116,6 +118,12 @@ public class RecipeActivity extends AppCompatActivity
                 .replace(R.id.fragment_container, recipeDetailFragment)
                 .addToBackStack(null)
                 .commit();
+    }
+
+
+    @Override
+    public void OnShoppingListFragmentInteractionListener(Ingredient ingredient){
+
     }
 
     /**
