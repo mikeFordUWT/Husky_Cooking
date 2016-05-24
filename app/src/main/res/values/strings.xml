@@ -40,6 +40,7 @@
     <string name="shopping_list_title">Shopping List</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
+    <string name="delete">Delete</string>
 
 
 </resources>
