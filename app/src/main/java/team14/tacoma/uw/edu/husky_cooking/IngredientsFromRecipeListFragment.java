@@ -32,7 +32,7 @@ import team14.tacoma.uw.edu.husky_cooking.model.Ingredient;
  * Activities containing this fragment MUST implement the {@link OnRecipeIngredientListFragmentInteractionListener}
  * interface.
  */
-public class IngredientFromRecipeListFragment extends Fragment {
+public class IngredientsFromRecipeListFragment extends Fragment {
 
     public static final String INGREDIENT_ITEM_SELECTED = "IngredientItemSelected";
     private static final String RECIPE_LIST_URL ="http://cssgate.insttech.washington.edu/~_450atm14/husky_cooking/recipe_ingredient_list.php?recipe=";
@@ -46,7 +46,7 @@ public class IngredientFromRecipeListFragment extends Fragment {
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public IngredientFromRecipeListFragment() {
+    public IngredientsFromRecipeListFragment() {
     }
 
     @Override

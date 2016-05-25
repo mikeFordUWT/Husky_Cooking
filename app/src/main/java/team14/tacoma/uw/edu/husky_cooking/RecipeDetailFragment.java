@@ -7,6 +7,7 @@ package team14.tacoma.uw.edu.husky_cooking;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -143,10 +144,22 @@ public class RecipeDetailFragment extends Fragment {
         viewIngredients.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                IngredientFromRecipeListFragment ingredients = new IngredientFromRecipeListFragment();
+                IngredientsFromRecipeListFragment ingredients = new IngredientsFromRecipeListFragment();
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragment_container, ingredients)
                         .addToBackStack(null).commit();
+            }
+        });
+
+        Button shareRecipe = (Button) view.findViewById(R.id.share_recipe_button);
+        shareRecipe.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent sendIntent = new Intent();
+                sendIntent.setAction(Intent.ACTION_SEND);
+                sendIntent.putExtra(Intent.EXTRA_TEXT, "This is my text to send.");
+                sendIntent.setType("text/plain");
+                startActivity(sendIntent);
             }
         });
         return view;

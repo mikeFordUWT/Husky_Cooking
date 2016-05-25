@@ -12,15 +12,15 @@ import java.util.List;
 
 /**
  * {@link RecyclerView.Adapter} that can display a {@link Ingredient} and makes a call to the
- * specified {@link IngredientFromRecipeListFragment.OnRecipeIngredientListFragmentInteractionListener}.
+ * specified {@link IngredientsFromRecipeListFragment.OnRecipeIngredientListFragmentInteractionListener}.
  *
  */
 public class MyIngredientFromRecipeRecyclerViewAdapter extends RecyclerView.Adapter<MyIngredientFromRecipeRecyclerViewAdapter.ViewHolder> {
 
     private final List<Ingredient> mValues;
-    private final IngredientFromRecipeListFragment.OnRecipeIngredientListFragmentInteractionListener mListener;
+    private final IngredientsFromRecipeListFragment.OnRecipeIngredientListFragmentInteractionListener mListener;
 
-    public MyIngredientFromRecipeRecyclerViewAdapter(List<Ingredient> items, IngredientFromRecipeListFragment.OnRecipeIngredientListFragmentInteractionListener listener) {
+    public MyIngredientFromRecipeRecyclerViewAdapter(List<Ingredient> items, IngredientsFromRecipeListFragment.OnRecipeIngredientListFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
     }
