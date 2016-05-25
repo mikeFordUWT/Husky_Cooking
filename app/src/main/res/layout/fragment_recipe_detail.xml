@@ -40,17 +40,24 @@
 
     <!--</ListView>-->
 
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center">
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/add_to_cookbook_button"
+            android:text="@string/add_to_cook_text"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/view_ingredients_button"
+            android:text="@string/view_ingredients"/>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/add_to_cookbook_button"
-        android:text="@string/add_to_cook_text"/>
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/view_ingredients_button"
-        android:text="@string/view_ingredients"/>
+    </LinearLayout>
+
 
 
 </LinearLayout>

@@ -197,15 +197,32 @@ public class RecipeActivity extends AppCompatActivity
         Fragment f = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
         if(f instanceof IngredientInShoppingListFragment){
             Log.d("IngredientInList", "NOO!!!");
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ShoppingListFragment()).addToBackStack(null).commit();
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, new ShoppingListFragment())
+                    .addToBackStack(null).commit();
         }else if(f instanceof ShoppingListFragment){
             Log.d("ShoppingList", "YAY!!");
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new UserHomeFragment()).addToBackStack(null).commit();
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, new UserHomeFragment())
+                    .addToBackStack(null).commit();
         }else if(f instanceof UserHomeFragment){
             Intent intent = new Intent();
             intent.setAction(Intent.ACTION_MAIN);
             intent.addCategory(Intent.CATEGORY_HOME);
             startActivity(intent);
+        } else if (f instanceof IngredientFromRecipeListFragment){
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, new RecipeDetailFragment())
+                    .addToBackStack(null).commit();
+
+        }else if(f instanceof RecipeDetailFragment){
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, new RecipeListFragment())
+                    .addToBackStack(null).commit();
+        }else if(f instanceof RecipeListFragment){
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, new UserHomeFragment())
+                    .addToBackStack(null).commit();
         }
         else{
             super.onBackPressed();
