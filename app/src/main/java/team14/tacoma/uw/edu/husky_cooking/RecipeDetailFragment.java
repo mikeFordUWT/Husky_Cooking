@@ -11,6 +11,7 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -70,7 +71,6 @@ public class RecipeDetailFragment extends Fragment {
      */
     private ListView mIngredientsListView;
 
-
     /**
      * Required empty constructor.
      */
@@ -84,10 +84,26 @@ public class RecipeDetailFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-
         Bundle args = getArguments();
+
+
         if (args != null) {
-            updateView((Recipe) args.getSerializable(RECIPE_ITEM_SELECTED));
+            Recipe current = (Recipe) args.getSerializable(RECIPE_ITEM_SELECTED);
+            updateView(current);
+        }else{
+            SharedPreferences sharedPreferences =
+                    getActivity().getSharedPreferences(getString(R.string.LOGIN_PREFS),
+                            Context.MODE_PRIVATE);
+
+            int id = sharedPreferences.getInt(getString(R.string.CURRENT_RECIPE_ID),0);
+            String name = sharedPreferences.getString(getString(R.string.CURRENT_RECIPE), "");
+            String descript = sharedPreferences.getString(getString(R.string.CURRENT_DESCRIPTION), "");
+            int cookTime = sharedPreferences.getInt(getString(R.string.CURRENT_COOK_TIME), 0);
+            int servings = sharedPreferences.getInt(getString(R.string.CURRENT_SERVINGS), 0);
+            Recipe r = new Recipe(id, name, descript, cookTime, servings);
+            updateView(r);
+
+            Log.d(RECIPE_ITEM_SELECTED, r.toString());
         }
     }
 
@@ -151,8 +167,18 @@ public class RecipeDetailFragment extends Fragment {
         SharedPreferences sharedPreferences =
                 getActivity().getSharedPreferences(getString(R.string.LOGIN_PREFS),
                         Context.MODE_PRIVATE);
+        sharedPreferences.edit().putInt(getString(R.string.CURRENT_RECIPE_ID),recipe.getRecipeId())
+                .commit();
         sharedPreferences.edit().putString(getString(R.string.CURRENT_RECIPE), recipe.getName())
                 .commit();
+        sharedPreferences.edit().putString(getString(R.string.CURRENT_DESCRIPTION), recipe.getDescription())
+                .commit();
+        sharedPreferences.edit().putInt(getString(R.string.CURRENT_COOK_TIME), recipe.getCookTime())
+                .commit();
+        sharedPreferences.edit().putInt(getString(R.string.CURRENT_SERVINGS), recipe.getServings())
+                .commit();
+
+
     }
 
     private String buildAddToUrl(View v){
