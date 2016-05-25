@@ -44,7 +44,7 @@ public class RecipeActivity extends AppCompatActivity
         AddRecipeFragment.AddRecipeInteractionListener,
         CookBookListFragment.OnCookFragmentInteractionListener,
         ShoppingListFragment.OnShoppingListFragmentInteractionListener,
-        IngredientFromRecipeListFragment.OnRecipeIngredientListFragmentInteractionListener{
+        IngredientsFromRecipeListFragment.OnRecipeIngredientListFragmentInteractionListener{
 
     /** base url to add a recipe to our database */
     public static final String ADD_RECIPE_URL =
@@ -126,9 +126,9 @@ public class RecipeActivity extends AppCompatActivity
 
     @Override
     public void onIngredientListFragmentInteraction(Ingredient ingredient){
-        IngredientFromRecipeListFragment ingredientFrom = new IngredientFromRecipeListFragment();
+        IngredientsFromRecipeListFragment ingredientFrom = new IngredientsFromRecipeListFragment();
         Bundle args = new Bundle();
-        args.putSerializable(IngredientFromRecipeListFragment.INGREDIENT_ITEM_SELECTED, ingredient);
+        args.putSerializable(IngredientsFromRecipeListFragment.INGREDIENT_ITEM_SELECTED, ingredient);
         ingredientFrom.setArguments(args);
 
         getSupportFragmentManager().beginTransaction()
@@ -138,13 +138,13 @@ public class RecipeActivity extends AppCompatActivity
 
     @Override
     public void onShopListFragmentInteraction(Ingredient ingredient){
-        IngredientInShoppingListFragment ingredientInShoppingListFragment = new IngredientInShoppingListFragment();
+        IngredientDetailFromShoppingListFragment ingredientDetailFromShoppingListFragment = new IngredientDetailFromShoppingListFragment();
         Bundle args = new Bundle();
-        args.putSerializable(IngredientInShoppingListFragment.INGREDIENT_ITEM_SELECTED, ingredient);
-        ingredientInShoppingListFragment.setArguments(args);
+        args.putSerializable(IngredientDetailFromShoppingListFragment.INGREDIENT_ITEM_SELECTED, ingredient);
+        ingredientDetailFromShoppingListFragment.setArguments(args);
 
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, ingredientInShoppingListFragment)
+                .replace(R.id.fragment_container, ingredientDetailFromShoppingListFragment)
                 .commit();
     }
 
@@ -195,7 +195,7 @@ public class RecipeActivity extends AppCompatActivity
     @Override
     public void onBackPressed(){
         Fragment f = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
-        if(f instanceof IngredientInShoppingListFragment){
+        if(f instanceof IngredientDetailFromShoppingListFragment){
             Log.d("IngredientInList", "NOO!!!");
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_container, new ShoppingListFragment())
@@ -210,7 +210,7 @@ public class RecipeActivity extends AppCompatActivity
             intent.setAction(Intent.ACTION_MAIN);
             intent.addCategory(Intent.CATEGORY_HOME);
             startActivity(intent);
-        } else if (f instanceof IngredientFromRecipeListFragment){
+        } else if (f instanceof IngredientsFromRecipeListFragment){
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_container, new RecipeDetailFragment())
                     .addToBackStack(null).commit();

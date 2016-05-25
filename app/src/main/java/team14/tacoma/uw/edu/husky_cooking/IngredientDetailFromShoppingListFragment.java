@@ -30,7 +30,7 @@ import team14.tacoma.uw.edu.husky_cooking.model.Ingredient;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class IngredientInShoppingListFragment extends Fragment {
+public class IngredientDetailFromShoppingListFragment extends Fragment {
 
     public static final String INGREDIENT_ITEM_SELECTED = "IngredientItemSelected";
 
@@ -48,7 +48,7 @@ public class IngredientInShoppingListFragment extends Fragment {
     private TextView mMeasurementTypeTextView;
 
     /** Required empty constructor */
-    public IngredientInShoppingListFragment() {
+    public IngredientDetailFromShoppingListFragment() {
         // Required empty public constructor
     }
 
