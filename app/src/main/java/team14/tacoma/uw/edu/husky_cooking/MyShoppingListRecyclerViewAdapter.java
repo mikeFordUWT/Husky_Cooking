@@ -1,8 +1,3 @@
-/*
- * Mike Ford and Ian Skyles
- * TCSS450 – Spring 2016
- * Recipe Project
- */
 package team14.tacoma.uw.edu.husky_cooking;
 
 import android.support.v7.widget.RecyclerView;
@@ -13,38 +8,31 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import team14.tacoma.uw.edu.husky_cooking.model.Recipe;
+import team14.tacoma.uw.edu.husky_cooking.model.Ingredient;
 
 /**
- * Binds data to our app / view. A flexible
- * view for providing a limited window into a large data set.
- * The data it binds is from recipes/cookbook on our DB.
- *
- * @author Mike Ford
- * @author Ian Skyles
- * @version 5/4/2016
+ * {@link RecyclerView.Adapter} that can display a {@link Ingredient} and makes a call to the
+ * specified {@link ShoppingListFragment.OnShoppingListFragmentInteractionListener}.
+ * TODO: Replace the implementation with code for your data type.
  */
-public class MyCookBookRecyclerViewAdapter extends RecyclerView.Adapter<MyCookBookRecyclerViewAdapter.ViewHolder> {
+public class MyShoppingListRecyclerViewAdapter extends RecyclerView.Adapter<MyShoppingListRecyclerViewAdapter.ViewHolder> {
+
+    private final List<Ingredient> mValues;
+    private final ShoppingListFragment.OnShoppingListFragmentInteractionListener mListener;
+
 
     /**
-     * A list of recipes (which have values, in cookbook or not).
-     */
-    private final List<Recipe> mValues;
-    /** Listener for the view recycler containing our recipes. */
-    private final CookBookListFragment.OnCookFragmentInteractionListener mListener;
-
-    /**
-     * Creates a cook book recycler view adapter.
+     * Creates a shopping list recycler view adapter.
      * @param items items for our recycle view.
      * @param listener listens for interaction with recycle view.
      */
-    public MyCookBookRecyclerViewAdapter(List<Recipe> items, CookBookListFragment.OnCookFragmentInteractionListener listener) {
+    public MyShoppingListRecyclerViewAdapter(List<Ingredient> items, ShoppingListFragment.OnShoppingListFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
     }
 
     /**
-     * Creates a view holder on creation.
+     * Creates a list of ingredients.
      * @param parent where to put our view
      * @param viewType type of view to
      * @return a view holder for recycle view
@@ -52,19 +40,14 @@ public class MyCookBookRecyclerViewAdapter extends RecyclerView.Adapter<MyCookBo
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.fragment_recipe, parent, false);
+                .inflate(R.layout.fragment_ingredient, parent, false);
         return new ViewHolder(view);
     }
 
-    /**
-     * Display the data at the specified position.
-     * @param holder where to put our view
-     * @param position type of view to
-     */
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.mContentView.setText(mValues.get(position).getName());
+        holder.mContentView.setText(mValues.get(position).getIngredientName());
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,29 +55,22 @@ public class MyCookBookRecyclerViewAdapter extends RecyclerView.Adapter<MyCookBo
                 if (null != mListener) {
                     // Notify the active callbacks interface (the activity, if the
                     // fragment is attached to one) that an item has been selected.
-                    mListener.onCookBookFragmentInteraction(holder.mItem);
+                    mListener.onShopListFragmentInteraction(holder.mItem);
                 }
             }
         });
     }
 
-    /**
-     * Gets item (recipe) count
-     * @return item count
-     */
     @Override
     public int getItemCount() {
         return mValues.size();
     }
 
-    /**
-     * An item view and metadata about its place within the RecyclerView.
-     */
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
         public final TextView mIdView;
         public final TextView mContentView;
-        public Recipe mItem;
+        public Ingredient mItem;
 
         /**
          * instantiate the view holder with a given view.

@@ -11,8 +11,10 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -27,6 +29,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import team14.tacoma.uw.edu.husky_cooking.authenticate.SignInActivity;
+import team14.tacoma.uw.edu.husky_cooking.model.Ingredient;
 import team14.tacoma.uw.edu.husky_cooking.model.Recipe;
 
 /**
@@ -39,7 +42,9 @@ import team14.tacoma.uw.edu.husky_cooking.model.Recipe;
 public class RecipeActivity extends AppCompatActivity
         implements RecipeListFragment.OnListFragmentInteractionListener,
         AddRecipeFragment.AddRecipeInteractionListener,
-        CookBookListFragment.OnCookFragmentInteractionListener {
+        CookBookListFragment.OnCookFragmentInteractionListener,
+        ShoppingListFragment.OnShoppingListFragmentInteractionListener,
+        IngredientFromRecipeListFragment.OnRecipeIngredientListFragmentInteractionListener{
 
     /** base url to add a recipe to our database */
     public static final String ADD_RECIPE_URL =
@@ -118,6 +123,31 @@ public class RecipeActivity extends AppCompatActivity
                 .commit();
     }
 
+
+    @Override
+    public void onIngredientListFragmentInteraction(Ingredient ingredient){
+        IngredientFromRecipeListFragment ingredientFrom = new IngredientFromRecipeListFragment();
+        Bundle args = new Bundle();
+        args.putSerializable(IngredientFromRecipeListFragment.INGREDIENT_ITEM_SELECTED, ingredient);
+        ingredientFrom.setArguments(args);
+
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, ingredientFrom)
+                .commit();
+    }
+
+    @Override
+    public void onShopListFragmentInteraction(Ingredient ingredient){
+        IngredientInShoppingListFragment ingredientInShoppingListFragment = new IngredientInShoppingListFragment();
+        Bundle args = new Bundle();
+        args.putSerializable(IngredientInShoppingListFragment.INGREDIENT_ITEM_SELECTED, ingredient);
+        ingredientInShoppingListFragment.setArguments(args);
+
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, ingredientInShoppingListFragment)
+                .commit();
+    }
+
     /**
      * Updates (menu view) to show options bar..
      * @param menu menu to be inflated
@@ -160,6 +190,43 @@ public class RecipeActivity extends AppCompatActivity
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed(){
+        Fragment f = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+        if(f instanceof IngredientInShoppingListFragment){
+            Log.d("IngredientInList", "NOO!!!");
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, new ShoppingListFragment())
+                    .addToBackStack(null).commit();
+        }else if(f instanceof ShoppingListFragment){
+            Log.d("ShoppingList", "YAY!!");
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, new UserHomeFragment())
+                    .addToBackStack(null).commit();
+        }else if(f instanceof UserHomeFragment){
+            Intent intent = new Intent();
+            intent.setAction(Intent.ACTION_MAIN);
+            intent.addCategory(Intent.CATEGORY_HOME);
+            startActivity(intent);
+        } else if (f instanceof IngredientFromRecipeListFragment){
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, new RecipeDetailFragment())
+                    .addToBackStack(null).commit();
+
+        }else if(f instanceof RecipeDetailFragment){
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, new RecipeListFragment())
+                    .addToBackStack(null).commit();
+        }else if(f instanceof RecipeListFragment){
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, new UserHomeFragment())
+                    .addToBackStack(null).commit();
+        }
+        else{
+            super.onBackPressed();
+        }
     }
 
 

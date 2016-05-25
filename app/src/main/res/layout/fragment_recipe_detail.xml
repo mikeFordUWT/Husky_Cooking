@@ -1,16 +1,12 @@
 <?xml version ="1.0" encoding = "utf-8"?>
 
-<ScrollView
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-<LinearLayout
-
-    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="team14.tacoma.uw.edu.husky_cooking.RecipeDetailFragment">
+    android:orientation="vertical">
+
 
     <TextView
         android:layout_width="match_parent"
@@ -36,21 +32,32 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/recipe_directions"/>
-    <ListView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/ingredients_detail_list_view"
-        >
+    <!--<ListView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:id="@+id/ingredients_detail_list_view"-->
+        <!--&gt;-->
 
-    </ListView>
+    <!--</ListView>-->
 
-
-    <Button
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/add_to_cookbook_button"
-        android:text="@string/add_to_cook_text"/>
+        android:orientation="horizontal"
+        android:layout_gravity="center">
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/add_to_cookbook_button"
+            android:text="@string/add_to_cook_text"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/view_ingredients_button"
+            android:text="@string/view_ingredients"/>
+
+    </LinearLayout>
+
 
 
 </LinearLayout>
-</ScrollView>

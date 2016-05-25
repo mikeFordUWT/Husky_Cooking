@@ -110,7 +110,7 @@ public class RecipeDetailFragment extends Fragment {
         mServingsTextView = (TextView) view.findViewById(R.id.recipe_servings);
         mCookTimeTextView = (TextView) view.findViewById(R.id.recipe_cook_time);
         mDirectionsTextView = (TextView) view.findViewById(R.id.recipe_directions);
-        mIngredientsListView = (ListView) view.findViewById(R.id.ingredients_detail_list_view);
+//        mIngredientsListView = (ListView) view.findViewById(R.id.ingredients_detail_list_view);
 
         Button addToCookBook = (Button) view.findViewById(R.id.add_to_cookbook_button);
 
@@ -120,6 +120,17 @@ public class RecipeDetailFragment extends Fragment {
                 String url = buildAddToUrl(v);
                 AddToCookTask task = new AddToCookTask();
                 task.execute(url);
+            }
+        });
+
+        Button viewIngredients = (Button) view.findViewById(R.id.view_ingredients_button);
+        viewIngredients.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                IngredientFromRecipeListFragment ingredients = new IngredientFromRecipeListFragment();
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, ingredients)
+                        .addToBackStack(null).commit();
             }
         });
         return view;
