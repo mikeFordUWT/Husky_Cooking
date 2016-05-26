@@ -133,6 +133,7 @@ public class RecipeActivity extends AppCompatActivity
 
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, ingredientFrom)
+                .addToBackStack(null)
                 .commit();
     }
 

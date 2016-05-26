@@ -1,12 +1,29 @@
 package team14.tacoma.uw.edu.husky_cooking;
 
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
+import team14.tacoma.uw.edu.husky_cooking.model.Ingredient;
 
 
 /**
@@ -15,6 +32,7 @@ import android.widget.TextView;
 public class IngredientDetailFromRecipeFragment extends Fragment {
     public static final String INGREDIENT_ITEM_SELECTED = "IngredientItemSelected";
 
+    private static final String ADD_TO_SHOPPING_LIST = "http://cssgate.insttech.washington.edu/~_450atm14/husky_cooking/add_to_shopping_list.php?";
     /** TextView for displayng ingredient name*/
     private TextView mIngredientNameTextView;
 
@@ -28,12 +46,155 @@ public class IngredientDetailFromRecipeFragment extends Fragment {
         // Required empty public constructor
     }
 
+    /**Updates view with ingredient item/ Serializable on starting this fragment. */
+    @Override
+    public void onStart(){
+        super.onStart();
+        Bundle args = getArguments();
+        if(args != null){
+            updateView((Ingredient) args.getSerializable(INGREDIENT_ITEM_SELECTED));
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_ingredient_detail_from_recipe, container, false);
+        View view =  inflater.inflate(R.layout.fragment_ingredient_detail_from_recipe, container, false);
+        mAmountTextView = (TextView) view.findViewById(R.id.ingredient_amount_from_recipe);
+        mIngredientNameTextView = (TextView) view.findViewById(R.id.ingredient_name_from_recipe);
+        mMeasurementTypeTextView = (TextView) view.findViewById(R.id.ingredient_measurement_type_from_recipe);
+
+        final Button addToShoppingList = (Button) view.findViewById(R.id.add_to_shopping_list_button);
+
+        addToShoppingList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String url = buildAddUrl(v);
+                AddIngredientToListTask task = new AddIngredientToListTask();
+                task.execute(url);
+
+                RecipeListFragment newFrag = new RecipeListFragment();
+                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.fragment_container, newFrag).addToBackStack(null);
+                transaction.commit();
+
+
+            }
+        });
+
+        return view;
     }
 
+    /**
+     * Allows ingredient to update view.
+     *
+     * @param ingredient ingredient to add
+     */
+    public void updateView(Ingredient ingredient) {
+        mAmountTextView.setText(ingredient.getAmount());
+        mIngredientNameTextView.setText(ingredient.getIngredientName());
+        mMeasurementTypeTextView.setText(ingredient.getMeasurementType());
+
+
+        SharedPreferences sharedPreferences =
+                getActivity().getSharedPreferences(getString(R.string.LOGIN_PREFS),
+                        Context.MODE_PRIVATE);
+        sharedPreferences.edit().putString(getString(R.string.CURRENT_INGREDIENT), ingredient.getIngredientName())
+                .commit();
+        sharedPreferences.edit().putString(getString(R.string.CURRENT_AMOUNT), ingredient.getAmount())
+                .commit();
+        sharedPreferences.edit().putString(getString(R.string.CURRENT_MEASURE_TYPE), ingredient.getMeasurementType())
+                .commit();
+
+    }
+
+    private String buildAddUrl(View v){
+        StringBuilder sb = new StringBuilder(ADD_TO_SHOPPING_LIST);
+        SharedPreferences sharedPreferences = getActivity()
+                .getSharedPreferences(getString(R.string.LOGIN_PREFS), Context.MODE_PRIVATE);
+        String ingredient = sharedPreferences.getString(getString(R.string.CURRENT_INGREDIENT),"");
+        sb.append("ingredient=");
+
+
+        String user = sharedPreferences.getString(getString(R.string.LOGGED_USER), "");
+        sb.append("&user_name=");
+
+
+
+        sb.append("&amount=");
+
+        sb.append("&measurement_type=");
+
+
+        return sb.toString();
+    }
+
+    private class AddIngredientToListTask extends AsyncTask<String, Void, String> {
+        /**
+         * Tells it to connect and read http responses for the cookbook.
+         * @param urls where to download recipe details
+         * @return string of recipe details
+         */
+        @Override
+        protected String doInBackground(String... urls) {
+            String response = "";
+            HttpURLConnection urlConnection = null;
+            for (String url : urls) {
+                try {
+                    URL urlObject = new URL(url);
+                    urlConnection = (HttpURLConnection) urlObject.openConnection();
+
+                    InputStream content = urlConnection.getInputStream();
+
+                    BufferedReader buffer = new BufferedReader(new InputStreamReader(content));
+                    String s = "";
+                    while ((s = buffer.readLine()) != null) {
+                        response += s;
+                    }
+                } catch (Exception e) {
+                    response = "Unable to add ingredient to shopping list, Reason: "
+                            + e.getMessage();
+                } finally {
+                    if (urlConnection != null) {
+                        urlConnection.disconnect();
+                    }
+                }
+
+
+            }
+
+            return response;
+        }
+
+        /**
+         * Does appropriate actions to set/replace
+         * recycler view and adapter.
+         * @param result result string to be be checked
+         */
+        @Override
+        protected void onPostExecute(String result) {
+            try {
+                JSONObject jsonObject = new JSONObject(result);
+                String status = (String) jsonObject.get("result");
+                if (status.contains("success")) {
+                    Toast.makeText(getActivity().getApplicationContext(), "Recipe successfully added to your Cookbook!",
+                            Toast.LENGTH_LONG)
+                            .show();
+                } else {
+                    String error = jsonObject.get("error").toString();
+                    String minusP = error.substring(0,error.length()-1);
+                    Toast.makeText(getActivity().getApplicationContext(), "Failed to add: "
+                                    + minusP +" in your Cookbook"
+                            , Toast.LENGTH_LONG)
+                            .show();
+                }
+            } catch (JSONException e) {
+                if(e.getMessage().contains("1")){
+                    Toast.makeText(getActivity().getApplicationContext(), "Item removed from your shopping List!", Toast.LENGTH_LONG).show();
+                }
+
+            }
+        }
+    }
 }

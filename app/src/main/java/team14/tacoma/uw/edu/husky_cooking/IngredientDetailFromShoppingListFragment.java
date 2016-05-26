@@ -103,16 +103,18 @@ public class IngredientDetailFromShoppingListFragment extends Fragment {
     public void updateView(Ingredient ingredient) {
         mAmountTextView.setText(ingredient.getAmount());
         mIngredientNameTextView.setText(ingredient.getIngredientName());
-        if(!ingredient.getMeasurementType().equals("")) {
-            mMeasurementTypeTextView.setText(ingredient.getMeasurementType());
-        }
+        mMeasurementTypeTextView.setText(ingredient.getMeasurementType());
+
 
         SharedPreferences sharedPreferences =
                 getActivity().getSharedPreferences(getString(R.string.LOGIN_PREFS),
                         Context.MODE_PRIVATE);
         sharedPreferences.edit().putString(getString(R.string.CURRENT_INGREDIENT), ingredient.getIngredientName())
                 .commit();
-
+        sharedPreferences.edit().putString(getString(R.string.CURRENT_AMOUNT), ingredient.getAmount())
+                .commit();
+        sharedPreferences.edit().putString(getString(R.string.CURRENT_MEASURE_TYPE), ingredient.getMeasurementType())
+                .commit();
 
     }
 
