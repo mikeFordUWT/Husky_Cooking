@@ -37,6 +37,8 @@
     <string name="CURRENT_DESCRIPTION">directions</string>
 
     <string name="CURRENT_INGREDIENT">ingredient</string>
+    <string name="CURRENT_AMOUNT">amount</string>
+    <string name="CURRENT_MEASURE_TYPE">measure type</string>
     <string name="register_button_label">REGISTER</string>
     <string name="sign_up_button_label">SIGN UP</string>
     <string name="login_in_button">LOG IN</string>
