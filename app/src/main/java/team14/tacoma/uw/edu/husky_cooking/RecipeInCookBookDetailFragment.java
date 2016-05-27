@@ -105,7 +105,12 @@ public class RecipeInCookBookDetailFragment extends Fragment {
         viewIngredients.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                TODO build new list frag for ingredients from Cookbook recipe
+               IngredientsFromCookBookListFragment ingredients =
+                       new IngredientsFromCookBookListFragment();
+
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, ingredients)
+                        .addToBackStack(null).commit();
             }
         });
         return view;
