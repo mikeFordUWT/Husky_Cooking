@@ -30,12 +30,22 @@
         android:layout_height="wrap_content"
         android:id="@+id/recipe_directions_in_cook"/>
 
-
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/view_ingredients_button_in_cook"
             android:text="@string/view_ingredients"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/share_from_cookbook_button"
+            android:text="@string/share_recipe_button"/>
+
+    </LinearLayout>
 
 
 

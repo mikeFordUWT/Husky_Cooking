@@ -93,6 +93,7 @@ public class RecipeInCookBookDetailFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+
         View view = inflater.inflate(R.layout.fragment_recipe_in_cook_book_detail, container, false);
 
         mRecipeNameTextView = (TextView) view.findViewById(R.id.recipe_name_in_cook);
@@ -104,8 +105,7 @@ public class RecipeInCookBookDetailFragment extends Fragment {
         viewIngredients.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Ingredien
-//                TODO
+//                TODO build new list frag for ingredients from Cookbook recipe
             }
         });
         return view;

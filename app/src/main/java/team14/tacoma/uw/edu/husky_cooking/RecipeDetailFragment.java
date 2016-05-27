@@ -122,6 +122,7 @@ public class RecipeDetailFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+
         View view = inflater.inflate(R.layout.fragment_recipe_detail, container, false);
         mRecipeNameTextView = (TextView) view.findViewById(R.id.recipe_name);
         mServingsTextView = (TextView) view.findViewById(R.id.recipe_servings);
@@ -145,6 +146,8 @@ public class RecipeDetailFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 IngredientsFromRecipeListFragment ingredients = new IngredientsFromRecipeListFragment();
+
+
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragment_container, ingredients)
                         .addToBackStack(null).commit();

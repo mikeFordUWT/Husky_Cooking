@@ -112,9 +112,9 @@ public class RecipeActivity extends AppCompatActivity
      */
     @Override
     public void onCookBookFragmentInteraction(Recipe recipe){
-        RecipeDetailFragment recipeDetailFragment = new RecipeDetailFragment();
+        RecipeInCookBookDetailFragment recipeDetailFragment = new RecipeInCookBookDetailFragment();
         Bundle args = new Bundle();
-        args.putSerializable(RecipeDetailFragment.RECIPE_ITEM_SELECTED, recipe);
+        args.putSerializable(RecipeInCookBookDetailFragment.RECIPE_ITEM_SELECTED, recipe);
         recipeDetailFragment.setArguments(args);
 
         getSupportFragmentManager().beginTransaction()
@@ -126,7 +126,7 @@ public class RecipeActivity extends AppCompatActivity
 
     @Override
     public void onIngredientListFragmentInteraction(Ingredient ingredient){
-        IngredientsFromRecipeListFragment ingredientFrom = new IngredientsFromRecipeListFragment();
+        IngredientDetailFromRecipeFragment ingredientFrom = new IngredientDetailFromRecipeFragment();
         Bundle args = new Bundle();
         args.putSerializable(IngredientsFromRecipeListFragment.INGREDIENT_ITEM_SELECTED, ingredient);
         ingredientFrom.setArguments(args);
@@ -193,6 +193,10 @@ public class RecipeActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Handles the actions of the prebuilt back button overrides behavior.
+     * Allows user to access correct fragments from a specific fragment.
+     */
     @Override
     public void onBackPressed(){
         Fragment f = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
@@ -221,6 +225,14 @@ public class RecipeActivity extends AppCompatActivity
                     .replace(R.id.fragment_container, new RecipeListFragment())
                     .addToBackStack(null).commit();
         }else if(f instanceof RecipeListFragment){
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, new UserHomeFragment())
+                    .addToBackStack(null).commit();
+        }else if(f instanceof RecipeInCookBookDetailFragment){
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, new CookBookListFragment())
+                    .addToBackStack(null).commit();
+        }else if(f instanceof CookBookListFragment){
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_container, new UserHomeFragment())
                     .addToBackStack(null).commit();

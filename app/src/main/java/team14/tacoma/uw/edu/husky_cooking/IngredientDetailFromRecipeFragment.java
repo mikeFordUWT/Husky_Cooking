@@ -22,6 +22,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 
 import team14.tacoma.uw.edu.husky_cooking.model.Ingredient;
 
@@ -45,6 +46,7 @@ public class IngredientDetailFromRecipeFragment extends Fragment {
     public IngredientDetailFromRecipeFragment() {
         // Required empty public constructor
     }
+
 
     /**Updates view with ingredient item/ Serializable on starting this fragment. */
     @Override
@@ -111,20 +113,33 @@ public class IngredientDetailFromRecipeFragment extends Fragment {
 
     private String buildAddUrl(View v){
         StringBuilder sb = new StringBuilder(ADD_TO_SHOPPING_LIST);
-        SharedPreferences sharedPreferences = getActivity()
-                .getSharedPreferences(getString(R.string.LOGIN_PREFS), Context.MODE_PRIVATE);
-        String ingredient = sharedPreferences.getString(getString(R.string.CURRENT_INGREDIENT),"");
-        sb.append("ingredient=");
+
+        try{
+
+            SharedPreferences sharedPreferences = getActivity()
+                    .getSharedPreferences(getString(R.string.LOGIN_PREFS), Context.MODE_PRIVATE);
+            String ingredient = sharedPreferences.getString(getString(R.string.CURRENT_INGREDIENT),"");
+            sb.append("ingredient=");
+            sb.append(URLEncoder.encode(ingredient, "UTF-8"));
+
+            String user = sharedPreferences.getString(getString(R.string.LOGGED_USER), "");
+            sb.append("&user_name=");
+            sb.append(URLEncoder.encode(user, "UTF-8"));
 
 
-        String user = sharedPreferences.getString(getString(R.string.LOGGED_USER), "");
-        sb.append("&user_name=");
+            String amount = mAmountTextView.getText().toString();
+            sb.append("&amount=");
+            sb.append(URLEncoder.encode(amount, "UTF-8"));
 
+            String measure = mMeasurementTypeTextView.getText().toString();
+            sb.append("&measurement_type=");
+            sb.append(URLEncoder.encode(measure, "UTF-8"));
 
+        } catch (Exception e){
+            Toast.makeText(v.getContext(), "Something wrong with the url " + e.getMessage(),
+                    Toast.LENGTH_LONG).show();
+        }
 
-        sb.append("&amount=");
-
-        sb.append("&measurement_type=");
 
 
         return sb.toString();
@@ -178,14 +193,14 @@ public class IngredientDetailFromRecipeFragment extends Fragment {
                 JSONObject jsonObject = new JSONObject(result);
                 String status = (String) jsonObject.get("result");
                 if (status.contains("success")) {
-                    Toast.makeText(getActivity().getApplicationContext(), "Recipe successfully added to your Cookbook!",
+                    Toast.makeText(getActivity().getApplicationContext(), "Ingredient successfully added to your Shopping List!",
                             Toast.LENGTH_LONG)
                             .show();
                 } else {
                     String error = jsonObject.get("error").toString();
                     String minusP = error.substring(0,error.length()-1);
                     Toast.makeText(getActivity().getApplicationContext(), "Failed to add: "
-                                    + minusP +" in your Cookbook"
+                                    + minusP +" in your shopping list!"
                             , Toast.LENGTH_LONG)
                             .show();
                 }
