@@ -29,7 +29,7 @@ import team14.tacoma.uw.edu.husky_cooking.model.Ingredient;
 /**
  * A fragment representing a list of Items.
  * <p/>
- * Activities containing this fragment MUST implement the {@link OnShoppingIngredientListFragmentInteractionListener}
+ * Activities containing this fragment MUST implement the {@link OnCookBookIngredientListFragmentInteractionListener}
  * interface.
  */
 public class IngredientsFromCookBookListFragment extends Fragment {
@@ -39,7 +39,7 @@ public class IngredientsFromCookBookListFragment extends Fragment {
 
     private int mColumnCount = 1;
 
-    private OnShoppingIngredientListFragmentInteractionListener mListener;
+    private OnCookBookIngredientListFragmentInteractionListener mListener;
 
     private RecyclerView mRecyclerView;
 
@@ -106,8 +106,8 @@ public class IngredientsFromCookBookListFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnShoppingIngredientListFragmentInteractionListener) {
-            mListener = (OnShoppingIngredientListFragmentInteractionListener) context;
+        if (context instanceof OnCookBookIngredientListFragmentInteractionListener) {
+            mListener = (OnCookBookIngredientListFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnListFragmentInteractionListener");
@@ -130,8 +130,8 @@ public class IngredientsFromCookBookListFragment extends Fragment {
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-    public interface OnShoppingIngredientListFragmentInteractionListener {
-        void onIngredientShoppingListFragmentInteraction(Ingredient item);
+    public interface OnCookBookIngredientListFragmentInteractionListener {
+        void onIngredientCookBookListFragmentInteraction(Ingredient item);
     }
 
 

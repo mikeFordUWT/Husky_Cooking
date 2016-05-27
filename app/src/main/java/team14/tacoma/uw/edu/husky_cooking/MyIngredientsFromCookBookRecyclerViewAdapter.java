@@ -12,15 +12,15 @@ import team14.tacoma.uw.edu.husky_cooking.model.Ingredient;
 
 /**
  * {@link RecyclerView.Adapter} that can display a {@link Ingredient} and makes a call to the
- * specified {@link IngredientsFromCookBookListFragment.OnShoppingIngredientListFragmentInteractionListener}.
+ * specified {@link IngredientsFromCookBookListFragment.OnCookBookIngredientListFragmentInteractionListener}.
  * TODO: Replace the implementation with code for your data type.
  */
 public class MyIngredientsFromCookBookRecyclerViewAdapter extends RecyclerView.Adapter<MyIngredientsFromCookBookRecyclerViewAdapter.ViewHolder> {
 
     private final List<Ingredient> mValues;
-    private final IngredientsFromCookBookListFragment.OnShoppingIngredientListFragmentInteractionListener mListener;
+    private final IngredientsFromCookBookListFragment.OnCookBookIngredientListFragmentInteractionListener mListener;
 
-    public MyIngredientsFromCookBookRecyclerViewAdapter(List<Ingredient> items, IngredientsFromCookBookListFragment.OnShoppingIngredientListFragmentInteractionListener listener) {
+    public MyIngredientsFromCookBookRecyclerViewAdapter(List<Ingredient> items, IngredientsFromCookBookListFragment.OnCookBookIngredientListFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
     }
@@ -43,7 +43,7 @@ public class MyIngredientsFromCookBookRecyclerViewAdapter extends RecyclerView.A
                 if (null != mListener) {
                     // Notify the active callbacks interface (the activity, if the
                     // fragment is attached to one) that an item has been selected.
-                    mListener.onIngredientShoppingListFragmentInteraction(holder.mItem);
+                    mListener.onIngredientCookBookListFragmentInteraction(holder.mItem);
                 }
             }
         });

@@ -125,7 +125,7 @@ public class RecipeListFragment extends Fragment {
             mListener = (OnListFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement OnShoppingIngredientListFragmentInteractionListener");
+                    + " must implement OnCookBookIngredientListFragmentInteractionListener");
         }
     }
 

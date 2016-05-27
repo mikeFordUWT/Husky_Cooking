@@ -45,7 +45,7 @@ public class RecipeActivity extends AppCompatActivity
         CookBookListFragment.OnCookFragmentInteractionListener,
         ShoppingListFragment.OnShoppingListFragmentInteractionListener,
         IngredientsFromRecipeListFragment.OnRecipeIngredientListFragmentInteractionListener,
-        IngredientsFromCookBookListFragment.OnShoppingIngredientListFragmentInteractionListener {
+        IngredientsFromCookBookListFragment.OnCookBookIngredientListFragmentInteractionListener {
 
     /** base url to add a recipe to our database */
     public static final String ADD_RECIPE_URL =
@@ -127,7 +127,7 @@ public class RecipeActivity extends AppCompatActivity
 
     @Override
     public void onIngredientListFragmentInteraction(Ingredient ingredient){
-        IngredientDetailFromShoppingListFragment ingredientFrom = new IngredientDetailFromShoppingListFragment();
+        IngredientDetailFromRecipeFragment ingredientFrom = new IngredientDetailFromRecipeFragment();
         Bundle args = new Bundle();
         args.putSerializable(IngredientsFromRecipeListFragment.INGREDIENT_ITEM_SELECTED, ingredient);
         ingredientFrom.setArguments(args);
@@ -139,8 +139,8 @@ public class RecipeActivity extends AppCompatActivity
     }
 
     @Override
-    public void onIngredientShoppingListFragmentInteraction(Ingredient ingredient){
-        IngredientDetailFromShoppingListFragment ingredientFrom = new IngredientDetailFromShoppingListFragment();
+    public void onIngredientCookBookListFragmentInteraction(Ingredient ingredient){
+        IngredientDetailFromCookBookFragment ingredientFrom = new IngredientDetailFromCookBookFragment();
         Bundle args = new Bundle();
         args.putSerializable(IngredientsFromCookBookListFragment.INGREDIENT_ITEM_SELECTED, ingredient);
         ingredientFrom.setArguments(args);
@@ -249,6 +249,10 @@ public class RecipeActivity extends AppCompatActivity
         }else if(f instanceof CookBookListFragment){
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_container, new UserHomeFragment())
+                    .addToBackStack(null).commit();
+        } else if(f instanceof IngredientsFromCookBookListFragment){
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, new RecipeInCookBookDetailFragment())
                     .addToBackStack(null).commit();
         }
         else{
