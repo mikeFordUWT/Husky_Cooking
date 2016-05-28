@@ -22,6 +22,8 @@
     <string name="all_recipes_button_label">View All Recipes</string>
     <string name="create_recipe_button_label">Create a new Recipe</string>
     <string name="view_menus_buttons_label">View Menus</string>
+    <string name="your_stuff">Your Stuff</string>
+    <string name="all_stuff">Other Stuff</string>
 
     <string name="cook_book_upper_label">Your Cookbook </string>
 

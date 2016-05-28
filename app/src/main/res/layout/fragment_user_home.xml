@@ -11,17 +11,28 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="@string/home_screen_label"
-        android:layout_gravity="center"/>
+        android:textStyle="bold"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"/>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/your_stuff"
+        android:layout_gravity="center"
+        android:textStyle="bold"
+        android:layout_marginTop="20dp"/>
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+
         android:text="@string/cookbook_button_label"
         android:textStyle="bold"
         android:id="@+id/cookbook_button"
 
         android:layout_gravity="center_horizontal"
-        android:background="@color/colorAccent1"
+        android:background="@color/colorAccent"
         android:layout_marginBottom="10dp"/>
 
 
@@ -35,6 +46,15 @@
         android:background="@color/colorAccent"
         android:layout_marginBottom="10dp"/>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/all_stuff"
+        android:layout_gravity="center"
+        android:textStyle="bold"
+        android:layout_marginTop="35dp"/>
+
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -45,6 +65,7 @@
         android:background="@color/colorAccent1"
         android:layout_marginBottom="10dp"/>
 
+
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -52,7 +73,7 @@
         android:textStyle="bold"
         android:id="@+id/create_recipe_button"
         android:layout_gravity="center_horizontal"
-        android:background="@color/colorAccent"
+        android:background="@color/colorAccent1"
         android:layout_marginBottom="10dp"/>
 
     <Button
