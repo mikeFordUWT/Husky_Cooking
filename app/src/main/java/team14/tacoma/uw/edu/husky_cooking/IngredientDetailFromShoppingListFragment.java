@@ -205,7 +205,10 @@ public class IngredientDetailFromShoppingListFragment extends Fragment {
                 }
             } catch (JSONException e) {
                 if(e.getMessage().contains("1")){
-                    Toast.makeText(getActivity().getApplicationContext(), "Item removed from your shopping List!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity().getApplicationContext(),
+                            mIngredientNameTextView.getText().toString()+
+                                    " has been removed from your shopping List!",
+                            Toast.LENGTH_LONG).show();
                 }
 
             }

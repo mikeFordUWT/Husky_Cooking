@@ -50,14 +50,15 @@ public class UserHomeFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_user_home, container, false);
 
         //Create button lists
-        Button Cookbook = (Button)v.findViewById(R.id.cookbook_button);
-        Button ShoppingList = (Button) v.findViewById(R.id.shopping_list_button);
-        Button AllRecipes = (Button) v.findViewById(R.id.all_recipe_button);
-        Button CreateRecipes = (Button) v.findViewById(R.id.create_recipe_button);
+        Button cookbook = (Button)v.findViewById(R.id.cookbook_button);
+        Button shoppingList = (Button) v.findViewById(R.id.shopping_list_button);
+        Button allRecipes = (Button) v.findViewById(R.id.all_recipe_button);
+        Button createRecipes = (Button) v.findViewById(R.id.create_recipe_button);
+        Button menus = (Button) v.findViewById(R.id.view_menu_button);
 
 
         //set on click listener for cookbook
-        Cookbook.setOnClickListener( new View.OnClickListener() {
+        cookbook.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -71,7 +72,7 @@ public class UserHomeFragment extends Fragment {
             }
         });
         //set on click listener for
-        ShoppingList.setOnClickListener( new View.OnClickListener() {
+        shoppingList.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 ShoppingListFragment newFragment = new ShoppingListFragment();
@@ -90,7 +91,7 @@ public class UserHomeFragment extends Fragment {
             }
         });
         //set on click listener for cookbook
-        Cookbook.setOnClickListener( new View.OnClickListener() {
+        cookbook.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -104,7 +105,7 @@ public class UserHomeFragment extends Fragment {
             }
         });
         //set on click listener for
-        AllRecipes.setOnClickListener( new View.OnClickListener() {
+        allRecipes.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -118,13 +119,23 @@ public class UserHomeFragment extends Fragment {
             }
         });
         //set on click listener for
-        CreateRecipes.setOnClickListener( new View.OnClickListener() {
+        createRecipes.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
                 AddRecipeFragment addRecipeFragment = new AddRecipeFragment();
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragment_container, addRecipeFragment)
+                        .addToBackStack(null).commit();
+            }
+        });
+
+        menus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MenuListFragment menuListFragment = new MenuListFragment();
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, menuListFragment)
                         .addToBackStack(null).commit();
             }
         });

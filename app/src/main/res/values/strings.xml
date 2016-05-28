@@ -15,8 +15,8 @@
     <string name="cook_time_hint">How long will this take?(in minutes)</string>
 
     <string name="add_recipe_but_text">Add Recipe</string>
-    <string name="add_to_cook_text">Add to Cook Book</string>
-    <string name="share_recipe_button">Share Recipe</string>
+    <string name="add_to_cook_text">Add to Cookbook</string>
+    <string name="share_recipe_button">Share</string>
     <string name="cookbook_button_label">Cookbook</string>
     <string name="shopping_list_button_label">Shopping List</string>
     <string name="all_recipes_button_label">View All Recipes</string>
@@ -25,7 +25,7 @@
     <string name="your_stuff">Your Stuff</string>
     <string name="all_stuff">Other Stuff</string>
 
-    <string name="cook_book_upper_label">Your Cookbook </string>
+    <string name="cook_book_upper_label">Your Cookbook</string>
 
 
     <string name="action_logout">LOG OUT</string>

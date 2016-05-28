@@ -29,6 +29,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import team14.tacoma.uw.edu.husky_cooking.authenticate.SignInActivity;
+import team14.tacoma.uw.edu.husky_cooking.model.FoodMenu;
 import team14.tacoma.uw.edu.husky_cooking.model.Ingredient;
 import team14.tacoma.uw.edu.husky_cooking.model.Recipe;
 
@@ -45,7 +46,8 @@ public class RecipeActivity extends AppCompatActivity
         CookBookListFragment.OnCookFragmentInteractionListener,
         ShoppingListFragment.OnShoppingListFragmentInteractionListener,
         IngredientsFromRecipeListFragment.OnRecipeIngredientListFragmentInteractionListener,
-        IngredientsFromCookBookListFragment.OnCookBookIngredientListFragmentInteractionListener {
+        IngredientsFromCookBookListFragment.OnCookBookIngredientListFragmentInteractionListener,
+        MenuListFragment.OnListFragmentInteractionListener {
 
     /** base url to add a recipe to our database */
     public static final String ADD_RECIPE_URL =
@@ -104,6 +106,19 @@ public class RecipeActivity extends AppCompatActivity
                 .addToBackStack(null)
                 .commit();
     }
+
+    @Override
+    public void onMenuFragmentInteraction(FoodMenu item) {
+
+//        TODO replace with recipes from menu and recipe detail and ingreident detail fragments
+        RecipeListFragment recipeListFragment = new RecipeListFragment();
+
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, recipeListFragment)
+                .addToBackStack(null)
+                .commit();
+    }
+
 
     /**
      * Controls what happens when interacting with adding recipe
@@ -259,6 +274,8 @@ public class RecipeActivity extends AppCompatActivity
             super.onBackPressed();
         }
     }
+
+
 
 
     /**
