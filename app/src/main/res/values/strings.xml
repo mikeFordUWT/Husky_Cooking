@@ -34,6 +34,7 @@
     <string name="LOGIN_FILE">team14.tacoma.uw.edu.husky_cooking.LOGIN_FILE</string>
     <string name="LOGIN_URL">http://cssgate.insttech.washington.edu/~_450atm14/husky_cooking/login.php?</string>
     <string name="LOGGED_USER">user</string>
+    <string name="CURRENT_MENU">menu</string>
 
     <string name="CURRENT_RECIPE_ID">id</string>
     <string name="CURRENT_RECIPE">recipe</string>

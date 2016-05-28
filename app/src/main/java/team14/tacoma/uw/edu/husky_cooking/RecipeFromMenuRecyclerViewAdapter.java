@@ -6,15 +6,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import team14.tacoma.uw.edu.husky_cooking.dummy.DummyContent.DummyItem;
 import team14.tacoma.uw.edu.husky_cooking.model.Recipe;
 
 import java.util.List;
 
 /**
- * {@link RecyclerView.Adapter} that can display a {@link DummyItem} and makes a call to the
+ * {@link RecyclerView.Adapter} that can display a {@link Recipe} and makes a call to the
  * specified {@link RecipeFromMenuListFragment.OnListFragmentInteractionListener}.
- * TODO: Replace the implementation with code for your data type.
  */
 public class RecipeFromMenuRecyclerViewAdapter extends RecyclerView.Adapter<RecipeFromMenuRecyclerViewAdapter.ViewHolder> {
 

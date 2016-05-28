@@ -10,8 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import team14.tacoma.uw.edu.husky_cooking.dummy.DummyContent;
-import team14.tacoma.uw.edu.husky_cooking.dummy.DummyContent.DummyItem;
+
 import team14.tacoma.uw.edu.husky_cooking.model.Recipe;
 
 /**

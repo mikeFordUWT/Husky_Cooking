@@ -112,7 +112,11 @@ public class RecipeActivity extends AppCompatActivity
 
 //        TODO replace with recipes from menu and recipe detail and ingreident detail fragments
         RecipeListFragment recipeListFragment = new RecipeListFragment();
+        SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.LOGIN_PREFS),
+                Context.MODE_PRIVATE);
 
+        sharedPreferences.edit().putString(getString(R.string.CURRENT_MENU),
+                item.getMenuName()).commit();
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, recipeListFragment)
                 .addToBackStack(null)
