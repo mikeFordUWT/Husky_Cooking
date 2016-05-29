@@ -111,7 +111,6 @@ public class RecipeActivity extends AppCompatActivity
     @Override
     public void onMenuFragmentInteraction(FoodMenu item) {
 
-//        TODO replace with recipes from menu and recipe detail and ingreident detail fragments
         RecipeFromMenuListFragment recipeListFragment = new RecipeFromMenuListFragment();
         SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.LOGIN_PREFS),
                 Context.MODE_PRIVATE);
@@ -126,7 +125,15 @@ public class RecipeActivity extends AppCompatActivity
 
     @Override
     public void onRecipeFromMenuListFragmentInteraction(Recipe item) {
+        RecipeDetailFromMenuFragment newFrag = new RecipeDetailFromMenuFragment();
 
+        Bundle args = new Bundle();
+        args.putSerializable(RecipeDetailFromMenuFragment.RECIPE_ITEM_SELECTED, item);
+        newFrag.setArguments(args);
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, newFrag)
+                .addToBackStack(null)
+                .commit();
     }
 
 

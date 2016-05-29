@@ -51,6 +51,8 @@ public class RecipeDetailFragment extends Fragment {
     private static final String ADD_TO_COOK_URL =
             "http://cssgate.insttech.washington.edu/~_450atm14/husky_cooking/cookbook_add.php?";
 
+    private String mParent;
+
     /**
      * TextView that displays recipe name
      */
@@ -86,7 +88,7 @@ public class RecipeDetailFragment extends Fragment {
     public void onStart() {
         super.onStart();
         Bundle args = getArguments();
-
+        mParent = "";
 
         if (args != null) {
             Recipe current = (Recipe) args.getSerializable(RECIPE_ITEM_SELECTED);
