@@ -300,6 +300,26 @@ public class RecipeActivity extends AppCompatActivity
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_container, new RecipeInCookBookDetailFragment())
                     .addToBackStack(null).commit();
+        }else if(f instanceof IngredientDetailFromMenuFragment){
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, new IngredientsFromMenuListFragment())
+                    .addToBackStack(null).commit();
+        }else if(f instanceof IngredientsFromMenuListFragment){
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, new RecipeDetailFromMenuFragment())
+                    .addToBackStack(null).commit();
+        }else if(f instanceof RecipeDetailFromMenuFragment){
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, new RecipeFromMenuListFragment())
+                    .addToBackStack(null).commit();
+        }else if(f instanceof RecipeFromMenuListFragment){
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, new MenuListFragment())
+                    .addToBackStack(null).commit();
+        }else if(f instanceof MenuListFragment){
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, new UserHomeFragment())
+                    .addToBackStack(null).commit();
         }
         else{
             super.onBackPressed();

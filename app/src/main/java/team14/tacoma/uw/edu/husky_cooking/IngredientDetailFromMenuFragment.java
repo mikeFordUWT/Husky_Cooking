@@ -77,7 +77,10 @@ public class IngredientDetailFromMenuFragment extends Fragment {
                 String url = buildAddUrl(v);
                 AddIngredientToListTask task = new AddIngredientToListTask();
                 task.execute(url);
-//                TODO build ingredient list fragment and launch new one
+                IngredientsFromMenuListFragment newFrag = new IngredientsFromMenuListFragment();
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, newFrag)
+                        .addToBackStack(null).commit();
             }
         });
 

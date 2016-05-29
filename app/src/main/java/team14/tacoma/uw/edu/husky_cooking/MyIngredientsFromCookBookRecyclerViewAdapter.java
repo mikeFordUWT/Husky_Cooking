@@ -13,7 +13,6 @@ import team14.tacoma.uw.edu.husky_cooking.model.Ingredient;
 /**
  * {@link RecyclerView.Adapter} that can display a {@link Ingredient} and makes a call to the
  * specified {@link IngredientsFromCookBookListFragment.OnCookBookIngredientListFragmentInteractionListener}.
- * TODO: Replace the implementation with code for your data type.
  */
 public class MyIngredientsFromCookBookRecyclerViewAdapter extends RecyclerView.Adapter<MyIngredientsFromCookBookRecyclerViewAdapter.ViewHolder> {
 
