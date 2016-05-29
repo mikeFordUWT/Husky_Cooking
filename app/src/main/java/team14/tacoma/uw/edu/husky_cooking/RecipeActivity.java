@@ -47,7 +47,8 @@ public class RecipeActivity extends AppCompatActivity
         ShoppingListFragment.OnShoppingListFragmentInteractionListener,
         IngredientsFromRecipeListFragment.OnRecipeIngredientListFragmentInteractionListener,
         IngredientsFromCookBookListFragment.OnCookBookIngredientListFragmentInteractionListener,
-        MenuListFragment.OnListFragmentInteractionListener {
+        MenuListFragment.OnListFragmentInteractionListener,
+        RecipeFromMenuListFragment.OnListFragmentInteractionListener{
 
     /** base url to add a recipe to our database */
     public static final String ADD_RECIPE_URL =
@@ -111,7 +112,7 @@ public class RecipeActivity extends AppCompatActivity
     public void onMenuFragmentInteraction(FoodMenu item) {
 
 //        TODO replace with recipes from menu and recipe detail and ingreident detail fragments
-        RecipeListFragment recipeListFragment = new RecipeListFragment();
+        RecipeFromMenuListFragment recipeListFragment = new RecipeFromMenuListFragment();
         SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.LOGIN_PREFS),
                 Context.MODE_PRIVATE);
 
@@ -121,6 +122,11 @@ public class RecipeActivity extends AppCompatActivity
                 .replace(R.id.fragment_container, recipeListFragment)
                 .addToBackStack(null)
                 .commit();
+    }
+
+    @Override
+    public void onRecipeFromMenuListFragmentInteraction(Recipe item) {
+
     }
 
 
