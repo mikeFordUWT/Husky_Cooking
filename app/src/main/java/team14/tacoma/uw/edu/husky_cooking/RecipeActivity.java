@@ -48,7 +48,8 @@ public class RecipeActivity extends AppCompatActivity
         IngredientsFromRecipeListFragment.OnRecipeIngredientListFragmentInteractionListener,
         IngredientsFromCookBookListFragment.OnCookBookIngredientListFragmentInteractionListener,
         MenuListFragment.OnListFragmentInteractionListener,
-        RecipeFromMenuListFragment.OnListFragmentInteractionListener{
+        RecipeFromMenuListFragment.OnListFragmentInteractionListener,
+        IngredientsFromMenuListFragment.OnListFragmentInteractionListener{
 
     /** base url to add a recipe to our database */
     public static final String ADD_RECIPE_URL =
@@ -162,6 +163,19 @@ public class RecipeActivity extends AppCompatActivity
         IngredientDetailFromRecipeFragment ingredientFrom = new IngredientDetailFromRecipeFragment();
         Bundle args = new Bundle();
         args.putSerializable(IngredientsFromRecipeListFragment.INGREDIENT_ITEM_SELECTED, ingredient);
+        ingredientFrom.setArguments(args);
+
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, ingredientFrom)
+                .addToBackStack(null)
+                .commit();
+    }
+
+    @Override
+    public void onIngredientFromMenuListFragmentInteraction(Ingredient item) {
+        IngredientDetailFromMenuFragment ingredientFrom = new IngredientDetailFromMenuFragment();
+        Bundle args = new Bundle();
+        args.putSerializable(IngredientsFromMenuListFragment.INGREDIENT_ITEM_SELECTED, item);
         ingredientFrom.setArguments(args);
 
         getSupportFragmentManager().beginTransaction()
