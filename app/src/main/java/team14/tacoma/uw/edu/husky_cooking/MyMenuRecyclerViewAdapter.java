@@ -6,21 +6,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import team14.tacoma.uw.edu.husky_cooking.model.Ingredient;
+
+import team14.tacoma.uw.edu.husky_cooking.model.FoodMenu;
 
 import java.util.List;
 
 /**
- * {@link RecyclerView.Adapter} that can display a {@link Ingredient} and makes a call to the
- * specified {@link IngredientsFromRecipeListFragment.OnRecipeIngredientListFragmentInteractionListener}.
- *
+ * {@link RecyclerView.Adapter} that can display a {@link FoodMenu} and makes a call to the
+ * specified {@link MenuListFragment.OnListFragmentInteractionListener}.
  */
-public class MyIngredientFromRecipeRecyclerViewAdapter extends RecyclerView.Adapter<MyIngredientFromRecipeRecyclerViewAdapter.ViewHolder> {
+public class MyMenuRecyclerViewAdapter extends RecyclerView.Adapter<MyMenuRecyclerViewAdapter.ViewHolder> {
 
-    private final List<Ingredient> mValues;
-    private final IngredientsFromRecipeListFragment.OnRecipeIngredientListFragmentInteractionListener mListener;
+    private final List<FoodMenu> mValues;
+    private final MenuListFragment.OnListFragmentInteractionListener mListener;
 
-    public MyIngredientFromRecipeRecyclerViewAdapter(List<Ingredient> items, IngredientsFromRecipeListFragment.OnRecipeIngredientListFragmentInteractionListener listener) {
+    public MyMenuRecyclerViewAdapter(List<FoodMenu> items, MenuListFragment.OnListFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
     }
@@ -28,14 +28,14 @@ public class MyIngredientFromRecipeRecyclerViewAdapter extends RecyclerView.Adap
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.fragment_ingredient_from_recipe, parent, false);
+                .inflate(R.layout.fragment_menu, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.mContentView.setText(mValues.get(position).getIngredientName());
+        holder.mContentView.setText(mValues.get(position).getMenuName());
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -43,7 +43,7 @@ public class MyIngredientFromRecipeRecyclerViewAdapter extends RecyclerView.Adap
                 if (null != mListener) {
                     // Notify the active callbacks interface (the activity, if the
                     // fragment is attached to one) that an item has been selected.
-                    mListener.onIngredientListFragmentInteraction(holder.mItem);
+                    mListener.onMenuFragmentInteraction(holder.mItem);
                 }
             }
         });
@@ -58,7 +58,7 @@ public class MyIngredientFromRecipeRecyclerViewAdapter extends RecyclerView.Adap
         public final View mView;
         public final TextView mIdView;
         public final TextView mContentView;
-        public Ingredient mItem;
+        public FoodMenu mItem;
 
         public ViewHolder(View view) {
             super(view);

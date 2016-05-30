@@ -29,16 +29,17 @@ import team14.tacoma.uw.edu.husky_cooking.model.Ingredient;
 /**
  * A fragment representing a list of Items.
  * <p/>
- * Activities containing this fragment MUST implement the {@link OnRecipeIngredientListFragmentInteractionListener}
+ * Activities containing this fragment MUST implement the {@link OnCookBookIngredientListFragmentInteractionListener}
  * interface.
  */
-public class IngredientFromRecipeListFragment extends Fragment {
+public class IngredientsFromCookBookListFragment extends Fragment {
 
     public static final String INGREDIENT_ITEM_SELECTED = "IngredientItemSelected";
     private static final String RECIPE_LIST_URL ="http://cssgate.insttech.washington.edu/~_450atm14/husky_cooking/recipe_ingredient_list.php?recipe=";
+
     private int mColumnCount = 1;
 
-    private OnRecipeIngredientListFragmentInteractionListener mListener;
+    private OnCookBookIngredientListFragmentInteractionListener mListener;
 
     private RecyclerView mRecyclerView;
 
@@ -46,7 +47,7 @@ public class IngredientFromRecipeListFragment extends Fragment {
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public IngredientFromRecipeListFragment() {
+    public IngredientsFromCookBookListFragment() {
     }
 
     @Override
@@ -58,7 +59,7 @@ public class IngredientFromRecipeListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_ingredient_list_from_recipe, container, false);
+        View view = inflater.inflate(R.layout.fragment_ingredient_list_from_shopping, container, false);
 
         // Set the adapter
         if (view instanceof RecyclerView) {
@@ -69,45 +70,47 @@ public class IngredientFromRecipeListFragment extends Fragment {
             } else {
                 mRecyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-//            recyclerView.setAdapter(new MyIngredientFromRecipeRecyclerViewAdapter(DummyContent.ITEMS, mListener));
-            ConnectivityManager connMgr = (ConnectivityManager) getActivity()
-                    .getSystemService(Context.CONNECTIVITY_SERVICE);
-            NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-            if(networkInfo != null && networkInfo.isConnected()){
-                ;
-
-                StringBuilder sb = new StringBuilder(RECIPE_LIST_URL);
-                try{
-                    SharedPreferences sharedPreferences = getActivity()
-                            .getSharedPreferences(getString(R.string.LOGIN_PREFS), Context.MODE_PRIVATE);
-                    String toEncode = sharedPreferences.getString(getString(R.string.CURRENT_RECIPE), "");
-                    sb.append(URLEncoder.encode(toEncode, "UTF-8"));
-                } catch (Exception e){
-                    Toast.makeText(view.getContext(), "Something wrong with the url " + e.getMessage(),
-                            Toast.LENGTH_LONG).show();
-                }
-
-                DownloadIngredientListTask task = new DownloadIngredientListTask();
-                task.execute(new String[]{sb.toString()});
-            }else{
-                Toast.makeText(view.getContext(),
-                        "No network connection available. Cannot display courses",
-                        Toast.LENGTH_SHORT).show();
-            }
+//            recyclerView.setAdapter(new MyIngredientsFromCookBookRecyclerViewAdapter(DummyContent.ITEMS, mListener));
         }
+
+        ConnectivityManager connMgr = (ConnectivityManager) getActivity()
+                .getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        if(networkInfo != null && networkInfo.isConnected()){
+            StringBuilder sb = new StringBuilder(RECIPE_LIST_URL);
+
+            try{
+                SharedPreferences sharedPreferences = getActivity()
+                        .getSharedPreferences(getString(R.string.LOGIN_PREFS), Context.MODE_PRIVATE);
+                String toEncode = sharedPreferences.getString(getString(R.string.CURRENT_RECIPE), "");
+                sb.append(URLEncoder.encode(toEncode, "UTF-8"));
+
+            }catch (Exception e) {
+                Toast.makeText(view.getContext(), "Something wrong with the url " + e.getMessage(),
+                        Toast.LENGTH_LONG).show();
+            }
+
+            DownloadIngredientListTask task  = new DownloadIngredientListTask();
+            task.execute(new String[]{sb.toString()});
+
+        }else{
+            Toast.makeText(view.getContext(),
+                    "No network connection available. Cannot display courses",
+                    Toast.LENGTH_SHORT).show();
+        }
+
         return view;
     }
-
 
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnRecipeIngredientListFragmentInteractionListener) {
-            mListener = (OnRecipeIngredientListFragmentInteractionListener) context;
+        if (context instanceof OnCookBookIngredientListFragmentInteractionListener) {
+            mListener = (OnCookBookIngredientListFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement OnRecipeIngredientListFragmentInteractionListener");
+                    + " must implement OnListFragmentInteractionListener");
         }
     }
 
@@ -127,8 +130,8 @@ public class IngredientFromRecipeListFragment extends Fragment {
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-    public interface OnRecipeIngredientListFragmentInteractionListener {
-        void onIngredientListFragmentInteraction(Ingredient item);
+    public interface OnCookBookIngredientListFragmentInteractionListener {
+        void onIngredientCookBookListFragmentInteraction(Ingredient item);
     }
 
 
@@ -190,7 +193,7 @@ public class IngredientFromRecipeListFragment extends Fragment {
             }
 
             if(!mIngredientList.isEmpty()){
-                mRecyclerView.setAdapter(new MyIngredientFromRecipeRecyclerViewAdapter(mIngredientList, mListener));
+                mRecyclerView.setAdapter(new MyIngredientsFromCookBookRecyclerViewAdapter(mIngredientList, mListener));
             }
         }
     }

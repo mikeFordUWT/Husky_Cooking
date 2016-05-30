@@ -149,5 +149,37 @@ public class Recipe implements Serializable {
         }
         return reason;
     }
+    /**
+     * Turns the recipe into a string representation.
+     *  We use this later for sharing a recipe.
+     *  @return a string representing recipe
+     */
+    @Override
+    public String toString() {
+        StringBuilder recipe = new StringBuilder();
+        recipe.append(this.mRecipeName);
+        recipe.append("\n\n");
+        recipe.append("The recipe makes ");
+        recipe.append(this.mServings);
+        recipe.append(" servings and takes ");
+        recipe.append(this.mCookTime);
+        recipe.append(" minutes to complete. \n\n");
+        if(this.mIngredientList.size() > 0) {
+            recipe.append("You'll need these ingredients:\n");
+            for (Ingredient ingr : this.mIngredientList) {
+                recipe.append(ingr.getIngredientName());
+                recipe.append(" ");
+                recipe.append(ingr.getAmount());
+                recipe.append(" ");
+                recipe.append(ingr.getIngredientName());
+                recipe.append("\n");
+            }
+            recipe.append("\n\n\n\n");
+        }
+        recipe.append(this.mDesc);
+        recipe.append("\n\n");
+        recipe.append("I hope you love it!");
+        return recipe.toString();
+    }
 }
 

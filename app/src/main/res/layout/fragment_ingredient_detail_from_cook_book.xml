@@ -3,37 +3,35 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:id="@+id/in_list_detail"
-    tools:context=".IngredientDetailFromShoppingListFragment">
+    tools:context="team14.tacoma.uw.edu.husky_cooking.IngredientDetailFromCookBookFragment">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="@string/ingredient_detail"/>
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:id="@+id/ingredient_name_in_list"/>
+        android:id="@+id/ingredient_name_from_cookbook"/>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/ingredient_amount_in_list"/>
+        android:id="@+id/ingredient_amount_from_cookbook"/>
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/ingredient_measurement_type_in_list"/>
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:id="@+id/ingredient_measurement_type_from_cookbook"/>
+
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/delete_from_shopping_list_button"
-        android:text="@string/remove_from_shopping"/>
+        android:id="@+id/add_to_shopping_list_button_from_cook_button"
+        android:text="@string/add_to_shopping_list"/>
 
-    </LinearLayout>
+
 
 </LinearLayout>

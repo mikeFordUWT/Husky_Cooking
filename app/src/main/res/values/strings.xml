@@ -15,12 +15,18 @@
     <string name="cook_time_hint">How long will this take?(in minutes)</string>
 
     <string name="add_recipe_but_text">Add Recipe</string>
-    <string name="add_to_cook_text">Add to Cook Book</string>
+    <string name="add_to_cook_text">Add to Cookbook</string>
+    <string name="share_recipe_button">Share</string>
     <string name="cookbook_button_label">Cookbook</string>
-    <string name="shopping_list_button_label">Shopping List(NOT YET FUNCTIONAL)</string>
+    <string name="shopping_list_button_label">Shopping List</string>
     <string name="all_recipes_button_label">View All Recipes</string>
     <string name="create_recipe_button_label">Create a new Recipe</string>
-    <string name="cook_book_upper_label">Your Cookbook </string>
+    <string name="view_menus_buttons_label">View Menus</string>
+    <string name="your_stuff">Your Stuff</string>
+    <string name="all_stuff">Other Stuff</string>
+
+    <string name="cook_book_upper_label">Your Cookbook</string>
+
 
     <string name="action_logout">LOG OUT</string>
     <string name="LOGGEDIN">loggedin</string>
@@ -28,15 +34,22 @@
     <string name="LOGIN_FILE">team14.tacoma.uw.edu.husky_cooking.LOGIN_FILE</string>
     <string name="LOGIN_URL">http://cssgate.insttech.washington.edu/~_450atm14/husky_cooking/login.php?</string>
     <string name="LOGGED_USER">user</string>
+    <string name="CURRENT_MENU">menu</string>
+
+    <string name="CURRENT_RECIPE_ID">id</string>
     <string name="CURRENT_RECIPE">recipe</string>
+    <string name="CURRENT_SERVINGS">servings</string>
+    <string name="CURRENT_COOK_TIME">cook_time</string>
+    <string name="CURRENT_DESCRIPTION">directions</string>
+
     <string name="CURRENT_INGREDIENT">ingredient</string>
+    <string name="CURRENT_AMOUNT">amount</string>
+    <string name="CURRENT_MEASURE_TYPE">measure type</string>
     <string name="register_button_label">REGISTER</string>
     <string name="sign_up_button_label">SIGN UP</string>
     <string name="login_in_button">LOG IN</string>
     <string name="register_text_label">\nREGISTER</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <string name="shopping_list_title">Shopping List</string>
     <string name="ok">OK</string>
@@ -46,6 +59,8 @@
     <string name="add_to_shopping_list">Add To Shopping List</string>
     <string name="ingredient_detail">Ingredient Details</string>
     <string name="view_ingredients">View Ingredients</string>
+
+
 
 </resources>
 

@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,15 +29,13 @@ import team14.tacoma.uw.edu.husky_cooking.model.Ingredient;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class IngredientInShoppingListFragment extends Fragment {
-
+public class IngredientDetailFromMenuFragment extends Fragment {
     public static final String INGREDIENT_ITEM_SELECTED = "IngredientItemSelected";
 
-    private static final String REMOVE_FROM_SHOPPING_LIST_URL = "http://cssgate.insttech.washington.edu/~_450atm14/husky_cooking/remove_shopping_list.php?";
+    private static final String ADD_TO_SHOPPING_LIST =
+            "http://cssgate.insttech.washington.edu/~_450atm14/husky_cooking/add_to_shopping_list.php?";
 
-
-
-    /** TextView for displayng ingredient name*/
+    /** TextView that displays ingredient name*/
     private TextView mIngredientNameTextView;
 
     /**TextView that displays amount of ingredient*/
@@ -47,8 +44,7 @@ public class IngredientInShoppingListFragment extends Fragment {
     /** TextView that displays measurement type of ingredient*/
     private TextView mMeasurementTypeTextView;
 
-    /** Required empty constructor */
-    public IngredientInShoppingListFragment() {
+    public IngredientDetailFromMenuFragment() {
         // Required empty public constructor
     }
 
@@ -62,36 +58,32 @@ public class IngredientInShoppingListFragment extends Fragment {
         }
     }
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view  = inflater.inflate(R.layout.fragment_ingredient_in_list_detail, container, false);
-        mAmountTextView = (TextView) view.findViewById(R.id.ingredient_amount_in_list);
-        mIngredientNameTextView = (TextView) view.findViewById(R.id.ingredient_name_in_list);
-        mMeasurementTypeTextView = (TextView) view.findViewById(R.id.ingredient_measurement_type_in_list);
+        View view = inflater.inflate(R.layout.fragment_ingredient_detail_from_menu, container, false);
 
-        final Button removeFromShoppingList = (Button) view.findViewById(R.id.delete_from_shopping_list_button);
+        mAmountTextView = (TextView) view.findViewById(R.id.ingredient_amount_from_menu);
+        mIngredientNameTextView = (TextView) view.findViewById(R.id.ingredient_name_from_menu);
+        mMeasurementTypeTextView = (TextView) view.findViewById(R.id.ingredient_measurement_type_from_menu);
 
-        removeFromShoppingList.setOnClickListener(new View.OnClickListener() {
+        Button addToShoppingList = (Button) view.findViewById(R.id.add_to_shopping_list_button_from_menu);
+
+        addToShoppingList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ShoppingListFragment newFrag = new ShoppingListFragment();
-
-                String url = buildRemoveUrl(v);
-                RemoveIngredientFromListTask task = new RemoveIngredientFromListTask();
+                String url = buildAddUrl(v);
+                AddIngredientToListTask task = new AddIngredientToListTask();
                 task.execute(url);
-//                ViewGroup layout = (ViewGroup) removeFromShoppingList.getParent();
-//                if(null!= layout){
-//                    layout.removeView(removeFromShoppingList);
-//                }
-
-                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.fragment_container, newFrag).addToBackStack(null);
-                transaction.commit();
-//                getActivity().getSupportFragmentManager().popBackStack();
+                IngredientsFromMenuListFragment newFrag = new IngredientsFromMenuListFragment();
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, newFrag)
+                        .addToBackStack(null).commit();
             }
         });
+
         return view;
     }
 
@@ -103,46 +95,57 @@ public class IngredientInShoppingListFragment extends Fragment {
     public void updateView(Ingredient ingredient) {
         mAmountTextView.setText(ingredient.getAmount());
         mIngredientNameTextView.setText(ingredient.getIngredientName());
-        if(!ingredient.getMeasurementType().equals("")) {
-            mMeasurementTypeTextView.setText(ingredient.getMeasurementType());
-        }
+        mMeasurementTypeTextView.setText(ingredient.getMeasurementType());
+
 
         SharedPreferences sharedPreferences =
                 getActivity().getSharedPreferences(getString(R.string.LOGIN_PREFS),
                         Context.MODE_PRIVATE);
         sharedPreferences.edit().putString(getString(R.string.CURRENT_INGREDIENT), ingredient.getIngredientName())
                 .commit();
-
+        sharedPreferences.edit().putString(getString(R.string.CURRENT_AMOUNT), ingredient.getAmount())
+                .commit();
+        sharedPreferences.edit().putString(getString(R.string.CURRENT_MEASURE_TYPE), ingredient.getMeasurementType())
+                .commit();
 
     }
 
-    private String buildRemoveUrl(View v){
-        StringBuilder sb = new StringBuilder(REMOVE_FROM_SHOPPING_LIST_URL);
+    private String buildAddUrl(View v){
+        StringBuilder sb = new StringBuilder(ADD_TO_SHOPPING_LIST);
+
         try{
+
             SharedPreferences sharedPreferences = getActivity()
                     .getSharedPreferences(getString(R.string.LOGIN_PREFS), Context.MODE_PRIVATE);
-
-            String user = sharedPreferences.getString(getString(R.string.LOGGED_USER), "");
-            sb.append("user=");
-            sb.append(URLEncoder.encode(user, "UTF-8"));
-
-            String ingredient = sharedPreferences.getString(getString(R.string.CURRENT_INGREDIENT), "");
-            sb.append("&ingredient=");
+            String ingredient = sharedPreferences.getString(getString(R.string.CURRENT_INGREDIENT),"");
+            sb.append("ingredient=");
             sb.append(URLEncoder.encode(ingredient, "UTF-8"));
 
-        }catch (Exception e){
+            String user = sharedPreferences.getString(getString(R.string.LOGGED_USER), "");
+            sb.append("&user_name=");
+            sb.append(URLEncoder.encode(user, "UTF-8"));
+
+
+            String amount = mAmountTextView.getText().toString();
+            sb.append("&amount=");
+            sb.append(URLEncoder.encode(amount, "UTF-8"));
+
+            String measure = mMeasurementTypeTextView.getText().toString();
+            sb.append("&measurement_type=");
+            sb.append(URLEncoder.encode(measure, "UTF-8"));
+
+        } catch (Exception e){
             Toast.makeText(v.getContext(), "Something wrong with the url " + e.getMessage(),
                     Toast.LENGTH_LONG).show();
         }
+
+
 
         return sb.toString();
     }
 
 
-
-
-    /** A class for removing ingredients from a user's shopping list*/
-    private class RemoveIngredientFromListTask extends AsyncTask<String, Void, String> {
+    private class AddIngredientToListTask extends AsyncTask<String, Void, String> {
         /**
          * Tells it to connect and read http responses for the cookbook.
          * @param urls where to download recipe details
@@ -165,7 +168,7 @@ public class IngredientInShoppingListFragment extends Fragment {
                         response += s;
                     }
                 } catch (Exception e) {
-                    response = "Unable to remove ingredient from shopping list, Reason: "
+                    response = "Unable to add ingredient to shopping list, Reason: "
                             + e.getMessage();
                 } finally {
                     if (urlConnection != null) {
@@ -190,14 +193,14 @@ public class IngredientInShoppingListFragment extends Fragment {
                 JSONObject jsonObject = new JSONObject(result);
                 String status = (String) jsonObject.get("result");
                 if (status.contains("success")) {
-                    Toast.makeText(getActivity().getApplicationContext(), "Recipe successfully added to your Cookbook!",
+                    Toast.makeText(getActivity().getApplicationContext(),
+                            mIngredientNameTextView.getText().toString() +
+                                    " successfully added to your Shopping List!",
                             Toast.LENGTH_LONG)
                             .show();
                 } else {
-                    String error = jsonObject.get("error").toString();
-                    String minusP = error.substring(0,error.length()-1);
                     Toast.makeText(getActivity().getApplicationContext(), "Failed to add: "
-                                    + minusP +" in your Cookbook"
+                                    + mIngredientNameTextView.getText().toString() +" already in your shopping list!"
                             , Toast.LENGTH_LONG)
                             .show();
                 }
@@ -208,8 +211,5 @@ public class IngredientInShoppingListFragment extends Fragment {
 
             }
         }
-
-
     }
-
 }

@@ -1,8 +1,3 @@
-/*
- * Mike Ford and Ian Skyles
- * TCSS450 – Spring 2016
- * Recipe Project
- */
 package team14.tacoma.uw.edu.husky_cooking;
 
 
@@ -23,6 +18,7 @@ import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -35,14 +31,10 @@ import team14.tacoma.uw.edu.husky_cooking.model.Recipe;
 
 
 /**
- * This fragment is used to populate the recipe item text views. Also, it is
- * used to update them.
- *
- * @author Mike Ford
- * @author Ian Skyles
- * @version 5/4/2016
+ * A simple {@link Fragment} subclass.
  */
-public class RecipeDetailFragment extends Fragment {
+public class RecipeDetailFromMenuFragment extends Fragment {
+
     /**
      * Used to update view on start
      */
@@ -50,8 +42,6 @@ public class RecipeDetailFragment extends Fragment {
 
     private static final String ADD_TO_COOK_URL =
             "http://cssgate.insttech.washington.edu/~_450atm14/husky_cooking/cookbook_add.php?";
-
-    private String mParent;
 
     /**
      * TextView that displays recipe name
@@ -74,10 +64,7 @@ public class RecipeDetailFragment extends Fragment {
      */
     private ListView mIngredientsListView;
 
-    /**
-     * Required empty constructor.
-     */
-    public RecipeDetailFragment() {
+    public RecipeDetailFromMenuFragment() {
         // Required empty public constructor
     }
 
@@ -87,13 +74,11 @@ public class RecipeDetailFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        Bundle args = getArguments();
-        mParent = "";
 
+        Bundle args = getArguments();
         if (args != null) {
-            Recipe current = (Recipe) args.getSerializable(RECIPE_ITEM_SELECTED);
-            updateView(current);
-        }else{
+            updateView((Recipe) args.getSerializable(RECIPE_ITEM_SELECTED));
+        }else {
             SharedPreferences sharedPreferences =
                     getActivity().getSharedPreferences(getString(R.string.LOGIN_PREFS),
                             Context.MODE_PRIVATE);
@@ -110,31 +95,19 @@ public class RecipeDetailFragment extends Fragment {
         }
     }
 
-    /**
-     * Creates the view that will be shown to the user.
-     * Attaches listeners to the buttons defined in the XML.
-     * Sets the TextViews with appropriate data to display to
-     *
-     * @param inflater           instantiate layout XML file into its corresponding View object
-     * @param container          item to contain other views
-     * @param savedInstanceState save state so we can resume later
-     * @return The view (user interface)
-     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        View view  = inflater.inflate(R.layout.fragment_recipe_detail_from_menu, container, false);
 
-        View view = inflater.inflate(R.layout.fragment_recipe_detail, container, false);
-        mRecipeNameTextView = (TextView) view.findViewById(R.id.recipe_name);
-        mServingsTextView = (TextView) view.findViewById(R.id.recipe_servings);
-        mCookTimeTextView = (TextView) view.findViewById(R.id.recipe_cook_time);
-        mDirectionsTextView = (TextView) view.findViewById(R.id.recipe_directions);
-//        mIngredientsListView = (ListView) view.findViewById(R.id.ingredients_detail_list_view);
+        mRecipeNameTextView = (TextView) view.findViewById(R.id.recipe_name_from_menu);
+        mServingsTextView = (TextView) view.findViewById(R.id.recipe_servings_from_menu);
+        mCookTimeTextView = (TextView) view.findViewById(R.id.recipe_cook_time_from_menu);
+        mDirectionsTextView = (TextView) view.findViewById(R.id.recipe_directions_from_menu);
 
-        Button addToCookBook = (Button) view.findViewById(R.id.add_to_cookbook_button);
-
-        addToCookBook.setOnClickListener(new View.OnClickListener() {
+        Button addToCook = (Button) view.findViewById(R.id.add_to_cookbook_button_from_menu);
+        addToCook.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String url = buildAddToUrl(v);
@@ -143,21 +116,19 @@ public class RecipeDetailFragment extends Fragment {
             }
         });
 
-        Button viewIngredients = (Button) view.findViewById(R.id.view_ingredients_button);
+        Button viewIngredients = (Button) view.findViewById(R.id.view_ingredients_from_menu_button);
         viewIngredients.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                IngredientsFromRecipeListFragment ingredients = new IngredientsFromRecipeListFragment();
-
-
+                IngredientsFromMenuListFragment ingredients = new IngredientsFromMenuListFragment();
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragment_container, ingredients)
                         .addToBackStack(null).commit();
             }
         });
 
+        Button shareRecipe = (Button) view.findViewById(R.id.share_recipe_button_from_menu);
 
-        Button shareRecipe = (Button) view.findViewById(R.id.share_recipe_button);
         shareRecipe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -179,8 +150,9 @@ public class RecipeDetailFragment extends Fragment {
             }
         });
         return view;
-
     }
+
+
 
     /**
      * Allows the recipe to update the view.
@@ -206,8 +178,6 @@ public class RecipeDetailFragment extends Fragment {
                 .commit();
         sharedPreferences.edit().putInt(getString(R.string.CURRENT_SERVINGS), recipe.getServings())
                 .commit();
-
-
     }
 
     private String buildAddToUrl(View v){
@@ -260,6 +230,7 @@ public class RecipeDetailFragment extends Fragment {
                         response += s;
                     }
                 } catch (Exception e) {
+
                     response = "Unable to add recipe to Cookbook, Reason: "
                             + e.getMessage();
                 } finally {
@@ -284,7 +255,9 @@ public class RecipeDetailFragment extends Fragment {
                 JSONObject jsonObject = new JSONObject(result);
                 String status = (String) jsonObject.get("result");
                 if (status.equals("success")) {
-                    Toast.makeText(getActivity().getApplicationContext(), "Recipe successfully added to your Cookbook!",
+                    Toast.makeText(getActivity().getApplicationContext(),
+                            mRecipeNameTextView.getText().toString()
+                                    +" successfully added to your Cookbook!",
                             Toast.LENGTH_LONG)
                             .show();
                 } else {
@@ -301,7 +274,6 @@ public class RecipeDetailFragment extends Fragment {
             }
         }
     }
-
 
     /**
      * A class for retrieving ingredients for recipe.

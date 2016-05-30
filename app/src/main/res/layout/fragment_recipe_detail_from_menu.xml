@@ -1,26 +1,25 @@
-<?xml version ="1.0" encoding = "utf-8"?>
-
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
-
+    android:orientation="vertical"
+    tools:context="team14.tacoma.uw.edu.husky_cooking.RecipeDetailFromMenuFragment">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:id="@+id/recipe_name"/>
+        android:id="@+id/recipe_name_from_menu"/>
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/recipe_servings"/>
+        android:id="@+id/recipe_servings_from_menu"/>
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/recipe_cook_time"/>
+        android:id="@+id/recipe_cook_time_from_menu"/>
 
     <TextView
         android:layout_width="match_parent"
@@ -31,38 +30,28 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/recipe_directions"/>
-    <!--<ListView-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:id="@+id/ingredients_detail_list_view"-->
-        <!--&gt;-->
-
-    <!--</ListView>-->
+        android:id="@+id/recipe_directions_from_menu"/>
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_gravity="center">
+        android:orientation="horizontal">
+
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/add_to_cookbook_button"
+            android:id="@+id/add_to_cookbook_button_from_menu"
             android:text="@string/add_to_cook_text"/>
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/view_ingredients_button"
+            android:id="@+id/view_ingredients_from_menu_button"
             android:text="@string/view_ingredients"/>
+
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/share_recipe_button"
+            android:id="@+id/share_recipe_button_from_menu"
             android:text="@string/share_recipe_button"/>
-
     </LinearLayout>
-
-
-
 </LinearLayout>

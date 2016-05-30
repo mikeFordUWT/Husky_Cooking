@@ -1,11 +1,7 @@
-/*
- * Mike Ford and Ian Skyles
- * TCSS450 – Spring 2016
- * Recipe Project
- */
 package team14.tacoma.uw.edu.husky_cooking;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -17,75 +13,54 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
+
 
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
 import team14.tacoma.uw.edu.husky_cooking.model.Recipe;
 
 /**
- * This fragment/class will be used to represent a list of recipes.
- * @author Mike Ford
- * @author Ian Skyles
- * @version 5/4/2016
+ * A fragment representing a list of Items.
+ * <p/>
+ * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
+ * interface.
  */
-public class RecipeListFragment extends Fragment {
-    /**
-     * the url where the recipes are stored
-     */
-    private static final String RECIPE_URL =
-            "http://cssgate.insttech.washington.edu/~_450atm14/husky_cooking/test.php?cmd=recipes";
+public class RecipeFromMenuListFragment extends Fragment {
+    private static final String MENU_URL = "http://cssgate.insttech.washington.edu/~_450atm14/husky_cooking/get_menu_recipes.php?menu=";
 
-    /** the Number of columns in the list. */
     private int mColumnCount = 1;
 
-    /** Listens for interactions with list */
     private OnListFragmentInteractionListener mListener;
-    /** List of recipes */
-    private List<Recipe> mRecipeList;
 
-    /** A flexible view for providing a limited window into
-     * a large number of recipes (all in db)*/
-    public RecyclerView mRecyclerView;
-
-
+    private RecyclerView mRecyclerView;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public RecipeListFragment() {
+    public RecipeFromMenuListFragment() {
     }
 
-    /**
-     * Saves instance on creation of method of fragment/app.
-     * @param savedInstanceState state of the instance to be saved
-     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
     }
 
-    /**
-     * Creates the view that will be shown to the user.
-     * Attaches listeners to the buttons defined in the XML.
-     * Manages mRecyclerView layout and ensures network connectivity.
-     * @param inflater instantiate layout XML file into its corresponding View object
-     * @param container item to contain other views
-     * @param savedInstanceState save state so we can resume later
-     * @return The view (user interface)
-     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_recipe_list, container, false);
+
+        View view = inflater.inflate(R.layout.fragment_recipe_from_menu_list, container, false);
 
         // Set the adapter
         if (view instanceof RecyclerView) {
@@ -96,28 +71,37 @@ public class RecipeListFragment extends Fragment {
             } else {
                 mRecyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-//            recyclerView.setAdapter(new MyRecipeRecyclerViewAdapter(mRecipeList, mListener));
+//            recyclerView.setAdapter(new RecipeFromMenuRecyclerViewAdapter(DummyContent.ITEMS, mListener));
             ConnectivityManager connMgr = (ConnectivityManager) getActivity()
                     .getSystemService(Context.CONNECTIVITY_SERVICE);
             NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+
             if(networkInfo != null && networkInfo.isConnected()){
-                DownloadRecipesTask task = new DownloadRecipesTask();
-                task.execute(new String[]{RECIPE_URL});
+                SharedPreferences sharedPreferences = getActivity()
+                        .getSharedPreferences(getString(R.string.LOGIN_PREFS), Context.MODE_PRIVATE);
+                String toEncode = sharedPreferences.getString(getString(R.string.CURRENT_MENU),"");
+                try{
+                    String menu = URLEncoder.encode(toEncode, "UTF-8");
+                    String menuURL = MENU_URL+ menu;
+                    DownloadRecipesTask task = new DownloadRecipesTask();
+                    task.execute(new String[]{menuURL});
+                }catch (Exception e){
+                    Toast.makeText(view.getContext(), "Something wrong with the url " + e.getMessage(),
+                            Toast.LENGTH_LONG).show();
+                }
+
+
             }else{
                 Toast.makeText(view.getContext(),
                         "No network connection available. Cannot display courses",
                         Toast.LENGTH_SHORT).show();
             }
-        }
 
+        }
         return view;
     }
 
 
-    /**
-     * Attaches list fragment interaction listener to mlistener.
-     * @param context what to attach
-     */
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -125,13 +109,10 @@ public class RecipeListFragment extends Fragment {
             mListener = (OnListFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement OnCookBookIngredientListFragmentInteractionListener");
+                    + " must implement OnListFragmentInteractionListener");
         }
     }
 
-    /**
-     * makes mListener null if onDetach() is called.
-     */
     @Override
     public void onDetach() {
         super.onDetach();
@@ -149,24 +130,23 @@ public class RecipeListFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnListFragmentInteractionListener {
-        void onListFragmentInteraction(Recipe recipe);
+
+        void onRecipeFromMenuListFragmentInteraction(Recipe item);
     }
 
-    /**
-     * Downloads recipes Asynchronously (in the background) from
-     * our db/webservice hosted on cssgate.
-     */
-    private class DownloadRecipesTask extends AsyncTask<String, Void, String>{
+
+
+    private class DownloadRecipesTask extends AsyncTask<String, Void, String> {
         /**
          * Tells it to connect and read http responses for the cookbook.
-         * @param urls where each recipe is stored
+         * @param urls where recipes are stored
          * @return list of recipes
          */
         @Override
-        protected String doInBackground(String... urls){
+        protected String doInBackground(String... urls) {
             String response = "";
-            HttpURLConnection urlConnection = null;
-            for(String url:urls){
+            HttpURLConnection urlConnection =null;
+            for(String url: urls) {
                 try{
                     URL urlObject = new URL(url);
                     urlConnection = (HttpURLConnection) urlObject.openConnection();
@@ -176,8 +156,8 @@ public class RecipeListFragment extends Fragment {
                     while((s = buffer.readLine())!=null){
                         response += s;
                     }
-                }catch (Exception e){
-                    response = "Unable to download the list of recipes, Reason: " + e.getMessage();
+                }catch (Exception e) {
+                    response = "Unable to download the cookbook, Reason: " + e.getMessage();
                 }finally {
                     if(urlConnection != null){
                         urlConnection.disconnect();
@@ -190,7 +170,7 @@ public class RecipeListFragment extends Fragment {
         /**
          * Does appropriate actions to set/replace
          * recycler view and adapter.
-         * @param result result string to be be checked
+         * @param result result string to execute on
          */
         @Override
         protected void onPostExecute(String result) {
@@ -209,9 +189,7 @@ public class RecipeListFragment extends Fragment {
             }
 
             if(!mRecipeList.isEmpty()){
-                mRecyclerView.setAdapter(new MyRecipeRecyclerViewAdapter(mRecipeList, mListener));
-
-                //will store recipes on local SQLite Database
+                mRecyclerView.setAdapter(new RecipeFromMenuRecyclerViewAdapter(mRecipeList, mListener));
             }
         }
     }

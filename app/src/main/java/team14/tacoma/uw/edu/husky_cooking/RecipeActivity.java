@@ -29,6 +29,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import team14.tacoma.uw.edu.husky_cooking.authenticate.SignInActivity;
+import team14.tacoma.uw.edu.husky_cooking.model.FoodMenu;
 import team14.tacoma.uw.edu.husky_cooking.model.Ingredient;
 import team14.tacoma.uw.edu.husky_cooking.model.Recipe;
 
@@ -44,7 +45,11 @@ public class RecipeActivity extends AppCompatActivity
         AddRecipeFragment.AddRecipeInteractionListener,
         CookBookListFragment.OnCookFragmentInteractionListener,
         ShoppingListFragment.OnShoppingListFragmentInteractionListener,
-        IngredientFromRecipeListFragment.OnRecipeIngredientListFragmentInteractionListener{
+        IngredientsFromRecipeListFragment.OnRecipeIngredientListFragmentInteractionListener,
+        IngredientsFromCookBookListFragment.OnCookBookIngredientListFragmentInteractionListener,
+        MenuListFragment.OnListFragmentInteractionListener,
+        RecipeFromMenuListFragment.OnListFragmentInteractionListener,
+        IngredientsFromMenuListFragment.OnListFragmentInteractionListener{
 
     /** base url to add a recipe to our database */
     public static final String ADD_RECIPE_URL =
@@ -104,6 +109,35 @@ public class RecipeActivity extends AppCompatActivity
                 .commit();
     }
 
+    @Override
+    public void onMenuFragmentInteraction(FoodMenu item) {
+
+        RecipeFromMenuListFragment recipeListFragment = new RecipeFromMenuListFragment();
+        SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.LOGIN_PREFS),
+                Context.MODE_PRIVATE);
+
+        sharedPreferences.edit().putString(getString(R.string.CURRENT_MENU),
+                item.getMenuName()).commit();
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, recipeListFragment)
+                .addToBackStack(null)
+                .commit();
+    }
+
+    @Override
+    public void onRecipeFromMenuListFragmentInteraction(Recipe item) {
+        RecipeDetailFromMenuFragment newFrag = new RecipeDetailFromMenuFragment();
+
+        Bundle args = new Bundle();
+        args.putSerializable(RecipeDetailFromMenuFragment.RECIPE_ITEM_SELECTED, item);
+        newFrag.setArguments(args);
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, newFrag)
+                .addToBackStack(null)
+                .commit();
+    }
+
+
     /**
      * Controls what happens when interacting with adding recipe
      * to cookbook.
@@ -112,9 +146,9 @@ public class RecipeActivity extends AppCompatActivity
      */
     @Override
     public void onCookBookFragmentInteraction(Recipe recipe){
-        RecipeDetailFragment recipeDetailFragment = new RecipeDetailFragment();
+        RecipeInCookBookDetailFragment recipeDetailFragment = new RecipeInCookBookDetailFragment();
         Bundle args = new Bundle();
-        args.putSerializable(RecipeDetailFragment.RECIPE_ITEM_SELECTED, recipe);
+        args.putSerializable(RecipeInCookBookDetailFragment.RECIPE_ITEM_SELECTED, recipe);
         recipeDetailFragment.setArguments(args);
 
         getSupportFragmentManager().beginTransaction()
@@ -126,25 +160,52 @@ public class RecipeActivity extends AppCompatActivity
 
     @Override
     public void onIngredientListFragmentInteraction(Ingredient ingredient){
-        IngredientFromRecipeListFragment ingredientFrom = new IngredientFromRecipeListFragment();
+        IngredientDetailFromRecipeFragment ingredientFrom = new IngredientDetailFromRecipeFragment();
         Bundle args = new Bundle();
-        args.putSerializable(IngredientFromRecipeListFragment.INGREDIENT_ITEM_SELECTED, ingredient);
+        args.putSerializable(IngredientsFromRecipeListFragment.INGREDIENT_ITEM_SELECTED, ingredient);
         ingredientFrom.setArguments(args);
 
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, ingredientFrom)
+                .addToBackStack(null)
+                .commit();
+    }
+
+    @Override
+    public void onIngredientFromMenuListFragmentInteraction(Ingredient item) {
+        IngredientDetailFromMenuFragment ingredientFrom = new IngredientDetailFromMenuFragment();
+        Bundle args = new Bundle();
+        args.putSerializable(IngredientsFromMenuListFragment.INGREDIENT_ITEM_SELECTED, item);
+        ingredientFrom.setArguments(args);
+
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, ingredientFrom)
+                .addToBackStack(null)
+                .commit();
+    }
+
+    @Override
+    public void onIngredientCookBookListFragmentInteraction(Ingredient ingredient){
+        IngredientDetailFromCookBookFragment ingredientFrom = new IngredientDetailFromCookBookFragment();
+        Bundle args = new Bundle();
+        args.putSerializable(IngredientsFromCookBookListFragment.INGREDIENT_ITEM_SELECTED, ingredient);
+        ingredientFrom.setArguments(args);
+
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, ingredientFrom)
+                .addToBackStack(null)
                 .commit();
     }
 
     @Override
     public void onShopListFragmentInteraction(Ingredient ingredient){
-        IngredientInShoppingListFragment ingredientInShoppingListFragment = new IngredientInShoppingListFragment();
+        IngredientDetailFromShoppingListFragment ingredientDetailFromShoppingListFragment = new IngredientDetailFromShoppingListFragment();
         Bundle args = new Bundle();
-        args.putSerializable(IngredientInShoppingListFragment.INGREDIENT_ITEM_SELECTED, ingredient);
-        ingredientInShoppingListFragment.setArguments(args);
+        args.putSerializable(IngredientDetailFromShoppingListFragment.INGREDIENT_ITEM_SELECTED, ingredient);
+        ingredientDetailFromShoppingListFragment.setArguments(args);
 
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, ingredientInShoppingListFragment)
+                .replace(R.id.fragment_container, ingredientDetailFromShoppingListFragment)
                 .commit();
     }
 
@@ -192,10 +253,14 @@ public class RecipeActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Handles the actions of the prebuilt back button overrides behavior.
+     * Allows user to access correct fragments from a specific fragment.
+     */
     @Override
     public void onBackPressed(){
         Fragment f = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
-        if(f instanceof IngredientInShoppingListFragment){
+        if(f instanceof IngredientDetailFromShoppingListFragment){
             Log.d("IngredientInList", "NOO!!!");
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_container, new ShoppingListFragment())
@@ -210,7 +275,7 @@ public class RecipeActivity extends AppCompatActivity
             intent.setAction(Intent.ACTION_MAIN);
             intent.addCategory(Intent.CATEGORY_HOME);
             startActivity(intent);
-        } else if (f instanceof IngredientFromRecipeListFragment){
+        } else if (f instanceof IngredientsFromRecipeListFragment){
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_container, new RecipeDetailFragment())
                     .addToBackStack(null).commit();
@@ -223,11 +288,45 @@ public class RecipeActivity extends AppCompatActivity
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_container, new UserHomeFragment())
                     .addToBackStack(null).commit();
+        }else if(f instanceof RecipeInCookBookDetailFragment){
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, new CookBookListFragment())
+                    .addToBackStack(null).commit();
+        }else if(f instanceof CookBookListFragment){
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, new UserHomeFragment())
+                    .addToBackStack(null).commit();
+        } else if(f instanceof IngredientsFromCookBookListFragment){
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, new RecipeInCookBookDetailFragment())
+                    .addToBackStack(null).commit();
+        }else if(f instanceof IngredientDetailFromMenuFragment){
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, new IngredientsFromMenuListFragment())
+                    .addToBackStack(null).commit();
+        }else if(f instanceof IngredientsFromMenuListFragment){
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, new RecipeDetailFromMenuFragment())
+                    .addToBackStack(null).commit();
+        }else if(f instanceof RecipeDetailFromMenuFragment){
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, new RecipeFromMenuListFragment())
+                    .addToBackStack(null).commit();
+        }else if(f instanceof RecipeFromMenuListFragment){
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, new MenuListFragment())
+                    .addToBackStack(null).commit();
+        }else if(f instanceof MenuListFragment){
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, new UserHomeFragment())
+                    .addToBackStack(null).commit();
         }
         else{
             super.onBackPressed();
         }
     }
+
+
 
 
     /**
