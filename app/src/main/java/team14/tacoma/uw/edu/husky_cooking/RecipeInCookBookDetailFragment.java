@@ -2,6 +2,7 @@ package team14.tacoma.uw.edu.husky_cooking;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -111,6 +112,29 @@ public class RecipeInCookBookDetailFragment extends Fragment {
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragment_container, ingredients)
                         .addToBackStack(null).commit();
+            }
+        });
+
+        Button shareRecipe = (Button) view.findViewById(R.id.share_from_cookbook_button);
+
+        shareRecipe.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences sharedPreferences =
+                        getActivity().getSharedPreferences(getString(R.string.LOGIN_PREFS),
+                                Context.MODE_PRIVATE);
+                int id = sharedPreferences.getInt(getString(R.string.CURRENT_RECIPE_ID),0);
+                String name = sharedPreferences.getString(getString(R.string.CURRENT_RECIPE), "");
+                String descript = sharedPreferences.getString(getString(R.string.CURRENT_DESCRIPTION), "");
+                int cookTime = sharedPreferences.getInt(getString(R.string.CURRENT_COOK_TIME), 0);
+                int servings = sharedPreferences.getInt(getString(R.string.CURRENT_SERVINGS), 0);
+                Recipe r = new Recipe(id, name, descript, cookTime, servings);
+
+                Intent sendIntent = new Intent();
+                sendIntent.setAction(Intent.ACTION_SEND);
+                sendIntent.putExtra(Intent.EXTRA_TEXT, r.toString());
+                sendIntent.setType("text/plain");
+                startActivity(sendIntent);
             }
         });
         return view;
