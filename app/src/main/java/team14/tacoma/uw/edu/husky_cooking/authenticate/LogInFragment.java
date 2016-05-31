@@ -28,10 +28,17 @@ import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
 import com.facebook.Profile;
 import com.facebook.ProfileTracker;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.Arrays;
 
 /**
  * This class controls the user logging into our application.
@@ -65,6 +72,9 @@ public class LogInFragment extends Fragment {
     private AccessTokenTracker mtracker = null;
     /**Facebook profile tracker*/
     private ProfileTracker mprofileTracker = null;
+    private String Name;
+
+    private String FEmail;
 
     /**
      * Edit Text for allowing entry by user of username and password.
@@ -135,6 +145,8 @@ public class LogInFragment extends Fragment {
         mUserName = (EditText) v.findViewById(R.id.user_id);
         mPwd = (EditText) v.findViewById(R.id.pwd);
         loginButton = (LoginButton) v.findViewById(R.id.login_button);
+        loginButton.setReadPermissions(Arrays.asList(
+                "public_profile", "email", "user_birthday", "user_friends"));
         // If using in a fragment
         loginButton.setFragment(this);
         // Other app specific specialization
@@ -143,9 +155,40 @@ public class LogInFragment extends Fragment {
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                // App code
+                AccessToken accessToken = loginResult.getAccessToken();
+                Profile profile = Profile.getCurrentProfile();
 
-                //((SignInActivity) getActivity()).login(url, userId);
+
+
+                // Facebook Email address
+                GraphRequest request = GraphRequest.newMeRequest(
+                        accessToken,
+                        new GraphRequest.GraphJSONObjectCallback() {
+                            @Override
+                            public void onCompleted(
+                                    JSONObject object,
+                                    GraphResponse response) {
+                                Log.v("LoginActivity Response ", response.toString());
+
+                                try {
+                                    Name = object.getString("name");
+
+                                    FEmail = object.getString("email");
+                                    Log.v("Email = ", " " + FEmail);
+                                    Toast.makeText(getActivity().getApplicationContext(), "Email " + FEmail, Toast.LENGTH_LONG).show();
+
+
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+                Bundle parameters = new Bundle();
+                parameters.putString("fields", "id,name,email,gender, birthday");
+                request.setParameters(parameters);
+                request.executeAsync();
+
+
             }
 
             @Override
