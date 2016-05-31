@@ -6,8 +6,11 @@
 package team14.tacoma.uw.edu.husky_cooking.authenticate;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,6 +21,24 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import team14.tacoma.uw.edu.husky_cooking.R;
+
+import com.facebook.AccessToken;
+import com.facebook.AccessTokenTracker;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.Profile;
+import com.facebook.ProfileTracker;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.Arrays;
 
 /**
  * This class controls the user logging into our application.
@@ -42,6 +63,18 @@ public class LogInFragment extends Fragment {
     private static final String TAG_SUCCESS = "success";
     /** A tag for debugging */
     private static final String TAG_MESSAGE = "message";
+    /**Facebook login button*/
+    private LoginButton loginButton;
+
+    /**Facebook call back manager*/
+    private CallbackManager callbackManager = null;
+    /**Facebook access token tracker*/
+    private AccessTokenTracker mtracker = null;
+    /**Facebook profile tracker*/
+    private ProfileTracker mprofileTracker = null;
+    private String Name;
+
+    private String FEmail;
 
     /**
      * Edit Text for allowing entry by user of username and password.
@@ -56,6 +89,7 @@ public class LogInFragment extends Fragment {
         // Required empty public constructor
     }
 
+
     /**
      * Saves instance on creation of method of fragment/app.
      * @param savedInstanceState state of the instance to be saved
@@ -64,6 +98,32 @@ public class LogInFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
 
+        callbackManager = CallbackManager.Factory.create();
+        FacebookSdk.sdkInitialize(getActivity().getApplicationContext());
+
+
+        mtracker = new AccessTokenTracker() {
+            @Override
+            protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken currentAccessToken) {
+
+                Log.v("AccessTokenTracker", "oldAccessToken=" + oldAccessToken + "||" + "CurrentAccessToken" + currentAccessToken);
+            }
+        };
+
+
+        mprofileTracker = new ProfileTracker() {
+            @Override
+            protected void onCurrentProfileChanged(Profile oldProfile, Profile currentProfile) {
+
+                Log.v("Session Tracker", "oldProfile=" + oldProfile + "||" + "currentProfile" + currentProfile);
+                //pass profile to a another activity/frag here
+
+
+            }
+        };
+
+        mtracker.startTracking();
+        mprofileTracker.startTracking();
     }
 
 
@@ -84,7 +144,63 @@ public class LogInFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_log_in, container, false);
         mUserName = (EditText) v.findViewById(R.id.user_id);
         mPwd = (EditText) v.findViewById(R.id.pwd);
+        loginButton = (LoginButton) v.findViewById(R.id.login_button);
+        loginButton.setReadPermissions(Arrays.asList(
+                "public_profile", "email", "user_birthday", "user_friends"));
+        // If using in a fragment
+        loginButton.setFragment(this);
+        // Other app specific specialization
 
+        // Callback registration
+        loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                AccessToken accessToken = loginResult.getAccessToken();
+                Profile profile = Profile.getCurrentProfile();
+
+
+
+                // Facebook Email address
+                GraphRequest request = GraphRequest.newMeRequest(
+                        accessToken,
+                        new GraphRequest.GraphJSONObjectCallback() {
+                            @Override
+                            public void onCompleted(
+                                    JSONObject object,
+                                    GraphResponse response) {
+                                Log.v("LoginActivity Response ", response.toString());
+
+                                try {
+                                    Name = object.getString("name");
+
+                                    FEmail = object.getString("email");
+                                    Log.v("Email = ", " " + FEmail);
+                                    Toast.makeText(getActivity().getApplicationContext(), "Email " + FEmail, Toast.LENGTH_LONG).show();
+
+
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+                Bundle parameters = new Bundle();
+                parameters.putString("fields", "id,name,email,gender, birthday");
+                request.setParameters(parameters);
+                request.executeAsync();
+
+
+            }
+
+            @Override
+            public void onCancel() {
+                // App code
+            }
+
+            @Override
+            public void onError(FacebookException exception) {
+                // App code
+            }
+        });
 
 
         Button signInButton = (Button) v.findViewById(R.id.signin_button);
@@ -139,7 +255,20 @@ public class LogInFragment extends Fragment {
         mRegisterEmail = (EditText) v.findViewById(R.id.new_user_email);
         mRegisterPassword = (EditText) v.findViewById(R.id.new_user_password);
 
+
         return v;
+    }
+
+    /**
+     * forward the login results to the callbackManager created in onCreate():
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
     /**

@@ -250,6 +250,26 @@ public class RecipeActivity extends AppCompatActivity
             return true;
         }
 
+        if(id == R.id.action_home){
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, new UserHomeFragment())
+                    .addToBackStack(null).commit();
+        }
+
+        if(id == R.id.action_cookbook){
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, new CookBookListFragment())
+                    .addToBackStack(null).commit();
+        }
+
+        if(id == R.id.action_shopping_list){
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, new ShoppingListFragment())
+                    .addToBackStack(null).commit();
+        }
+
+
+
         return super.onOptionsItemSelected(item);
     }
 
