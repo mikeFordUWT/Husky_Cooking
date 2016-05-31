@@ -3,10 +3,29 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="team14.tacoma.uw.edu.husky_cooking.RecipeActivity">
 
+
+
+    <item
+        android:id="@+id/action_home"
+        android:title="@string/home_screen_label"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/action_shopping_list"
+        android:title="@string/shopping_list_button_label"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/action_cookbook"
+        android:title="@string/cookbook_button_label"
+        app:showAsAction="never"
+        />
+
     <item
         android:id="@+id/action_logout"
-        android:orderInCategory="100"
         android:title="@string/action_logout"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="never"/>
+
+
 
 </menu>
