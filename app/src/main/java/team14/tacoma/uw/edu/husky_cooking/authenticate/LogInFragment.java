@@ -6,11 +6,11 @@
 package team14.tacoma.uw.edu.husky_cooking.authenticate;
 
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,8 +19,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-
-import team14.tacoma.uw.edu.husky_cooking.R;
 
 import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
@@ -39,6 +37,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Arrays;
+
+import team14.tacoma.uw.edu.husky_cooking.R;
+import team14.tacoma.uw.edu.husky_cooking.RecipeActivity;
 
 /**
  * This class controls the user logging into our application.
@@ -141,6 +142,9 @@ public class LogInFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+
+        FacebookSdk.sdkInitialize(this.getContext());
+
         View v = inflater.inflate(R.layout.fragment_log_in, container, false);
         mUserName = (EditText) v.findViewById(R.id.user_id);
         mPwd = (EditText) v.findViewById(R.id.pwd);
@@ -155,6 +159,8 @@ public class LogInFragment extends Fragment {
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
+                final SharedPreferences sharedPreferences = getActivity().getSharedPreferences(getString(R.string.LOGIN_PREFS)
+                        , Context.MODE_PRIVATE);
                 AccessToken accessToken = loginResult.getAccessToken();
                 Profile profile = Profile.getCurrentProfile();
 
@@ -176,8 +182,8 @@ public class LogInFragment extends Fragment {
                                     FEmail = object.getString("email");
                                     Log.v("Email = ", " " + FEmail);
                                     Toast.makeText(getActivity().getApplicationContext(), "Email " + FEmail, Toast.LENGTH_LONG).show();
-
-
+                                    sharedPreferences.edit().putString(getString(R.string.LOGGED_USER), FEmail).apply();
+                                    sharedPreferences.edit().putBoolean(getString(R.string.LOGGEDIN),true).apply();
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
@@ -187,6 +193,14 @@ public class LogInFragment extends Fragment {
                 parameters.putString("fields", "id,name,email,gender, birthday");
                 request.setParameters(parameters);
                 request.executeAsync();
+
+                Intent i  = new Intent(getActivity(), RecipeActivity.class);
+                startActivity(i);
+
+                getActivity().finish();
+
+
+
 
 
             }
