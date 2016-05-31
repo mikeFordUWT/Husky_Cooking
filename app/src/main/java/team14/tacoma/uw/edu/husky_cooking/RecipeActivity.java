@@ -19,6 +19,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.facebook.FacebookSdk;
+import com.facebook.login.LoginManager;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -244,6 +247,8 @@ public class RecipeActivity extends AppCompatActivity
             sharedPreferences.edit().putString(getString(R.string.CURRENT_RECIPE), "")
                     .apply();
 
+            FacebookSdk.sdkInitialize(getApplicationContext());
+            LoginManager.getInstance().logOut();
             Intent i  = new Intent(this, SignInActivity.class);
             startActivity(i);
             finish();
