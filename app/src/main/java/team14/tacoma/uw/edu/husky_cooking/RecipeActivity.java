@@ -62,6 +62,9 @@ public class RecipeActivity extends AppCompatActivity
     public static final String ADD_RECIPE_URL =
             "http://cssgate.insttech.washington.edu/~_450atm14/husky_cooking/addRecipe.php?";
 
+    public static final String FACE_ADD_TO_COOK_URL =
+            "http://cssgate.insttech.washington.edu/~_450atm14/husky_cooking/facebook_cookbook_add.php?";
+
     /**
      * Saves instance on creation of method of fragment/app.
      * @param savedInstanceState the instance that will be saved in it's current state
@@ -124,7 +127,7 @@ public class RecipeActivity extends AppCompatActivity
                 Context.MODE_PRIVATE);
 
         sharedPreferences.edit().putString(getString(R.string.CURRENT_MENU),
-                item.getMenuName()).commit();
+                item.getMenuName()).apply();
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, recipeListFragment)
                 .addToBackStack(null)

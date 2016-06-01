@@ -18,7 +18,6 @@ import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -42,6 +41,9 @@ public class RecipeDetailFromMenuFragment extends Fragment {
 
     private static final String ADD_TO_COOK_URL =
             "http://cssgate.insttech.washington.edu/~_450atm14/husky_cooking/cookbook_add.php?";
+
+    private static final String FACE_ADD_TO_COOK_URL =
+            "http://cssgate.insttech.washington.edu/~_450atm14/husky_cooking/facebook_cookbook_add.php?";
 
     /**
      * TextView that displays recipe name
@@ -101,6 +103,9 @@ public class RecipeDetailFromMenuFragment extends Fragment {
         // Inflate the layout for this fragment
         View view  = inflater.inflate(R.layout.fragment_recipe_detail_from_menu, container, false);
 
+        final SharedPreferences sharedPreferences =
+                getActivity().getSharedPreferences(getString(R.string.LOGIN_PREFS),
+                        Context.MODE_PRIVATE);
         mRecipeNameTextView = (TextView) view.findViewById(R.id.recipe_name_from_menu);
         mServingsTextView = (TextView) view.findViewById(R.id.recipe_servings_from_menu);
         mCookTimeTextView = (TextView) view.findViewById(R.id.recipe_cook_time_from_menu);
@@ -110,7 +115,13 @@ public class RecipeDetailFromMenuFragment extends Fragment {
         addToCook.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String url = buildAddToUrl(v);
+                String url;
+                String face = sharedPreferences.getString(getString(R.string.LOGIN_METHOD), "");
+                if(face.equals("facebook")){
+                    url = buildFaceAddUrl(v);
+                }else{
+                    url = buildAddToUrl(v);
+                }
                 AddToCookTask task = new AddToCookTask();
                 task.execute(url);
             }
@@ -169,19 +180,43 @@ public class RecipeDetailFromMenuFragment extends Fragment {
                 getActivity().getSharedPreferences(getString(R.string.LOGIN_PREFS),
                         Context.MODE_PRIVATE);
         sharedPreferences.edit().putInt(getString(R.string.CURRENT_RECIPE_ID),recipe.getRecipeId())
-                .commit();
+                .apply();
         sharedPreferences.edit().putString(getString(R.string.CURRENT_RECIPE), recipe.getName())
-                .commit();
+                .apply();
         sharedPreferences.edit().putString(getString(R.string.CURRENT_DESCRIPTION), recipe.getDescription())
-                .commit();
+                .apply();
         sharedPreferences.edit().putInt(getString(R.string.CURRENT_COOK_TIME), recipe.getCookTime())
-                .commit();
+                .apply();
         sharedPreferences.edit().putInt(getString(R.string.CURRENT_SERVINGS), recipe.getServings())
-                .commit();
+                .apply();
     }
 
     private String buildAddToUrl(View v){
         StringBuilder sb = new StringBuilder(ADD_TO_COOK_URL);
+        try{
+            SharedPreferences sharedPreferences = getActivity()
+                    .getSharedPreferences(getString(R.string.LOGIN_PREFS), Context.MODE_PRIVATE);
+
+            String user = sharedPreferences.getString(getString(R.string.LOGGED_USER), "");
+
+            sb.append("user_name=");
+            sb.append(URLEncoder.encode(user, "UTF-8"));
+
+
+            String recipe = sharedPreferences.getString(getString(R.string.CURRENT_RECIPE), "");
+            sb.append("&recipe_name=");
+            sb.append(URLEncoder.encode(recipe, "UTF-8"));
+
+        }catch(Exception e){
+            Toast.makeText(v.getContext(), "Something wrong with the url " + e.getMessage(),
+                    Toast.LENGTH_LONG).show();
+        }
+
+        return sb.toString();
+    }
+
+    private String buildFaceAddUrl(View v){
+        StringBuilder sb = new StringBuilder(FACE_ADD_TO_COOK_URL);
         try{
             SharedPreferences sharedPreferences = getActivity()
                     .getSharedPreferences(getString(R.string.LOGIN_PREFS), Context.MODE_PRIVATE);
