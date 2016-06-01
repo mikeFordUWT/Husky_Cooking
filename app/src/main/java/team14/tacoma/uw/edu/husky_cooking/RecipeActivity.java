@@ -299,14 +299,8 @@ public class RecipeActivity extends AppCompatActivity
     public void onBackPressed(){
         Fragment f = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
         if(f instanceof IngredientDetailFromShoppingListFragment){
-            Log.d("IngredientInList", "NOO!!!");
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_container, new ShoppingListFragment())
-                    .addToBackStack(null).commit();
-        }else if(f instanceof ShoppingListFragment){
-            Log.d("ShoppingList", "YAY!!");
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container, new UserHomeFragment())
                     .addToBackStack(null).commit();
         }else if(f instanceof UserHomeFragment){
             Intent intent = new Intent();
@@ -322,17 +316,9 @@ public class RecipeActivity extends AppCompatActivity
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_container, new RecipeListFragment())
                     .addToBackStack(null).commit();
-        }else if(f instanceof RecipeListFragment){
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container, new UserHomeFragment())
-                    .addToBackStack(null).commit();
-        }else if(f instanceof RecipeInCookBookDetailFragment){
+        } else if(f instanceof RecipeInCookBookDetailFragment){
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_container, new CookBookListFragment())
-                    .addToBackStack(null).commit();
-        }else if(f instanceof CookBookListFragment){
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container, new UserHomeFragment())
                     .addToBackStack(null).commit();
         } else if(f instanceof IngredientsFromCookBookListFragment){
             getSupportFragmentManager().beginTransaction()
@@ -354,7 +340,9 @@ public class RecipeActivity extends AppCompatActivity
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_container, new MenuListFragment())
                     .addToBackStack(null).commit();
-        }else if(f instanceof MenuListFragment){
+        }else if(f instanceof MenuListFragment || f instanceof AddRecipeFragment
+                || f instanceof CookBookListFragment || f instanceof RecipeListFragment
+                || f instanceof ShoppingListFragment){
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_container, new UserHomeFragment())
                     .addToBackStack(null).commit();
