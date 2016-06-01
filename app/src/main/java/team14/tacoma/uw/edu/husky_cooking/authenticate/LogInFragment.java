@@ -55,6 +55,8 @@ public class LogInFragment extends Fragment {
     /** CSSGATE login url */
     private static final String LOGIN_URL =
             "http://cssgate.insttech.washington.edu/~_450atm14/husky_cooking/login.php?";
+
+
     /** CSSGATE user add url url */
     private static final String USER_ADD_URL =
             "http://cssgate.insttech.washington.edu/~_450atm14/husky_cooking/addUser.php?";
@@ -145,7 +147,7 @@ public class LogInFragment extends Fragment {
 
         FacebookSdk.sdkInitialize(this.getContext());
 
-        View v = inflater.inflate(R.layout.fragment_log_in, container, false);
+        final View v = inflater.inflate(R.layout.fragment_log_in, container, false);
         mUserName = (EditText) v.findViewById(R.id.user_id);
         mPwd = (EditText) v.findViewById(R.id.pwd);
         loginButton = (LoginButton) v.findViewById(R.id.login_button);
@@ -161,6 +163,8 @@ public class LogInFragment extends Fragment {
             public void onSuccess(LoginResult loginResult) {
                 final SharedPreferences sharedPreferences = getActivity().getSharedPreferences(getString(R.string.LOGIN_PREFS)
                         , Context.MODE_PRIVATE);
+
+                final String hello;
                 AccessToken accessToken = loginResult.getAccessToken();
                 Profile profile = Profile.getCurrentProfile();
 
@@ -169,6 +173,7 @@ public class LogInFragment extends Fragment {
                 // Facebook Email address
                 GraphRequest request = GraphRequest.newMeRequest(
                         accessToken,
+
                         new GraphRequest.GraphJSONObjectCallback() {
                             @Override
                             public void onCompleted(
@@ -181,9 +186,15 @@ public class LogInFragment extends Fragment {
 
                                     FEmail = object.getString("email");
                                     Log.v("Email = ", " " + FEmail);
-                                    Toast.makeText(getActivity().getApplicationContext(), "Email " + FEmail, Toast.LENGTH_LONG).show();
-                                    sharedPreferences.edit().putString(getString(R.string.LOGGED_USER), FEmail).apply();
-                                    sharedPreferences.edit().putBoolean(getString(R.string.LOGGEDIN),true).apply();
+
+                                    sharedPreferences.edit()
+                                            .putString(getString(R.string.LOGGED_USER), FEmail).apply();
+
+                                    sharedPreferences.edit().putBoolean(getString(R.string.LOGGEDIN)
+                                            ,true).apply();
+                                    sharedPreferences.edit()
+                                            .putString(getString(R.string.LOGIN_METHOD),
+                                                    getString(R.string.FACE)).apply();
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
@@ -316,5 +327,8 @@ public class LogInFragment extends Fragment {
         }
         return sb.toString();
     }
+
+
+
 
 }

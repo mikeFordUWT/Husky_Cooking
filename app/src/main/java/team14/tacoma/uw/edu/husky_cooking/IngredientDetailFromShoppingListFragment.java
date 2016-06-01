@@ -34,7 +34,11 @@ public class IngredientDetailFromShoppingListFragment extends Fragment {
 
     public static final String INGREDIENT_ITEM_SELECTED = "IngredientItemSelected";
 
-    private static final String REMOVE_FROM_SHOPPING_LIST_URL = "http://cssgate.insttech.washington.edu/~_450atm14/husky_cooking/remove_shopping_list.php?";
+    private static final String REMOVE_FROM_SHOPPING_LIST_URL =
+            "http://cssgate.insttech.washington.edu/~_450atm14/husky_cooking/remove_shopping_list.php?";
+
+    private static final String FACE_REMOVE_FROM_SHOPPING_LIST_URL =
+            "http://cssgate.insttech.washington.edu/~_450atm14/husky_cooking/remove_face_shopping_list.php?";
 
 
 
@@ -77,8 +81,17 @@ public class IngredientDetailFromShoppingListFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 ShoppingListFragment newFrag = new ShoppingListFragment();
+                SharedPreferences sharedPreferences = getActivity().getSharedPreferences(getString(R.string.LOGIN_PREFS), Context.MODE_PRIVATE);
+                String face= sharedPreferences.getString(getString(R.string.LOGIN_METHOD), "");
+                String url;
+                if(face.equals("facebook")){
+                    url = buildFaceRemoveUrl(v);
+                }else{
+                    url = buildRemoveUrl(v);
+                }
 
-                String url = buildRemoveUrl(v);
+
+
                 RemoveIngredientFromListTask task = new RemoveIngredientFromListTask();
                 task.execute(url);
 //                ViewGroup layout = (ViewGroup) removeFromShoppingList.getParent();
@@ -110,12 +123,34 @@ public class IngredientDetailFromShoppingListFragment extends Fragment {
                 getActivity().getSharedPreferences(getString(R.string.LOGIN_PREFS),
                         Context.MODE_PRIVATE);
         sharedPreferences.edit().putString(getString(R.string.CURRENT_INGREDIENT), ingredient.getIngredientName())
-                .commit();
+                .apply();
         sharedPreferences.edit().putString(getString(R.string.CURRENT_AMOUNT), ingredient.getAmount())
-                .commit();
+                .apply();
         sharedPreferences.edit().putString(getString(R.string.CURRENT_MEASURE_TYPE), ingredient.getMeasurementType())
-                .commit();
+                .apply();
 
+    }
+
+    private String buildFaceRemoveUrl(View v){
+        StringBuilder sb = new StringBuilder(FACE_REMOVE_FROM_SHOPPING_LIST_URL);
+        try{
+            SharedPreferences sharedPreferences = getActivity()
+                    .getSharedPreferences(getString(R.string.LOGIN_PREFS), Context.MODE_PRIVATE);
+
+            String user = sharedPreferences.getString(getString(R.string.LOGGED_USER), "");
+            sb.append("user=");
+            sb.append(URLEncoder.encode(user, "UTF-8"));
+
+            String ingredient = sharedPreferences.getString(getString(R.string.CURRENT_INGREDIENT), "");
+            sb.append("&ingredient=");
+            sb.append(URLEncoder.encode(ingredient, "UTF-8"));
+
+        }catch (Exception e){
+            Toast.makeText(v.getContext(), "Something wrong with the url " + e.getMessage(),
+                    Toast.LENGTH_LONG).show();
+        }
+
+        return sb.toString();
     }
 
     private String buildRemoveUrl(View v){

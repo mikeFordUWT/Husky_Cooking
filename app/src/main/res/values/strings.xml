@@ -15,7 +15,9 @@
     <string name="servings_hint">How many servings?</string>
     <string name="cook_time_hint">How long will this take?(in minutes)</string>
 
+    <string name="add_recipe_label">Add A Recipe</string>
     <string name="add_recipe_but_text">Add Recipe</string>
+    <string name="add_ingredients_button_text">ADD INGREDIENTS</string>
     <string name="add_to_cook_text">Add to Cookbook</string>
     <string name="share_recipe_button">Share</string>
     <string name="cookbook_button_label">Cookbook</string>
@@ -35,7 +37,10 @@
     <string name="LOGIN_FILE">team14.tacoma.uw.edu.husky_cooking.LOGIN_FILE</string>
     <string name="LOGIN_URL">http://cssgate.insttech.washington.edu/~_450atm14/husky_cooking/login.php?</string>
     <string name="LOGGED_USER">user</string>
+    <string name="LOGIN_METHOD">method</string>
     <string name="CURRENT_MENU">menu</string>
+    <string name="HUSKY">husky</string>
+    <string name="FACE">facebook</string>
 
     <string name="CURRENT_RECIPE_ID">id</string>
     <string name="CURRENT_RECIPE">recipe</string>
@@ -61,8 +66,18 @@
     <string name="ingredient_detail">Ingredient Details</string>
     <string name="view_ingredients">View Ingredients</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="with_facebook">With Facebook:</string>
+    <string name="without_facebook">With Husky Cooking:</string>
+
+    <string name="ingredient_name">Name: </string>
+    <string name="ingredient_name_hint">Enter a name</string>
+    <string name="ingredient_amount">Amount: </string>
+    <string name="ingredient_amt_hint">How much?</string>
+    <string name="ingredient_measure_type">Measurement Type: </string>
+    <string name="ingredient_measure_hint">Of what type? [optional] (ex: cup, ounce)</string>
+    <string name="add_ingredient">ADD AN INGREDIENT</string>
+    <string name="add_more_ingredients_button_label">ADD MORE</string>
+    <string name="finish">FINISH</string>
 
 
 </resources>

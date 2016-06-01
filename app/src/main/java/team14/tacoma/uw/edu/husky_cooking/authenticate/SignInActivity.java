@@ -126,19 +126,11 @@ public class SignInActivity extends AppCompatActivity
                         .edit()
                         .putString(getString(R.string.LOGGED_USER), user)
                         .apply();
-                //for greeting a user
-//                try {
-//                    OutputStreamWriter outputStreamWriter = new OutputStreamWriter(
-//                            openFileOutput(getString(R.string.LOGIN_FILE)
-//                                    , Context.MODE_PRIVATE));
-//                    outputStreamWriter.write(url);
-//                    outputStreamWriter.close();
-//                    String welcome = "Welcome, "+ mUserName.getText().toString() + "!";
-//                    Toast.makeText(this,welcome, Toast.LENGTH_LONG)
-//                            .show();
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
+                mSharedPreferences
+                        .edit()
+                        .putString(getString(R.string.LOGIN_METHOD), getString(R.string.HUSKY))
+                        .apply();
+
                 Intent i  = new Intent(this, RecipeActivity.class);
                 startActivity(i);
 
@@ -158,6 +150,9 @@ public class SignInActivity extends AppCompatActivity
 
 
     }
+
+
+
 
     /**
      * Used to add a user to Database.
@@ -305,4 +300,7 @@ public class SignInActivity extends AppCompatActivity
             }
         }
     }
+
+
+
 }

@@ -19,11 +19,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.facebook.AccessToken;
 import com.facebook.FacebookSdk;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.HttpMethod;
 import com.facebook.login.LoginManager;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -45,7 +46,6 @@ import team14.tacoma.uw.edu.husky_cooking.model.Recipe;
  */
 public class RecipeActivity extends AppCompatActivity
         implements RecipeListFragment.OnListFragmentInteractionListener,
-        AddRecipeFragment.AddRecipeInteractionListener,
         CookBookListFragment.OnCookFragmentInteractionListener,
         ShoppingListFragment.OnShoppingListFragmentInteractionListener,
         IngredientsFromRecipeListFragment.OnRecipeIngredientListFragmentInteractionListener,
@@ -57,6 +57,9 @@ public class RecipeActivity extends AppCompatActivity
     /** base url to add a recipe to our database */
     public static final String ADD_RECIPE_URL =
             "http://cssgate.insttech.washington.edu/~_450atm14/husky_cooking/addRecipe.php?";
+
+    public static final String FACE_ADD_TO_COOK_URL =
+            "http://cssgate.insttech.washington.edu/~_450atm14/husky_cooking/facebook_cookbook_add.php?";
 
     /**
      * Saves instance on creation of method of fragment/app.
@@ -85,16 +88,6 @@ public class RecipeActivity extends AppCompatActivity
     }
 
     /**
-     * Makes appropriate calls to add a recipe.
-     * @param url where to add the recipe (how to access db)
-     */
-    public void addRecipe(String url){
-        AddRecipeTask task = new AddRecipeTask();
-        task.execute(new String[]{url.toString()});
-        getSupportFragmentManager().popBackStackImmediate();
-    }
-
-    /**
      * Controls what happens when interacting with adding recipe.
      * Changes fragment smoothly.
      * @param item the Recipe object to be used for the RecipeDetailFragment
@@ -120,7 +113,7 @@ public class RecipeActivity extends AppCompatActivity
                 Context.MODE_PRIVATE);
 
         sharedPreferences.edit().putString(getString(R.string.CURRENT_MENU),
-                item.getMenuName()).commit();
+                item.getMenuName()).apply();
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, recipeListFragment)
                 .addToBackStack(null)
@@ -248,7 +241,7 @@ public class RecipeActivity extends AppCompatActivity
                     .apply();
 
             FacebookSdk.sdkInitialize(getApplicationContext());
-            LoginManager.getInstance().logOut();
+            facebookLogout();
             Intent i  = new Intent(this, SignInActivity.class);
             startActivity(i);
             finish();
@@ -278,6 +271,26 @@ public class RecipeActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
+    public void faceBookCheck(String url){
+        FacebookCheck task = new FacebookCheck();
+        task.execute(new String[]{url.toString()});
+
+    }
+    private void facebookLogout(){
+        if (AccessToken.getCurrentAccessToken() == null) {
+            return; // already logged out
+        }
+
+        new GraphRequest(AccessToken.getCurrentAccessToken(), "/me/permissions/", null, HttpMethod.DELETE, new GraphRequest
+                .Callback() {
+            @Override
+            public void onCompleted(GraphResponse graphResponse) {
+
+                LoginManager.getInstance().logOut();
+
+            }
+        }).executeAsync();
+    }
     /**
      * Handles the actions of the prebuilt back button overrides behavior.
      * Allows user to access correct fragments from a specific fragment.
@@ -286,14 +299,8 @@ public class RecipeActivity extends AppCompatActivity
     public void onBackPressed(){
         Fragment f = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
         if(f instanceof IngredientDetailFromShoppingListFragment){
-            Log.d("IngredientInList", "NOO!!!");
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_container, new ShoppingListFragment())
-                    .addToBackStack(null).commit();
-        }else if(f instanceof ShoppingListFragment){
-            Log.d("ShoppingList", "YAY!!");
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container, new UserHomeFragment())
                     .addToBackStack(null).commit();
         }else if(f instanceof UserHomeFragment){
             Intent intent = new Intent();
@@ -309,17 +316,9 @@ public class RecipeActivity extends AppCompatActivity
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_container, new RecipeListFragment())
                     .addToBackStack(null).commit();
-        }else if(f instanceof RecipeListFragment){
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container, new UserHomeFragment())
-                    .addToBackStack(null).commit();
-        }else if(f instanceof RecipeInCookBookDetailFragment){
+        } else if(f instanceof RecipeInCookBookDetailFragment){
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_container, new CookBookListFragment())
-                    .addToBackStack(null).commit();
-        }else if(f instanceof CookBookListFragment){
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container, new UserHomeFragment())
                     .addToBackStack(null).commit();
         } else if(f instanceof IngredientsFromCookBookListFragment){
             getSupportFragmentManager().beginTransaction()
@@ -341,7 +340,9 @@ public class RecipeActivity extends AppCompatActivity
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_container, new MenuListFragment())
                     .addToBackStack(null).commit();
-        }else if(f instanceof MenuListFragment){
+        }else if(f instanceof MenuListFragment || f instanceof AddRecipeFragment
+                || f instanceof CookBookListFragment || f instanceof RecipeListFragment
+                || f instanceof ShoppingListFragment){
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.fragment_container, new UserHomeFragment())
                     .addToBackStack(null).commit();
@@ -351,45 +352,36 @@ public class RecipeActivity extends AppCompatActivity
         }
     }
 
-
-
-
-    /**
-     * Adds the recipe to our database asynchronously.
-     */
-    private class AddRecipeTask extends AsyncTask<String, Void, String> {
-
-        /**
-         * calls super on pre execute.
-         */
+    private class FacebookCheck extends AsyncTask<String, Void, String> {
         @Override
-        protected void onPreExecute() {super.onPreExecute();}
+        protected void onPreExecute(){
+            super.onPreExecute();
+
+        }
+
         /**
-         * Adds recipe to our database.
-         * @param urls where to add recipe
-         * @return string of response details
+         * Finds out if the user is in the database
+         * @param urls A url to run in the background
+         * @return repsonse string
          */
         @Override
         protected String doInBackground(String... urls){
-            String response ="";
+            String response = "";
             HttpURLConnection urlConnection = null;
-            for(String url: urls){
-                try{
+            for(String url:urls){
+                try {
                     URL urlObject = new URL(url);
                     urlConnection = (HttpURLConnection) urlObject.openConnection();
-
                     InputStream content = urlConnection.getInputStream();
-
                     BufferedReader buffer = new BufferedReader(new InputStreamReader(content));
-                    String s = "";
-                    while ((s = buffer.readLine()) != null) {
-                        response += s;
+                    String s ="";
+                    while((s=buffer.readLine())!=null){
+                        response +=s;
                     }
-                }catch (Exception e) {
-                    response = "Unable to add recipe, Reason: "
-                            + e.getMessage();
-                }finally {
-                    if(urlConnection != null){
+                }catch (Exception e){
+                    response = "Unable to login, Reason: " + e.getMessage();
+                }finally{
+                    if(urlConnection !=null){
                         urlConnection.disconnect();
                     }
                 }
@@ -398,29 +390,20 @@ public class RecipeActivity extends AppCompatActivity
         }
 
         /**
-         * Does appropriate actions to set/replace
-         * recycler view and adapter.
-         * Lets user know if it was successful or unsuccessfully added.
-         * @param result result string to be be checked
+         * Checks the String returned from doInBackground to see if the log in was successful.
+         * @param result
          */
         @Override
-        protected void onPostExecute(String result){
-            try{
-                JSONObject jsonObject = new JSONObject(result);
-                String status = (String) jsonObject.get("result");
-                if(status.equals("success")){
-                    Toast.makeText(getApplicationContext(), "Recipe successfully added!",
-                            Toast.LENGTH_LONG)
-                            .show();
-                }else {
-                    Toast.makeText(getApplicationContext(), "Failed to add: "
-                                    + jsonObject.get("error")
-                            ,Toast.LENGTH_LONG)
-                            .show();
-                }
-            }catch(JSONException e){
-                Toast.makeText(getApplicationContext(), "Something wrong with the data" +
-                        e.getMessage(), Toast.LENGTH_LONG).show();
+        protected void onPostExecute(String result) {
+
+            if(result.startsWith("Unable to")){
+                Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG)
+                        .show();
+                return;
+            }
+
+            if(result!=null){
+                Log.e("SignInActivity", result.toString());
             }
         }
     }

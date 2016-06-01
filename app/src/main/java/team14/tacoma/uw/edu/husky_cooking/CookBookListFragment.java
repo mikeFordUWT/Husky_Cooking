@@ -43,6 +43,9 @@ public class CookBookListFragment extends Fragment {
     private static final String COOKBOOK_URL =
             "http://cssgate.insttech.washington.edu/~_450atm14/husky_cooking/cookbook.php?user=";
 
+    private static final String FACE_COOKBOOK_URL =
+            "http://cssgate.insttech.washington.edu/~_450atm14/husky_cooking/facebook_cookbook.php?user=";
+
     /** how many columns to make the list */
     private int mColumnCount = 1;
 
@@ -102,7 +105,14 @@ public class CookBookListFragment extends Fragment {
                 SharedPreferences sharedPreferences = getActivity()
                         .getSharedPreferences(getString(R.string.LOGIN_PREFS), Context.MODE_PRIVATE);
                 String user = sharedPreferences.getString(getString(R.string.LOGGED_USER), "");
-                String cookURL = COOKBOOK_URL + user;
+                String face = sharedPreferences.getString(getString(R.string.LOGIN_METHOD), "");
+                String cookURL;
+                if(face.equals("facebook")){
+                    cookURL = FACE_COOKBOOK_URL + user;
+                }else{
+                    cookURL = COOKBOOK_URL + user;
+                }
+
                 DownloadCookbookTask task = new DownloadCookbookTask();
                 task.execute(new String[]{cookURL});
             }else{

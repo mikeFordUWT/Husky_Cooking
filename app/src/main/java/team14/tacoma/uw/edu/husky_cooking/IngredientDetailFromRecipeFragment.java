@@ -33,7 +33,12 @@ import team14.tacoma.uw.edu.husky_cooking.model.Ingredient;
 public class IngredientDetailFromRecipeFragment extends Fragment {
     public static final String INGREDIENT_ITEM_SELECTED = "IngredientItemSelected";
 
-    private static final String ADD_TO_SHOPPING_LIST = "http://cssgate.insttech.washington.edu/~_450atm14/husky_cooking/add_to_shopping_list.php?";
+    private static final String ADD_TO_SHOPPING_LIST =
+            "http://cssgate.insttech.washington.edu/~_450atm14/husky_cooking/add_to_shopping_list.php?";
+
+    private static final String FACE_ADD_TO_SHOPPING =
+            "http://cssgate.insttech.washington.edu/~_450atm14/husky_cooking/add_to_face_shopping.php?";
+
     /** TextView for displayng ingredient name*/
     private TextView mIngredientNameTextView;
 
@@ -72,8 +77,19 @@ public class IngredientDetailFromRecipeFragment extends Fragment {
         addToShoppingList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String url = buildAddUrl(v);
+                String url;
                 AddIngredientToListTask task = new AddIngredientToListTask();
+
+                SharedPreferences sharedPreferences = getActivity()
+                        .getSharedPreferences(getString(R.string.LOGIN_PREFS), Context.MODE_PRIVATE);
+
+                String face = sharedPreferences.getString(getString(R.string.LOGIN_METHOD), "");
+
+                if(face.equals("facebook")){
+                    url = buildFaceAddUrl(v);
+                }else{
+                    url = buildAddUrl(v);
+                }
                 task.execute(url);
 
                 IngredientsFromRecipeListFragment newFrag = new IngredientsFromRecipeListFragment();
@@ -103,12 +119,51 @@ public class IngredientDetailFromRecipeFragment extends Fragment {
                 getActivity().getSharedPreferences(getString(R.string.LOGIN_PREFS),
                         Context.MODE_PRIVATE);
         sharedPreferences.edit().putString(getString(R.string.CURRENT_INGREDIENT), ingredient.getIngredientName())
-                .commit();
+                .apply();
         sharedPreferences.edit().putString(getString(R.string.CURRENT_AMOUNT), ingredient.getAmount())
-                .commit();
+                .apply();
         sharedPreferences.edit().putString(getString(R.string.CURRENT_MEASURE_TYPE), ingredient.getMeasurementType())
-                .commit();
+                .apply();
 
+    }
+
+    /**
+     * Helper method that retuns string if user logged in via custom login.
+     * @param v
+     * @return
+     */
+    private String buildFaceAddUrl(View v){
+        StringBuilder sb = new StringBuilder(FACE_ADD_TO_SHOPPING);
+
+        try{
+
+            SharedPreferences sharedPreferences = getActivity()
+                    .getSharedPreferences(getString(R.string.LOGIN_PREFS), Context.MODE_PRIVATE);
+            String ingredient = sharedPreferences.getString(getString(R.string.CURRENT_INGREDIENT),"");
+            sb.append("ingredient=");
+            sb.append(URLEncoder.encode(ingredient, "UTF-8"));
+
+            String user = sharedPreferences.getString(getString(R.string.LOGGED_USER), "");
+            sb.append("&user_name=");
+            sb.append(URLEncoder.encode(user, "UTF-8"));
+
+
+            String amount = mAmountTextView.getText().toString();
+            sb.append("&amount=");
+            sb.append(URLEncoder.encode(amount, "UTF-8"));
+
+            String measure = mMeasurementTypeTextView.getText().toString();
+            sb.append("&measurement_type=");
+            sb.append(URLEncoder.encode(measure, "UTF-8"));
+
+        } catch (Exception e){
+            Toast.makeText(v.getContext(), "Something wrong with the url " + e.getMessage(),
+                    Toast.LENGTH_LONG).show();
+        }
+
+
+
+        return sb.toString();
     }
 
     private String buildAddUrl(View v){
