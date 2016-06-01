@@ -19,7 +19,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.facebook.AccessToken;
 import com.facebook.FacebookSdk;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.HttpMethod;
 import com.facebook.login.LoginManager;
 
 import org.json.JSONException;
@@ -248,7 +252,7 @@ public class RecipeActivity extends AppCompatActivity
                     .apply();
 
             FacebookSdk.sdkInitialize(getApplicationContext());
-            LoginManager.getInstance().logOut();
+            facebookLogout();
             Intent i  = new Intent(this, SignInActivity.class);
             startActivity(i);
             finish();
@@ -278,6 +282,26 @@ public class RecipeActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
+    public void faceBookCheck(String url){
+        FacebookCheck task = new FacebookCheck();
+        task.execute(new String[]{url.toString()});
+
+    }
+    private void facebookLogout(){
+        if (AccessToken.getCurrentAccessToken() == null) {
+            return; // already logged out
+        }
+
+        new GraphRequest(AccessToken.getCurrentAccessToken(), "/me/permissions/", null, HttpMethod.DELETE, new GraphRequest
+                .Callback() {
+            @Override
+            public void onCompleted(GraphResponse graphResponse) {
+
+                LoginManager.getInstance().logOut();
+
+            }
+        }).executeAsync();
+    }
     /**
      * Handles the actions of the prebuilt back button overrides behavior.
      * Allows user to access correct fragments from a specific fragment.
@@ -421,6 +445,62 @@ public class RecipeActivity extends AppCompatActivity
             }catch(JSONException e){
                 Toast.makeText(getApplicationContext(), "Something wrong with the data" +
                         e.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
+    private class FacebookCheck extends AsyncTask<String, Void, String> {
+        @Override
+        protected void onPreExecute(){
+            super.onPreExecute();
+
+        }
+
+        /**
+         * Finds out if the user is in the database
+         * @param urls A url to run in the background
+         * @return repsonse string
+         */
+        @Override
+        protected String doInBackground(String... urls){
+            String response = "";
+            HttpURLConnection urlConnection = null;
+            for(String url:urls){
+                try {
+                    URL urlObject = new URL(url);
+                    urlConnection = (HttpURLConnection) urlObject.openConnection();
+                    InputStream content = urlConnection.getInputStream();
+                    BufferedReader buffer = new BufferedReader(new InputStreamReader(content));
+                    String s ="";
+                    while((s=buffer.readLine())!=null){
+                        response +=s;
+                    }
+                }catch (Exception e){
+                    response = "Unable to login, Reason: " + e.getMessage();
+                }finally{
+                    if(urlConnection !=null){
+                        urlConnection.disconnect();
+                    }
+                }
+            }
+            return response;
+        }
+
+        /**
+         * Checks the String returned from doInBackground to see if the log in was successful.
+         * @param result
+         */
+        @Override
+        protected void onPostExecute(String result) {
+
+            if(result.startsWith("Unable to")){
+                Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG)
+                        .show();
+                return;
+            }
+
+            if(result!=null){
+                Log.e("SignInActivity", result.toString());
             }
         }
     }

@@ -35,7 +35,10 @@
     <string name="LOGIN_FILE">team14.tacoma.uw.edu.husky_cooking.LOGIN_FILE</string>
     <string name="LOGIN_URL">http://cssgate.insttech.washington.edu/~_450atm14/husky_cooking/login.php?</string>
     <string name="LOGGED_USER">user</string>
+    <string name="LOGIN_METHOD">method</string>
     <string name="CURRENT_MENU">menu</string>
+    <string name="HUSKY">husky</string>
+    <string name="FACE">facebook</string>
 
     <string name="CURRENT_RECIPE_ID">id</string>
     <string name="CURRENT_RECIPE">recipe</string>
@@ -61,9 +64,8 @@
     <string name="ingredient_detail">Ingredient Details</string>
     <string name="view_ingredients">View Ingredients</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-
+    <string name="with_facebook">With Facebook:</string>
+    <string name="without_facebook">With Husky Cooking:</string>
 
 </resources>
 

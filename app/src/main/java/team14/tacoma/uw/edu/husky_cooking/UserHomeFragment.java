@@ -6,6 +6,8 @@
 package team14.tacoma.uw.edu.husky_cooking;
 
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -13,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 
 /**
@@ -24,7 +27,9 @@ import android.widget.Button;
  * @version 5/4/2016
  */
 public class UserHomeFragment extends Fragment {
-
+    /** URL for facebook user check*/
+    private static final String FACEBOOK_CHECK =
+            "http://cssgate.insttech.washington.edu/~_450atm14/husky_cooking/facebook_user_check.php?";
 
     /**
      * Required empty public constructor
@@ -49,6 +54,15 @@ public class UserHomeFragment extends Fragment {
 
         View v = inflater.inflate(R.layout.fragment_user_home, container, false);
 
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(getString(R.string.LOGIN_PREFS)
+                , Context.MODE_PRIVATE);
+        String face = sharedPreferences.getString(getString(R.string.LOGIN_METHOD), "");
+        if(face.equals("facebook")){
+            String url  = buildFaceString(v);
+            ((RecipeActivity) getActivity()).faceBookCheck(url);
+        }
+        String user = getActivity().getSharedPreferences(getString(R.string.LOGIN_PREFS)
+                , Context.MODE_PRIVATE).getString(getString(R.string.LOGGED_USER), "");
         //Create button lists
         Button cookbook = (Button)v.findViewById(R.id.cookbook_button);
         Button shoppingList = (Button) v.findViewById(R.id.shopping_list_button);
@@ -141,6 +155,26 @@ public class UserHomeFragment extends Fragment {
         });
         return v;
 
+    }
+
+    /**
+     * Return string for checking if a user is already in the database.
+     * If they aren't a new entry is inserted into appropriate table.
+     *
+     */
+    private String buildFaceString(View v){
+        StringBuilder sb = new StringBuilder(FACEBOOK_CHECK);
+        try{
+            SharedPreferences sharedPreferences = getActivity().getSharedPreferences(getString(R.string.LOGIN_PREFS)
+                    , Context.MODE_PRIVATE);
+            String user = sharedPreferences.getString(getString(R.string.LOGGED_USER), "");
+            sb.append("email=");
+            sb.append(user);
+        }catch (Exception e){
+            Toast.makeText(v.getContext(), "Something wrong with the url " + e.getMessage(),
+                    Toast.LENGTH_LONG).show();
+        }
+        return sb.toString();
     }
 
 
