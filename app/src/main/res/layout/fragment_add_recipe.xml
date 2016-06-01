@@ -10,7 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Add a Recipe"
+        android:text="@string/add_recipe_label"
         android:layout_gravity="center"/>
 
     <EditText
@@ -40,8 +40,8 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/add_recipe_button"
-        android:text="@string/add_recipe_but_text"
-        android:layout_gravity="right"/>
+        android:id="@+id/add_ingredients_button"
+        android:text="@string/add_ingredients_button_text"
+        android:layout_gravity="end"/>
 </LinearLayout>
 

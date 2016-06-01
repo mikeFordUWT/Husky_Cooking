@@ -6,8 +6,12 @@
 package team14.tacoma.uw.edu.husky_cooking;
 
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,6 +21,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.net.URLEncoder;
 
 
@@ -51,13 +63,6 @@ public class AddRecipeFragment extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * An interface which requires implementing addRecipe(String).
-     * It is used for a listener.
-     */
-    public interface AddRecipeInteractionListener{
-        void addRecipe(String url);
-    }
 
     /**
      * Creates the view that will be shown to the user.
@@ -79,9 +84,9 @@ public class AddRecipeFragment extends Fragment {
         mServings = (EditText) v.findViewById(R.id.new_recipe_servings);
 
         //Add button from xml
-        Button addRecipeButton = (Button) v.findViewById(R.id.add_recipe_button);
+        Button addIngredientsButton = (Button) v.findViewById(R.id.add_ingredients_button);
 
-        addRecipeButton.setOnClickListener(new View.OnClickListener() {
+        addIngredientsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //checks for valid user input
@@ -122,7 +127,24 @@ public class AddRecipeFragment extends Fragment {
                 }
                 String url = buildRecipeUrl(v);
 
-                ((RecipeActivity) getActivity()).addRecipe(url);
+                SharedPreferences sharedPreferences =
+                        getActivity().getSharedPreferences(getString(R.string.LOGIN_PREFS),
+                                Context.MODE_PRIVATE);
+
+                sharedPreferences.edit()
+                        .putString(getString(R.string.CURRENT_RECIPE),mRecipeName
+                                .getText().toString()).apply();
+
+                AddIngredientFragment ingredientFragment = new AddIngredientFragment();
+                FragmentActivity act = getActivity();
+                AddRecipeTask task = new AddRecipeTask();
+                task.execute(new String[]{url});
+
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, new AddIngredientFragment())
+                        .addToBackStack(null).commit();
+//                ((RecipeActivity) getActivity()).addRecipe(url);
+
             }
         });
 
@@ -162,5 +184,76 @@ public class AddRecipeFragment extends Fragment {
         }
 
         return sb.toString();
+    }
+
+    /**
+     * Adds the recipe to our database asynchronously.
+     */
+    private class AddRecipeTask extends AsyncTask<String, Void, String> {
+
+        /**
+         * calls super on pre execute.
+         */
+        @Override
+        protected void onPreExecute() {super.onPreExecute();}
+        /**
+         * Adds recipe to our database.
+         * @param urls where to add recipe
+         * @return string of response details
+         */
+        @Override
+        protected String doInBackground(String... urls){
+            String response ="";
+            HttpURLConnection urlConnection = null;
+            for(String url: urls){
+                try{
+                    URL urlObject = new URL(url);
+                    urlConnection = (HttpURLConnection) urlObject.openConnection();
+
+                    InputStream content = urlConnection.getInputStream();
+
+                    BufferedReader buffer = new BufferedReader(new InputStreamReader(content));
+                    String s = "";
+                    while ((s = buffer.readLine()) != null) {
+                        response += s;
+                    }
+                }catch (Exception e) {
+                    response = "Unable to add recipe, Reason: "
+                            + e.getMessage();
+                }finally {
+                    if(urlConnection != null){
+                        urlConnection.disconnect();
+                    }
+                }
+            }
+            return response;
+        }
+
+        /**
+         * Does appropriate actions to set/replace
+         * recycler view and adapter.
+         * Lets user know if it was successful or unsuccessfully added.
+         * @param result result string to be be checked
+         */
+        @Override
+        protected void onPostExecute(String result){
+            try{
+                JSONObject jsonObject = new JSONObject(result);
+                String status = (String) jsonObject.get("result");
+                if(status.equals("success")){
+                    Toast.makeText(getActivity().getApplicationContext(), "Recipe successfully added!",
+                            Toast.LENGTH_LONG)
+                            .show();
+                }else {
+                    Toast.makeText(getActivity().getApplicationContext(), "Failed to add: "
+                                    + jsonObject.get("error")
+                            ,Toast.LENGTH_LONG)
+                            .show();
+                }
+            }catch(JSONException e){
+                Toast.makeText(getActivity().getApplicationContext(), "Something wrong with the data" +
+                        e.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        }
     }
 }

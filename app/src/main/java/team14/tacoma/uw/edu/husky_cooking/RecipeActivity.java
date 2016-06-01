@@ -26,9 +26,6 @@ import com.facebook.GraphResponse;
 import com.facebook.HttpMethod;
 import com.facebook.login.LoginManager;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -49,7 +46,6 @@ import team14.tacoma.uw.edu.husky_cooking.model.Recipe;
  */
 public class RecipeActivity extends AppCompatActivity
         implements RecipeListFragment.OnListFragmentInteractionListener,
-        AddRecipeFragment.AddRecipeInteractionListener,
         CookBookListFragment.OnCookFragmentInteractionListener,
         ShoppingListFragment.OnShoppingListFragmentInteractionListener,
         IngredientsFromRecipeListFragment.OnRecipeIngredientListFragmentInteractionListener,
@@ -89,16 +85,6 @@ public class RecipeActivity extends AppCompatActivity
                     .add(R.id.fragment_container, userHomeFragment)
                     .commit();
         }
-    }
-
-    /**
-     * Makes appropriate calls to add a recipe.
-     * @param url where to add the recipe (how to access db)
-     */
-    public void addRecipe(String url){
-        AddRecipeTask task = new AddRecipeTask();
-        task.execute(new String[]{url.toString()});
-        getSupportFragmentManager().popBackStackImmediate();
     }
 
     /**
@@ -375,80 +361,6 @@ public class RecipeActivity extends AppCompatActivity
         }
         else{
             super.onBackPressed();
-        }
-    }
-
-
-
-
-    /**
-     * Adds the recipe to our database asynchronously.
-     */
-    private class AddRecipeTask extends AsyncTask<String, Void, String> {
-
-        /**
-         * calls super on pre execute.
-         */
-        @Override
-        protected void onPreExecute() {super.onPreExecute();}
-        /**
-         * Adds recipe to our database.
-         * @param urls where to add recipe
-         * @return string of response details
-         */
-        @Override
-        protected String doInBackground(String... urls){
-            String response ="";
-            HttpURLConnection urlConnection = null;
-            for(String url: urls){
-                try{
-                    URL urlObject = new URL(url);
-                    urlConnection = (HttpURLConnection) urlObject.openConnection();
-
-                    InputStream content = urlConnection.getInputStream();
-
-                    BufferedReader buffer = new BufferedReader(new InputStreamReader(content));
-                    String s = "";
-                    while ((s = buffer.readLine()) != null) {
-                        response += s;
-                    }
-                }catch (Exception e) {
-                    response = "Unable to add recipe, Reason: "
-                            + e.getMessage();
-                }finally {
-                    if(urlConnection != null){
-                        urlConnection.disconnect();
-                    }
-                }
-            }
-            return response;
-        }
-
-        /**
-         * Does appropriate actions to set/replace
-         * recycler view and adapter.
-         * Lets user know if it was successful or unsuccessfully added.
-         * @param result result string to be be checked
-         */
-        @Override
-        protected void onPostExecute(String result){
-            try{
-                JSONObject jsonObject = new JSONObject(result);
-                String status = (String) jsonObject.get("result");
-                if(status.equals("success")){
-                    Toast.makeText(getApplicationContext(), "Recipe successfully added!",
-                            Toast.LENGTH_LONG)
-                            .show();
-                }else {
-                    Toast.makeText(getApplicationContext(), "Failed to add: "
-                                    + jsonObject.get("error")
-                            ,Toast.LENGTH_LONG)
-                            .show();
-                }
-            }catch(JSONException e){
-                Toast.makeText(getApplicationContext(), "Something wrong with the data" +
-                        e.getMessage(), Toast.LENGTH_LONG).show();
-            }
         }
     }
 

@@ -15,7 +15,9 @@
     <string name="servings_hint">How many servings?</string>
     <string name="cook_time_hint">How long will this take?(in minutes)</string>
 
+    <string name="add_recipe_label">Add A Recipe</string>
     <string name="add_recipe_but_text">Add Recipe</string>
+    <string name="add_ingredients_button_text">ADD INGREDIENTS</string>
     <string name="add_to_cook_text">Add to Cookbook</string>
     <string name="share_recipe_button">Share</string>
     <string name="cookbook_button_label">Cookbook</string>
@@ -66,6 +68,17 @@
 
     <string name="with_facebook">With Facebook:</string>
     <string name="without_facebook">With Husky Cooking:</string>
+
+    <string name="ingredient_name">Name: </string>
+    <string name="ingredient_name_hint">Enter a name</string>
+    <string name="ingredient_amount">Amount: </string>
+    <string name="ingredient_amt_hint">How much?</string>
+    <string name="ingredient_measure_type">Measurement Type: </string>
+    <string name="ingredient_measure_hint">Of what type? [optional] (ex: cup, ounce)</string>
+    <string name="add_ingredient">ADD AN INGREDIENT</string>
+    <string name="add_more_ingredients_button_label">ADD MORE</string>
+    <string name="finish">FINISH</string>
+
 
 </resources>
 
