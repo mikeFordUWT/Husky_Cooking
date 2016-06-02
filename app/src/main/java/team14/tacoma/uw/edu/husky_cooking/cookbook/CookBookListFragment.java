@@ -38,12 +38,18 @@ import team14.tacoma.uw.edu.husky_cooking.model.Recipe;
  *
  * @author Mike Ford
  * @author Ian Skyles
- * @version 5/4/2016
+ * @version 6/3/2016
  */
 public class CookBookListFragment extends Fragment {
+    /**
+     * A url for husky cooking users cookbook. Used to connect to our db.
+     */
     private static final String COOKBOOK_URL =
             "http://cssgate.insttech.washington.edu/~_450atm14/husky_cooking/cookbook.php?user=";
 
+    /**
+     * A url for facebook users cookbook. Used to connect to our db.
+     */
     private static final String FACE_COOKBOOK_URL =
             "http://cssgate.insttech.washington.edu/~_450atm14/husky_cooking/facebook_cookbook.php?user=";
 
@@ -108,6 +114,7 @@ public class CookBookListFragment extends Fragment {
                 String user = sharedPreferences.getString(getString(R.string.LOGGED_USER), "");
                 String face = sharedPreferences.getString(getString(R.string.LOGIN_METHOD), "");
                 String cookURL;
+                //select cookbook url based on fb user or husky cooking user
                 if(face.equals("facebook")){
                     cookURL = FACE_COOKBOOK_URL + user;
                 }else{
@@ -166,7 +173,8 @@ public class CookBookListFragment extends Fragment {
      */
     private class DownloadCookbookTask extends AsyncTask<String, Void, String>{
         /**
-         * Tells it to connect and read http responses for the cookbook.
+         * Tells it to connect and read http responses for the cookbook:
+         * (what is suppose to be in the users cookbook).
          * @param urls where recipes are stored
          * @return list of recipes
          */
@@ -215,7 +223,6 @@ public class CookBookListFragment extends Fragment {
                         .show();
                 return;
             }
-
             if(!mRecipeList.isEmpty()){
                 mRecyclerView.setAdapter(new MyCookBookRecyclerViewAdapter(mRecipeList, mListener));
             }
