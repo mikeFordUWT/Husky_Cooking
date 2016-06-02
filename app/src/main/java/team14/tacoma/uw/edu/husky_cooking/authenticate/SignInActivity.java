@@ -38,7 +38,7 @@ import team14.tacoma.uw.edu.husky_cooking.recipe.RecipeActivity;
  *
  * @author Mike Ford
  * @author Ian Skyles
- * @version 5/2/2016
+ * @version 6/3/2016
  */
 public class SignInActivity extends AppCompatActivity
         implements LogInFragment.LoginInteractionListener
@@ -139,20 +139,12 @@ public class SignInActivity extends AppCompatActivity
                 Toast.makeText(getApplicationContext(), "Log in failed!", Toast.LENGTH_LONG).show();
                 return;
             }
-
-
         } else {
             Toast.makeText(this, "No network connection available. Cannot authenticate user",
                     Toast.LENGTH_SHORT) .show();
             return;
         }
-
-
-
     }
-
-
-
 
     /**
      * Used to add a user to Database.
@@ -236,7 +228,6 @@ public class SignInActivity extends AppCompatActivity
                         e.getMessage(), Toast.LENGTH_LONG).show();
             }
         }
-
     }
 
 
@@ -288,19 +279,14 @@ public class SignInActivity extends AppCompatActivity
          */
         @Override
         protected void onPostExecute(String result) {
-
             if(result.startsWith("Unable to")){
                 Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG)
                         .show();
                 return;
             }
-
             if(result!=null){
                 Log.e("SignInActivity", result.toString());
             }
         }
     }
-
-
-
 }
