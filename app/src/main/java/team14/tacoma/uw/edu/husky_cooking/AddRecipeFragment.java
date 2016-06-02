@@ -100,6 +100,11 @@ public class AddRecipeFragment extends Fragment {
                             Toast.LENGTH_LONG).show();
                     mRecipeName.requestFocus();
                     return;
+                }else if(mRecipeName.getText().toString().contains("\'")) {
+                    Toast.makeText(v.getContext(), "Recipe names with apostrophe are not valid.",
+                            Toast.LENGTH_LONG).show();
+                    mRecipeName.requestFocus();
+                    return;
                 }
                 if(TextUtils.isEmpty(mRecipeDescript.getText().toString())){
                     Toast.makeText(v.getContext(), "Please enter recipe directions.",
@@ -111,6 +116,11 @@ public class AddRecipeFragment extends Fragment {
                             "characters.",
                             Toast.LENGTH_LONG).show();
                     mRecipeDescript.requestFocus();
+                    return;
+                }else if(mRecipeDescript.getText().toString().contains("\'")) {
+                    Toast.makeText(v.getContext(), "Recipe descriptions with apostrophe are not valid.",
+                            Toast.LENGTH_LONG).show();
+                    mRecipeName.requestFocus();
                     return;
                 }
                 if(TextUtils.isEmpty(mServings.getText().toString())){
