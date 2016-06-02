@@ -9,6 +9,7 @@ package team14.tacoma.uw.edu.husky_cooking.authenticate;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
@@ -36,6 +37,11 @@ import com.facebook.login.widget.LoginButton;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.Arrays;
 
 import team14.tacoma.uw.edu.husky_cooking.R;
@@ -205,6 +211,8 @@ public class LogInFragment extends Fragment {
                 request.setParameters(parameters);
                 request.executeAsync();
 
+
+
                 Intent i  = new Intent(getActivity(), RecipeActivity.class);
                 startActivity(i);
 
@@ -329,6 +337,60 @@ public class LogInFragment extends Fragment {
     }
 
 
+    private class FacebookCheck extends AsyncTask<String, Void, String> {
+        @Override
+        protected void onPreExecute(){
+            super.onPreExecute();
 
+        }
+
+        /**
+         * Finds out if the user is in the database
+         * @param urls A url to run in the background
+         * @return repsonse string
+         */
+        @Override
+        protected String doInBackground(String... urls){
+            String response = "";
+            HttpURLConnection urlConnection = null;
+            for(String url:urls){
+                try {
+                    URL urlObject = new URL(url);
+                    urlConnection = (HttpURLConnection) urlObject.openConnection();
+                    InputStream content = urlConnection.getInputStream();
+                    BufferedReader buffer = new BufferedReader(new InputStreamReader(content));
+                    String s ="";
+                    while((s=buffer.readLine())!=null){
+                        response +=s;
+                    }
+                }catch (Exception e){
+                    response = "Unable to login, Reason: " + e.getMessage();
+                }finally{
+                    if(urlConnection !=null){
+                        urlConnection.disconnect();
+                    }
+                }
+            }
+            return response;
+        }
+
+        /**
+         * Checks the String returned from doInBackground to see if the log in was successful.
+         * @param result
+         */
+        @Override
+        protected void onPostExecute(String result) {
+
+            if(result.startsWith("Unable to")){
+                Toast.makeText(getActivity().getApplicationContext(), result, Toast.LENGTH_LONG)
+                        .show();
+                return;
+            }
+
+            if(result!=null){
+                Log.e("SignInActivity", result.toString());
+            }
+        }
+    }
 
 }
