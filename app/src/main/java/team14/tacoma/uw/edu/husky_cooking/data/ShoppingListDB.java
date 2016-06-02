@@ -1,3 +1,8 @@
+/*
+ * Mike Ford and Ian Skyles
+ * TCSS450 – Spring 2016
+ * Recipe Project
+ */
 package team14.tacoma.uw.edu.husky_cooking.data;
 
 import android.content.ContentValues;
@@ -12,15 +17,38 @@ import java.util.List;
 import team14.tacoma.uw.edu.husky_cooking.model.Ingredient;
 
 /**
- * Created by Ian Skyles on 6/1/2016.
+ * A database class for shopping list (Ingredients). We currently do not use it in our project
+ * but want to switch from our web hosted database to a local database for shopping list.
+ *
+ * @author Ian Skyles
+ * @author Mike Ford
+ * @version 6/3/2016
  */
 public class ShoppingListDB {
+    /**
+     * Database unique version identifier.
+     */
     public static final int DB_VERSION = 1;
+    /**
+     * Database unique name.
+     */
     public static final String DB_NAME = "ShoppingList.db";
 
+
+    /**
+     * Database helper with creating, inserting, deleting/dropping from the table.
+     */
     private ShoppingListDBHelper mShoppingListDBHelper;
+    /**
+     * SQLite db for storing information.
+     */
     private SQLiteDatabase mSQLiteDatabase;
 
+    /**
+     * Constructor for the database. Makes the helper which creates table and does operations on it.
+     * Also makes the SQLite db.
+     * @param context
+     */
     public ShoppingListDB(Context context) {
         mShoppingListDBHelper = new ShoppingListDBHelper(
                 context, DB_NAME, null, DB_VERSION);
@@ -35,22 +63,35 @@ public class ShoppingListDB {
     class ShoppingListDBHelper extends SQLiteOpenHelper {
 
 
+        /**
+         * sql command for creating table entry.
+         */
         private static final String CREATE_ShoppingItem_SQL =
                 "CREATE TABLE IF NOT EXISTS ShoppingItem "
                         + "(id TEXT PRIMARY KEY, amount TEXT, ingredientName TEXT, measurementType TEXT)";
-
+        /**
+         * sql command for dropping from table.
+         */
         private static final String DROP_ShoppingItem_SQL =
                 "DROP TABLE IF EXISTS ShoppingItem";
-
+        /**
+         *  Inherited sql lite open helper.
+         */
         public ShoppingListDBHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
             super(context, name, factory, version);
         }
 
+        /**
+         * Create table and insert into the table on create.
+         */
         @Override
         public void onCreate(SQLiteDatabase sqLiteDatabase) {
             sqLiteDatabase.execSQL(CREATE_ShoppingItem_SQL);
         }
 
+        /**
+         * Drops ingredient from table and updates the database.
+         */
         @Override
         public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
             sqLiteDatabase.execSQL(DROP_ShoppingItem_SQL);
@@ -84,6 +125,9 @@ public class ShoppingListDB {
         mSQLiteDatabase.close();
     }
 
+    /**
+     * Ingredient table name
+     */
     private static final String INGREDIENT_TABLE = "Ingredient";
 
     /**
@@ -125,7 +169,4 @@ public class ShoppingListDB {
     public void deleteIngredients() {
         mSQLiteDatabase.delete(INGREDIENT_TABLE, null, null);
     }
-
-
-
 }
