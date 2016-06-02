@@ -82,7 +82,7 @@ public class MenuListFragment extends Fragment {
 
             }else{
                 Toast.makeText(view.getContext(),
-                        "No network connection available. Cannot display courses",
+                        "No network connection available.  Please connect and try again.",
                         Toast.LENGTH_SHORT).show();
             }
         }

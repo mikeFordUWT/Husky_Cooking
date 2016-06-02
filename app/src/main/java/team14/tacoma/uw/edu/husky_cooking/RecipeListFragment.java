@@ -105,7 +105,7 @@ public class RecipeListFragment extends Fragment {
                 task.execute(new String[]{RECIPE_URL});
             }else{
                 Toast.makeText(view.getContext(),
-                        "No network connection available. Cannot display courses",
+                        "No network connection available.  Please connect and try again.",
                         Toast.LENGTH_SHORT).show();
             }
         }
