@@ -1,4 +1,5 @@
-package team14.tacoma.uw.edu.husky_cooking;
+package team14.tacoma.uw.edu.husky_cooking.recipe;
+
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -23,16 +24,18 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 
+import team14.tacoma.uw.edu.husky_cooking.R;
 import team14.tacoma.uw.edu.husky_cooking.model.Ingredient;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class IngredientDetailFromCookBookFragment extends Fragment {
+public class IngredientDetailFromRecipeFragment extends Fragment {
     public static final String INGREDIENT_ITEM_SELECTED = "IngredientItemSelected";
 
-    private static final String ADD_TO_SHOPPING_LIST = "http://cssgate.insttech.washington.edu/~_450atm14/husky_cooking/add_to_shopping_list.php?";
+    private static final String ADD_TO_SHOPPING_LIST =
+            "http://cssgate.insttech.washington.edu/~_450atm14/husky_cooking/add_to_shopping_list.php?";
 
     private static final String FACE_ADD_TO_SHOPPING =
             "http://cssgate.insttech.washington.edu/~_450atm14/husky_cooking/add_to_face_shopping.php?";
@@ -46,17 +49,17 @@ public class IngredientDetailFromCookBookFragment extends Fragment {
     /** TextView that displays measurement type of ingredient*/
     private TextView mMeasurementTypeTextView;
 
-
-    public IngredientDetailFromCookBookFragment() {
+    public IngredientDetailFromRecipeFragment() {
         // Required empty public constructor
     }
 
 
+    /**Updates view with ingredient item/ Serializable on starting this fragment. */
     @Override
     public void onStart(){
         super.onStart();
         Bundle args = getArguments();
-        if(args!=null){
+        if(args != null){
             updateView((Ingredient) args.getSerializable(INGREDIENT_ITEM_SELECTED));
         }
     }
@@ -65,13 +68,12 @@ public class IngredientDetailFromCookBookFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_ingredient_detail_from_cook_book, container, false);
+        View view =  inflater.inflate(R.layout.fragment_ingredient_detail_from_recipe, container, false);
+        mAmountTextView = (TextView) view.findViewById(R.id.ingredient_amount_from_recipe);
+        mIngredientNameTextView = (TextView) view.findViewById(R.id.ingredient_name_from_recipe);
+        mMeasurementTypeTextView = (TextView) view.findViewById(R.id.ingredient_measurement_type_from_recipe);
 
-        mAmountTextView = (TextView) view.findViewById(R.id.ingredient_amount_from_cookbook);
-        mIngredientNameTextView = (TextView) view.findViewById(R.id.ingredient_name_from_cookbook);
-        mMeasurementTypeTextView = (TextView) view.findViewById(R.id.ingredient_measurement_type_from_cookbook);
-
-        final Button addToShoppingList = (Button) view.findViewById(R.id.add_to_shopping_list_button_from_cook_button);
+        final Button addToShoppingList = (Button) view.findViewById(R.id.add_to_shopping_list_button);
 
         addToShoppingList.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -91,18 +93,24 @@ public class IngredientDetailFromCookBookFragment extends Fragment {
                 }
                 task.execute(url);
 
-                IngredientsFromCookBookListFragment frag = new IngredientsFromCookBookListFragment();
+                IngredientsFromRecipeListFragment newFrag = new IngredientsFromRecipeListFragment();
                 FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.fragment_container, frag).addToBackStack(null);
+                transaction.replace(R.id.fragment_container, newFrag).addToBackStack(null);
                 transaction.commit();
+
+
             }
         });
+
         return view;
     }
 
-
-
-    public void updateView(Ingredient ingredient){
+    /**
+     * Allows ingredient to update view.
+     *
+     * @param ingredient ingredient to add
+     */
+    public void updateView(Ingredient ingredient) {
         mAmountTextView.setText(ingredient.getAmount());
         mIngredientNameTextView.setText(ingredient.getIngredientName());
         mMeasurementTypeTextView.setText(ingredient.getMeasurementType());
@@ -117,6 +125,7 @@ public class IngredientDetailFromCookBookFragment extends Fragment {
                 .apply();
         sharedPreferences.edit().putString(getString(R.string.CURRENT_MEASURE_TYPE), ingredient.getMeasurementType())
                 .apply();
+
     }
 
     /**

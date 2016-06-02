@@ -1,4 +1,4 @@
-package team14.tacoma.uw.edu.husky_cooking;
+package team14.tacoma.uw.edu.husky_cooking.shoppinglist;
 
 
 import android.content.Context;
@@ -24,6 +24,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 
+import team14.tacoma.uw.edu.husky_cooking.R;
 import team14.tacoma.uw.edu.husky_cooking.model.Ingredient;
 
 

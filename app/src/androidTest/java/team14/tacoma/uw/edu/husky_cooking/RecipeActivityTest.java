@@ -6,7 +6,7 @@ import com.robotium.solo.Solo;
 
 import java.util.Random;
 
-import team14.tacoma.uw.edu.husky_cooking.authenticate.SignInActivity;
+import team14.tacoma.uw.edu.husky_cooking.recipe.RecipeActivity;
 
 /**
  * Created by Ian Skyles on 5/25/2016.

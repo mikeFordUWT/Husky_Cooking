@@ -1,4 +1,4 @@
-package team14.tacoma.uw.edu.husky_cooking;
+package team14.tacoma.uw.edu.husky_cooking.cookbook;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import team14.tacoma.uw.edu.husky_cooking.R;
 import team14.tacoma.uw.edu.husky_cooking.model.Ingredient;
 
 /**

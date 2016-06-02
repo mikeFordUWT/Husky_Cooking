@@ -1,7 +1,6 @@
-package team14.tacoma.uw.edu.husky_cooking;
+package team14.tacoma.uw.edu.husky_cooking.menu;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -23,29 +22,26 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import team14.tacoma.uw.edu.husky_cooking.model.Ingredient;
+import team14.tacoma.uw.edu.husky_cooking.R;
+import team14.tacoma.uw.edu.husky_cooking.model.FoodMenu;
 
 /**
  * A fragment representing a list of Items.
  * <p/>
- * Activities containing this fragment MUST implement the {@link OnShoppingListFragmentInteractionListener}
+ * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
  * interface.
  */
-public class ShoppingListFragment extends Fragment {
-    private static final String SHOPPING_LIST_URL=
-            "http://cssgate.insttech.washington.edu/~_450atm14/husky_cooking/shopping_list.php?user=";
+public class MenuListFragment extends Fragment {
 
-    private static final String FACE_SHOPPING_LIST_URL =
-            "http://cssgate.insttech.washington.edu/~_450atm14/husky_cooking/facebook_shopping_list.php?user=";
-    /** how many columns to make the list */
+    /**
+     * the url where the menus are stored
+     */
+    private static final String MENU_URL =
+            "http://cssgate.insttech.washington.edu/~_450atm14/husky_cooking/test.php?cmd=menus";
+
     private int mColumnCount = 1;
 
-    /**Listener for shopping list*/
-    private OnShoppingListFragmentInteractionListener mListener;
-
-
-    /** List of ingredients*/
-    private List<Ingredient> mIngredientList;
+    private OnListFragmentInteractionListener mListener;
 
     private RecyclerView mRecyclerView;
 
@@ -53,7 +49,7 @@ public class ShoppingListFragment extends Fragment {
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public ShoppingListFragment() {
+    public MenuListFragment() {
     }
 
     @Override
@@ -65,7 +61,7 @@ public class ShoppingListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_ingredient_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_menu_list, container, false);
 
         // Set the adapter
         if (view instanceof RecyclerView) {
@@ -76,25 +72,15 @@ public class ShoppingListFragment extends Fragment {
             } else {
                 mRecyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-//            recyclerView.setAdapter(new MyShoppingListRecyclerViewAdapter(mIngredientList.ITEMS, mListener));
+//            mRecyclerView.setAdapter(new MyMenuRecyclerViewAdapter(DummyContent.ITEMS, mListener));
+
             ConnectivityManager connMgr = (ConnectivityManager) getActivity()
                     .getSystemService(Context.CONNECTIVITY_SERVICE);
             NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-            if(networkInfo != null && networkInfo.isConnected()){
-                SharedPreferences sharedPreferences = getActivity()
-                        .getSharedPreferences(getString(R.string.LOGIN_PREFS), Context.MODE_PRIVATE);
-                String user = sharedPreferences.getString(getString(R.string.LOGGED_USER), "");
-                String face = sharedPreferences.getString(getString(R.string.LOGIN_METHOD),"");
+            if(networkInfo != null && networkInfo.isConnected()) {
+                DownloadMenusTask task = new DownloadMenusTask();
+                task.execute(new String[]{MENU_URL});
 
-                String shoppingListURL;
-
-                if(face.equals("facebook")){
-                    shoppingListURL = FACE_SHOPPING_LIST_URL + user;
-                }else{
-                    shoppingListURL = SHOPPING_LIST_URL + user;
-                }
-                DownloadShoppingListTask task = new DownloadShoppingListTask();
-                task.execute(new String[]{shoppingListURL});
             }else{
                 Toast.makeText(view.getContext(),
                         "No network connection available.  Please connect and try again.",
@@ -105,16 +91,14 @@ public class ShoppingListFragment extends Fragment {
     }
 
 
-
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnShoppingListFragmentInteractionListener) {
-            mListener = (OnShoppingListFragmentInteractionListener) context;
+        if (context instanceof OnListFragmentInteractionListener) {
+            mListener = (OnListFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement OnCookBookIngredientListFragmentInteractionListener");
+                    + " must implement OnListFragmentInteractionListener");
         }
     }
 
@@ -134,26 +118,25 @@ public class ShoppingListFragment extends Fragment {
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-    public interface OnShoppingListFragmentInteractionListener {
-        void onShopListFragmentInteraction(Ingredient item);
+    public interface OnListFragmentInteractionListener {
+        void onMenuFragmentInteraction(FoodMenu item);
     }
 
     /**
-     * Downloads ingredients for user cookbook
-     * Asynchronously (in the background) from
+     * Downloads recipes Asynchronously (in the background) from
      * our db/webservice hosted on cssgate.
      */
-    private class DownloadShoppingListTask extends AsyncTask<String, Void, String>{
+    private class DownloadMenusTask extends AsyncTask<String, Void, String> {
         /**
          * Tells it to connect and read http responses for the cookbook.
-         * @param urls where recipes are stored
+         * @param urls where each recipe is stored
          * @return list of recipes
          */
         @Override
-        protected String doInBackground(String... urls) {
+        protected String doInBackground(String... urls){
             String response = "";
-            HttpURLConnection urlConnection =null;
-            for(String url: urls) {
+            HttpURLConnection urlConnection = null;
+            for(String url:urls){
                 try{
                     URL urlObject = new URL(url);
                     urlConnection = (HttpURLConnection) urlObject.openConnection();
@@ -163,8 +146,8 @@ public class ShoppingListFragment extends Fragment {
                     while((s = buffer.readLine())!=null){
                         response += s;
                     }
-                }catch (Exception e) {
-                    response = "Unable to download the shopping list, Reason: " + e.getMessage();
+                }catch (Exception e){
+                    response = "Unable to download the list of menus, Reason: " + e.getMessage();
                 }finally {
                     if(urlConnection != null){
                         urlConnection.disconnect();
@@ -177,7 +160,7 @@ public class ShoppingListFragment extends Fragment {
         /**
          * Does appropriate actions to set/replace
          * recycler view and adapter.
-         * @param result result string to execute on
+         * @param result result string to be be checked
          */
         @Override
         protected void onPostExecute(String result) {
@@ -186,8 +169,8 @@ public class ShoppingListFragment extends Fragment {
                         .show();
                 return;
             }
-            List<Ingredient> mIngredientList = new ArrayList<Ingredient>();
-            result = Ingredient.parseIngredientJSON(result, mIngredientList);
+            List<FoodMenu> mFoodMenuList = new ArrayList<>();
+            result = FoodMenu.parseMenuJSON(result, mFoodMenuList);
             //Something wrong with JSON returned
             if(result != null){
                 Toast.makeText(getActivity().getApplicationContext(), result, Toast.LENGTH_LONG)
@@ -195,8 +178,10 @@ public class ShoppingListFragment extends Fragment {
                 return;
             }
 
-            if(!mIngredientList.isEmpty()){
-                mRecyclerView.setAdapter(new MyShoppingListRecyclerViewAdapter(mIngredientList, mListener));
+            if(!mFoodMenuList.isEmpty()){
+                mRecyclerView.setAdapter(new MyMenuRecyclerViewAdapter(mFoodMenuList, mListener));
+
+                //will store recipes on local SQLite Database
             }
         }
     }

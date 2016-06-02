@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:id="@+id/in_list_detail"
-    tools:context=".IngredientDetailFromShoppingListFragment">
+    tools:context=".shoppinglist.IngredientDetailFromShoppingListFragment">
 
     <TextView
         android:layout_width="match_parent"

@@ -1,4 +1,4 @@
-package team14.tacoma.uw.edu.husky_cooking;
+package team14.tacoma.uw.edu.husky_cooking.cookbook;
 
 
 import android.content.Context;
@@ -14,6 +14,8 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import team14.tacoma.uw.edu.husky_cooking.R;
+import team14.tacoma.uw.edu.husky_cooking.cookbook.IngredientsFromCookBookListFragment;
 import team14.tacoma.uw.edu.husky_cooking.model.Recipe;
 
 

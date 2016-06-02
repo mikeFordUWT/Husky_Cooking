@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:id="@+id/user_home"
-    tools:context="team14.tacoma.uw.edu.husky_cooking.UserHomeFragment">
+    tools:context=".mainmenu.UserHomeFragment">
 
     <TextView
         android:layout_width="wrap_content"

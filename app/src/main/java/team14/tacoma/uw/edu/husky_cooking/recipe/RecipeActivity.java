@@ -3,7 +3,7 @@
  * TCSS450 – Spring 2016
  * Recipe Project
  */
-package team14.tacoma.uw.edu.husky_cooking;
+package team14.tacoma.uw.edu.husky_cooking.recipe;
 
 import android.content.Context;
 import android.content.Intent;
@@ -32,10 +32,23 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import team14.tacoma.uw.edu.husky_cooking.R;
+import team14.tacoma.uw.edu.husky_cooking.mainmenu.UserHomeFragment;
 import team14.tacoma.uw.edu.husky_cooking.authenticate.SignInActivity;
+import team14.tacoma.uw.edu.husky_cooking.cookbook.CookBookListFragment;
+import team14.tacoma.uw.edu.husky_cooking.cookbook.IngredientDetailFromCookBookFragment;
+import team14.tacoma.uw.edu.husky_cooking.cookbook.IngredientsFromCookBookListFragment;
+import team14.tacoma.uw.edu.husky_cooking.cookbook.RecipeInCookBookDetailFragment;
+import team14.tacoma.uw.edu.husky_cooking.menu.IngredientDetailFromMenuFragment;
+import team14.tacoma.uw.edu.husky_cooking.menu.IngredientsFromMenuListFragment;
+import team14.tacoma.uw.edu.husky_cooking.menu.MenuListFragment;
+import team14.tacoma.uw.edu.husky_cooking.menu.RecipeDetailFromMenuFragment;
+import team14.tacoma.uw.edu.husky_cooking.menu.RecipeFromMenuListFragment;
 import team14.tacoma.uw.edu.husky_cooking.model.FoodMenu;
 import team14.tacoma.uw.edu.husky_cooking.model.Ingredient;
 import team14.tacoma.uw.edu.husky_cooking.model.Recipe;
+import team14.tacoma.uw.edu.husky_cooking.shoppinglist.IngredientDetailFromShoppingListFragment;
+import team14.tacoma.uw.edu.husky_cooking.shoppinglist.ShoppingListFragment;
 
 /**
  * This activity controls adding a recipe.

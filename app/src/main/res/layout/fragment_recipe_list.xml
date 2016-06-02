@@ -10,5 +10,5 @@
     android:layout_marginRight="16dp"
 
     app:layoutManager="LinearLayoutManager"
-    tools:context="team14.tacoma.uw.edu.husky_cooking.RecipeListFragment"
+    tools:context=".recipe.RecipeListFragment"
     tools:listitem="@layout/fragment_recipe" />

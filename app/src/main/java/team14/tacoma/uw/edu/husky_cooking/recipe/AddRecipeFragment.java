@@ -3,7 +3,7 @@
  * TCSS450 – Spring 2016
  * Recipe Project
  */
-package team14.tacoma.uw.edu.husky_cooking;
+package team14.tacoma.uw.edu.husky_cooking.recipe;
 
 
 import android.content.Context;
@@ -30,6 +30,9 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+
+import team14.tacoma.uw.edu.husky_cooking.R;
+import team14.tacoma.uw.edu.husky_cooking.recipe.AddIngredientFragment;
 
 
 /**

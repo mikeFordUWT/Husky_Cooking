@@ -9,5 +9,5 @@
     android:layout_marginLeft="16dp"
     android:layout_marginRight="16dp"
     app:layoutManager="LinearLayoutManager"
-    tools:context="team14.tacoma.uw.edu.husky_cooking.CookBookListFragment"
+    tools:context=".cookbook.CookBookListFragment"
     tools:listitem="@layout/fragment_cook_book" />

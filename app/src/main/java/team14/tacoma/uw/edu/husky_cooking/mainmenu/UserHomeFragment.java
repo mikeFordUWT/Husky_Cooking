@@ -3,7 +3,7 @@
  * TCSS450 – Spring 2016
  * Recipe Project
  */
-package team14.tacoma.uw.edu.husky_cooking;
+package team14.tacoma.uw.edu.husky_cooking.mainmenu;
 
 
 import android.content.Context;
@@ -24,6 +24,14 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+
+import team14.tacoma.uw.edu.husky_cooking.R;
+import team14.tacoma.uw.edu.husky_cooking.cookbook.CookBookListFragment;
+import team14.tacoma.uw.edu.husky_cooking.menu.MenuListFragment;
+import team14.tacoma.uw.edu.husky_cooking.recipe.AddRecipeFragment;
+import team14.tacoma.uw.edu.husky_cooking.recipe.RecipeActivity;
+import team14.tacoma.uw.edu.husky_cooking.recipe.RecipeListFragment;
+import team14.tacoma.uw.edu.husky_cooking.shoppinglist.ShoppingListFragment;
 
 
 /**
