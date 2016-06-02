@@ -59,14 +59,14 @@ public class ShoppingListDB {
 
     }
     /**
-     * Inserts the course into the shoppingList sqlite table. Returns true if successful, false otherwise.
+     * Inserts the ingredient into the shoppingList sqlite table. Returns true if successful, false otherwise.
      * @param id
      * @param amount
      * @param ingredientName
      * @param measurementType
      * @return true or false
      */
-    public boolean insertCourse(int id, String amount, String ingredientName, String measurementType) {
+    public boolean insertIngredient(int id, String amount, String ingredientName, String measurementType) {
         ContentValues contentValues = new ContentValues();
         contentValues.put("id", id);
         contentValues.put("amount", amount);
@@ -87,10 +87,10 @@ public class ShoppingListDB {
     private static final String INGREDIENT_TABLE = "Ingredient";
 
     /**
-     * Returns the list of courses from the local Course table.
+     * Returns the list of Ingredient from the local shopping list table.
      * @return list
      */
-    public List<Ingredient> getCourses() {
+    public List<Ingredient> getIngredients() {
 
         String[] columns = {
                 "id", "shortDesc", "longDesc", "prereqs"
@@ -112,8 +112,8 @@ public class ShoppingListDB {
             String amount = c.getString(1);
             String ingredientName = c.getString(2);
             String measurementType = c.getString(3);
-            Ingredient course = new Ingredient(id, amount, ingredientName, measurementType);
-            list.add(course);
+            Ingredient Ingredient = new Ingredient(id, amount, ingredientName, measurementType);
+            list.add(Ingredient);
             c.moveToNext();
         }
 
@@ -122,7 +122,7 @@ public class ShoppingListDB {
     /**
      * Delete all the data from the shopping list
      */
-    public void deleteCourses() {
+    public void deleteIngredients() {
         mSQLiteDatabase.delete(INGREDIENT_TABLE, null, null);
     }
 
