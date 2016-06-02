@@ -135,6 +135,17 @@ public class AddRecipeFragment extends Fragment {
                         .putString(getString(R.string.CURRENT_RECIPE),mRecipeName
                                 .getText().toString()).apply();
 
+                int servings = Integer.parseInt(mServings.getText().toString());
+
+                sharedPreferences.edit().putInt(getString(R.string.CURRENT_SERVINGS),
+                        servings).apply();
+                sharedPreferences.edit().putString(getString(R.string.CURRENT_DESCRIPTION),
+                        mRecipeDescript.getText().toString()).apply();
+
+                int cookTime = Integer.parseInt(mCookTime.getText().toString());
+                sharedPreferences.edit().putInt(getString(R.string.CURRENT_COOK_TIME),
+                        cookTime);
+
                 AddIngredientFragment ingredientFragment = new AddIngredientFragment();
                 FragmentActivity act = getActivity();
                 AddRecipeTask task = new AddRecipeTask();
