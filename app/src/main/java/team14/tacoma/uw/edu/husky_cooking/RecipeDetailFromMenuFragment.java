@@ -25,7 +25,10 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.List;
 
+import team14.tacoma.uw.edu.husky_cooking.data.ShoppingListDB;
+import team14.tacoma.uw.edu.husky_cooking.model.Ingredient;
 import team14.tacoma.uw.edu.husky_cooking.model.Recipe;
 
 
@@ -69,6 +72,17 @@ public class RecipeDetailFromMenuFragment extends Fragment {
     public RecipeDetailFromMenuFragment() {
         // Required empty public constructor
     }
+
+    /**
+     * Database for shopping list.
+     */
+    private ShoppingListDB mShoppingListDB;
+
+    /**
+     * List of ingredients.
+     */
+    private List<Ingredient> mIngredientList;
+
 
     /**
      * Updates view with recipe item/ Serializable on starting this fragment.

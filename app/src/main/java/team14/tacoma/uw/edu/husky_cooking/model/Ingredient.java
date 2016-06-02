@@ -135,7 +135,8 @@ public class Ingredient implements Serializable{
         String reason = null;
         if(ingredientJSON != null){
             if(ingredientJSON.equals("")){
-                reason = "You don't have any items in your shopping list, take a nap!";
+                reason = "There are no ingredients in this list.";
+                //reason = "You don't have any items in your shopping list, take a nap!";
             }else{
                 try{
                     JSONArray arr = new JSONArray(ingredientJSON);
