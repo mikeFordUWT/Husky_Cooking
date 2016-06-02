@@ -16,10 +16,12 @@
         <activity
             android:name=".RecipeActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait">
+
 
         </activity>
-        <activity android:name=".authenticate.SignInActivity">
+        <activity android:name=".authenticate.SignInActivity" android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
