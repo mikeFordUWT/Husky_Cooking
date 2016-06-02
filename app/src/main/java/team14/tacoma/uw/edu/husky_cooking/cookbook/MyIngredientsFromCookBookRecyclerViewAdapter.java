@@ -1,9 +1,10 @@
-package team14.tacoma.uw.edu.husky_cooking.cookbook;
 /*
  * Mike Ford and Ian Skyles
  * TCSS450 – Spring 2016
  * Recipe Project
  */
+package team14.tacoma.uw.edu.husky_cooking.cookbook;
+
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
