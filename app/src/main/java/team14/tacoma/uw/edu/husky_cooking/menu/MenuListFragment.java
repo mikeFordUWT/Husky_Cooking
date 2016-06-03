@@ -29,6 +29,7 @@ import java.util.List;
 
 import team14.tacoma.uw.edu.husky_cooking.R;
 import team14.tacoma.uw.edu.husky_cooking.model.FoodMenu;
+import team14.tacoma.uw.edu.husky_cooking.recipe.RecipeActivity;
 
 /**
  * This fragment/class will be used to represent a list of recipes
@@ -72,7 +73,7 @@ public class MenuListFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        ((RecipeActivity)getActivity()).setActionBarTitle(getString(R.string.curated_menus));
     }
 
     /**

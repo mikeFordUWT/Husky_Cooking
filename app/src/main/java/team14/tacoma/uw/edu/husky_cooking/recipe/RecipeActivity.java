@@ -299,6 +299,24 @@ public class RecipeActivity extends AppCompatActivity
                     .addToBackStack(null).commit();
         }
 
+        if(id == R.id.action_all_recipes){
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, new RecipeListFragment())
+                    .addToBackStack(null).commit();
+        }
+
+        if(id == R.id.action_create_recipe){
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, new AddRecipeFragment())
+                    .addToBackStack(null).commit();
+        }
+
+        if(id == R.id.action_curated){
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, new MenuListFragment())
+                    .addToBackStack(null).commit();
+        }
+
 
 
         return super.onOptionsItemSelected(item);
@@ -331,6 +349,14 @@ public class RecipeActivity extends AppCompatActivity
             }
         }).executeAsync();
     }
+
+    /**
+     * Allows us to reset the ActionBar title.
+     */
+    public void setActionBarTitle(String title){
+        getSupportActionBar().setTitle(title);
+    }
+
     /**
      * Handles the actions of the prebuilt back button overrides behavior.
      * Specified each flow for specific fragments.

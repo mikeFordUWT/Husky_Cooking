@@ -32,7 +32,6 @@ import java.net.URL;
 import java.net.URLEncoder;
 
 import team14.tacoma.uw.edu.husky_cooking.R;
-import team14.tacoma.uw.edu.husky_cooking.recipe.AddIngredientFragment;
 
 
 /**
@@ -66,6 +65,15 @@ public class AddRecipeFragment extends Fragment {
         // Required empty public constructor
     }
 
+    /**
+     * Saves instance on creation of method of fragment/app.
+     * @param savedInstanceState state of the saved instance
+     */
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        ((RecipeActivity)getActivity()).setActionBarTitle(getString(R.string.add_a_recipe));
+    }
 
     /**
      * Creates the view that will be shown to the user.

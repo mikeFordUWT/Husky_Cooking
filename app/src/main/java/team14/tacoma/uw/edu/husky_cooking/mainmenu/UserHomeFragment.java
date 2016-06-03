@@ -54,6 +54,16 @@ public class UserHomeFragment extends Fragment {
         // Required empty public constructor
     }
 
+    /**
+     * Saves instance on creation of method of fragment/app.
+     * @param savedInstanceState state of the saved instance
+     */
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        ((RecipeActivity)getActivity()).setActionBarTitle(getString(R.string.app_name));
+
+    }
 
     /**
      * Creates the view that will be shown to the user.
