@@ -1,3 +1,8 @@
+/*
+ * Mike Ford and Ian Skyles
+ * TCSS450 – Spring 2016
+ * Recipe Project
+ */
 package team14.tacoma.uw.edu.husky_cooking.shoppinglist;
 
 import android.content.Context;
@@ -28,17 +33,26 @@ import team14.tacoma.uw.edu.husky_cooking.model.Ingredient;
 import team14.tacoma.uw.edu.husky_cooking.shoppinglist.MyShoppingListRecyclerViewAdapter;
 
 /**
- * A fragment representing a list of Items.
- * <p/>
- * Activities containing this fragment MUST implement the {@link OnShoppingListFragmentInteractionListener}
- * interface.
+ * This fragment/class will be used to represent a list of recipes
+ * held in a users cookbook on our database hosted on CSSGATE.
+ *
+ * @author Mike Ford
+ * @author Ian Skyles
+ * @version 6/3/2016
  */
 public class ShoppingListFragment extends Fragment {
+    /**
+     * A url for husky cooking users shopping list. Used to connect to our db.
+     */
     private static final String SHOPPING_LIST_URL=
             "http://cssgate.insttech.washington.edu/~_450atm14/husky_cooking/shopping_list.php?user=";
 
+    /**
+     * A url for facebook users shopping list. Used to connect to our db.
+     */
     private static final String FACE_SHOPPING_LIST_URL =
             "http://cssgate.insttech.washington.edu/~_450atm14/husky_cooking/facebook_shopping_list.php?user=";
+
     /** how many columns to make the list */
     private int mColumnCount = 1;
 
@@ -46,9 +60,10 @@ public class ShoppingListFragment extends Fragment {
     private OnShoppingListFragmentInteractionListener mListener;
 
 
-    /** List of ingredients*/
+    /** List of ingredients in shopping list*/
     private List<Ingredient> mIngredientList;
 
+    /** A recyclerView to view our shopping list fragment */
     private RecyclerView mRecyclerView;
 
     /**
@@ -58,12 +73,26 @@ public class ShoppingListFragment extends Fragment {
     public ShoppingListFragment() {
     }
 
+
+    /**
+     * Saves instance on creation of method of fragment/app.
+     * @param savedInstanceState state of the saved instance
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
     }
 
+    /**
+     * Creates the view that will be shown to the user.
+     * Attaches listeners to the buttons defined in the XML.
+     * It sets up recycler view and displays toast if no network connection.
+     * @param inflater instantiate layout XML file into its corresponding View object
+     * @param container item to contain other views
+     * @param savedInstanceState save state so we can resume later
+     * @return The view (user interface)
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -108,7 +137,10 @@ public class ShoppingListFragment extends Fragment {
 
 
 
-
+    /**
+     * Attaches shopping list fragment interaction listener to mlistener.
+     * @param context what to attach
+     */
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -120,6 +152,10 @@ public class ShoppingListFragment extends Fragment {
         }
     }
 
+    /**
+     * makes shopping list listener (removes listener)
+     * null if onDetach() is called.
+     */
     @Override
     public void onDetach() {
         super.onDetach();
@@ -127,29 +163,26 @@ public class ShoppingListFragment extends Fragment {
     }
 
     /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
+     * An interface which requires implementing
+     * onShopListFragmentInteraction(Ingredient).
+     * It is used to ensure the cookbook listener
+     * is in place.
      */
     public interface OnShoppingListFragmentInteractionListener {
         void onShopListFragmentInteraction(Ingredient item);
     }
 
     /**
-     * Downloads ingredients for user cookbook
+     * Downloads ingredients for users shopping list
      * Asynchronously (in the background) from
      * our db/webservice hosted on cssgate.
      */
     private class DownloadShoppingListTask extends AsyncTask<String, Void, String>{
         /**
-         * Tells it to connect and read http responses for the cookbook.
-         * @param urls where recipes are stored
-         * @return list of recipes
+         * Tells it to connect and read http responses for the shopping list:
+         * (Ingredients).
+         * @param urls where user shopping list is stored
+         * @return list of ingredients
          */
         @Override
         protected String doInBackground(String... urls) {

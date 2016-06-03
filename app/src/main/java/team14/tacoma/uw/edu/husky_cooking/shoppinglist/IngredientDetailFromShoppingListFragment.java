@@ -1,5 +1,9 @@
+/*
+ * Mike Ford and Ian Skyles
+ * TCSS450 – Spring 2016
+ * Recipe Project
+ */
 package team14.tacoma.uw.edu.husky_cooking.shoppinglist;
-
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -27,17 +31,32 @@ import java.net.URLEncoder;
 import team14.tacoma.uw.edu.husky_cooking.R;
 import team14.tacoma.uw.edu.husky_cooking.model.Ingredient;
 
-
 /**
- * A simple {@link Fragment} subclass.
+ * Deals with getting ingredient details from shopping list.
+ * Pulls from users shopping list ingredients on our database hosted on CSSGATE.
+ *
+ * @author Ian Skyles
+ * @author Mike Ford
+ * @version 6/3/2016
  */
 public class IngredientDetailFromShoppingListFragment extends Fragment {
 
+    /**
+     * Used to unserilize ingredients. Table name fromm db.
+     */
     public static final String INGREDIENT_ITEM_SELECTED = "IngredientItemSelected";
 
+    /**
+     * Used to connect with our shopping list database from cookbook.
+     * Removing ingredient from shopping list for husky cooking user.
+     */
     private static final String REMOVE_FROM_SHOPPING_LIST_URL =
             "http://cssgate.insttech.washington.edu/~_450atm14/husky_cooking/remove_shopping_list.php?";
 
+    /**
+     * Used to connect with our shopping list database from cookbook.
+     * Removing ingredient from shopping list for facebook user.
+     */
     private static final String FACE_REMOVE_FROM_SHOPPING_LIST_URL =
             "http://cssgate.insttech.washington.edu/~_450atm14/husky_cooking/remove_face_shopping_list.php?";
 
@@ -57,7 +76,12 @@ public class IngredientDetailFromShoppingListFragment extends Fragment {
         // Required empty public constructor
     }
 
-    /**Updates view with ingredient item/ Serializable on starting this fragment. */
+    /**
+     * Details the behavior for when the fragment is started.
+     * This fragment is started when a user views ingredient
+     * details from the shopping list.
+     * Gets info from ingredient item selected.
+     */
     @Override
     public void onStart(){
         super.onStart();
@@ -67,6 +91,13 @@ public class IngredientDetailFromShoppingListFragment extends Fragment {
         }
     }
 
+    /**
+     * Creates the view from viewing an ingredient item when inside of the shopping list.
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return what is to be displayed to user
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -110,9 +141,9 @@ public class IngredientDetailFromShoppingListFragment extends Fragment {
     }
 
     /**
-     * Allows ingredient to update view.
-     *
-     * @param ingredient ingredient to add
+     * Adds the relevant ingredient information to the users screen
+     * based on ingredient details from db.
+     * @param ingredient
      */
     public void updateView(Ingredient ingredient) {
         mAmountTextView.setText(ingredient.getAmount());
@@ -132,6 +163,12 @@ public class IngredientDetailFromShoppingListFragment extends Fragment {
 
     }
 
+    /**
+     * Builds database access URL to remove an ingredient to shopping list.
+     * For fb users
+     * @param v What the url will be based on (the filled in prompts from view)
+     * @return URL to remove an ingredient from shopping list.
+     */
     private String buildFaceRemoveUrl(View v){
         StringBuilder sb = new StringBuilder(FACE_REMOVE_FROM_SHOPPING_LIST_URL);
         try{
@@ -154,6 +191,12 @@ public class IngredientDetailFromShoppingListFragment extends Fragment {
         return sb.toString();
     }
 
+    /**
+     * Builds database access URL to remove an ingredient from shopping list.
+     * This one is for hc users
+     * @param v What the url will be based on (the filled in prompts from view)
+     * @return URL to remove an ingredient from shopping list.
+     */
     private String buildRemoveUrl(View v){
         StringBuilder sb = new StringBuilder(REMOVE_FROM_SHOPPING_LIST_URL);
         try{
@@ -179,12 +222,17 @@ public class IngredientDetailFromShoppingListFragment extends Fragment {
 
 
 
-    /** A class for removing ingredients from a user's shopping list*/
+    /**
+     * This class is what will call the database from the background. It uses the url given
+     * by the buildAddUrl for fb or husky cooking user.
+     * It removes the ingredient from the users shopping list in background.
+     */
     private class RemoveIngredientFromListTask extends AsyncTask<String, Void, String> {
         /**
-         * Tells it to connect and read http responses for the cookbook.
-         * @param urls where to download recipe details
-         * @return string of recipe details
+         * Try to visit the urls given, in this case removing from
+         * the users shopping list.
+         * @param urls which will add ingredient to database.
+         * @return details on outcome of successful remove or unsuccessful add to db
          */
         @Override
         protected String doInBackground(String... urls) {
@@ -218,8 +266,8 @@ public class IngredientDetailFromShoppingListFragment extends Fragment {
         }
 
         /**
-         * Does appropriate actions to set/replace
-         * recycler view and adapter.
+         * Lets the user know via toast whether or not the ingredient was removed from the
+         * shopping list successfully.
          * @param result result string to be be checked
          */
         @Override
@@ -249,8 +297,5 @@ public class IngredientDetailFromShoppingListFragment extends Fragment {
 
             }
         }
-
-
     }
-
 }

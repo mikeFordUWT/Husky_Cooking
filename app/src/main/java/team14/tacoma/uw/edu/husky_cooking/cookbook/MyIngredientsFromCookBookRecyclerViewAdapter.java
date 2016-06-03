@@ -29,7 +29,7 @@ import team14.tacoma.uw.edu.husky_cooking.model.Ingredient;
 public class MyIngredientsFromCookBookRecyclerViewAdapter extends RecyclerView.Adapter<MyIngredientsFromCookBookRecyclerViewAdapter.ViewHolder> {
 
     /**
-     * The list of ignredients to be displayed.
+     * The list of ingredients to be displayed.
      */
     private final List<Ingredient> mValues;
     /**
