@@ -180,7 +180,6 @@ public class LogInFragment extends Fragment {
                 final SharedPreferences sharedPreferences = getActivity().getSharedPreferences(getString(R.string.LOGIN_PREFS)
                         , Context.MODE_PRIVATE);
 
-                final String hello;
                 //get profile info and access token from fb
                 AccessToken accessToken = loginResult.getAccessToken();
                 Profile profile = Profile.getCurrentProfile();
