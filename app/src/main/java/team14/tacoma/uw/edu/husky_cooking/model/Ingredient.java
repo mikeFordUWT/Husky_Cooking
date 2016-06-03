@@ -37,20 +37,20 @@ public class Ingredient implements Serializable{
     /** A String which will store the amount, as measurement by the amount.. */
     private String mAmount;
 
-    /**
-     * This constructor creates a new Ingredient with
-     * specified id, name, and amount.
-     *
-     * @param id The id of the ingredient.
-     * @param name The name of the ingredient.
-     * @param amount The amount of the ingredient.
-     */
-    public Ingredient(int id, String name, String amount){
-        this.mIngredientId = id;
-        this.mIngredientName = name;
-        this.mAmount = amount;
-        this.mMeasurementType = null;
-    }
+//    /**
+//     * This constructor creates a new Ingredient with
+//     * specified id, name, and amount.
+//     *
+//     * @param id The id of the ingredient.
+//     * @param name The name of the ingredient.
+//     * @param amount The amount of the ingredient.
+//     */
+//    public Ingredient(int id, String name, String amount){
+//        this.mIngredientId = id;
+//        this.mIngredientName = name;
+//        this.mAmount = amount;
+//        this.mMeasurementType = null;
+//    }
 
     /**
      * This constructor creates a new Ingredient with
