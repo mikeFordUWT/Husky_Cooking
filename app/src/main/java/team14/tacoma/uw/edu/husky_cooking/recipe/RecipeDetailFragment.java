@@ -50,13 +50,21 @@ public class RecipeDetailFragment extends Fragment {
      */
     public static final String RECIPE_ITEM_SELECTED = "RecipeItemSelected";
 
+
+    /**
+     * Used to connect with our recipe database from menu.
+     * Adding to recipe to cookbook for husky cooking user.
+     */
     private static final String ADD_TO_COOK_URL =
             "http://cssgate.insttech.washington.edu/~_450atm14/husky_cooking/cookbook_add.php?";
 
+
+    /**
+     * Used to connect with our recipe database from menu.
+     * Adding to recipe to cookbook for facebook user.
+     */
     private static final String FACE_ADD_TO_COOK_URL =
             "http://cssgate.insttech.washington.edu/~_450atm14/husky_cooking/facebook_cookbook_add.php?";
-    private String mParent;
-
     /**
      * TextView that displays recipe name
      */
@@ -87,12 +95,12 @@ public class RecipeDetailFragment extends Fragment {
 
     /**
      * Updates view with recipe item/ Serializable on starting this fragment.
+     * Updates shared preferences.
      */
     @Override
     public void onStart() {
         super.onStart();
         Bundle args = getArguments();
-        mParent = "";
 
         if (args != null) {
             Recipe current = (Recipe) args.getSerializable(RECIPE_ITEM_SELECTED);
@@ -116,6 +124,7 @@ public class RecipeDetailFragment extends Fragment {
 
     /**
      * Creates the view that will be shown to the user.
+     * Sets up all the buttons and listeners.
      * Attaches listeners to the buttons defined in the XML.
      * Sets the TextViews with appropriate data to display to
      *
@@ -223,7 +232,11 @@ public class RecipeDetailFragment extends Fragment {
 
 
     }
-
+    /**
+     * Builds database access URL to add a recipe to facebook users cookbook.
+     * @param v What the url will be based on (the filled in prompts from view)
+     * @return URL to add an ingredient to facebook users cookbook.
+     */
     private String buildFaceAddUrl(View v){
         StringBuilder sb = new StringBuilder(FACE_ADD_TO_COOK_URL);
         try{
@@ -247,6 +260,12 @@ public class RecipeDetailFragment extends Fragment {
 
         return sb.toString();
     }
+
+    /**
+     * Builds database access URL to add a recipe to husky cooking users cookbook.
+     * @param v What the url will be based on (the filled in prompts from view)
+     * @return URL to add an ingredient to husky cooking users cookbook.
+     */
     private String buildAddToUrl(View v){
         StringBuilder sb = new StringBuilder(ADD_TO_COOK_URL);
         try{
@@ -272,13 +291,15 @@ public class RecipeDetailFragment extends Fragment {
     }
 
     /**
-     * A class for adding a recipe to the User's Cookbook.
+     * This class is what will call the database from the background. It uses the url given
+     * by the buildAddUrl for fb or husky cooking user.
+     * It adds the recipe to the users cookbook in background.
      */
     private class AddToCookTask extends AsyncTask<String, Void, String> {
         /**
-         * Tells it to connect and read http responses for the cookbook.
-         * @param urls where to download recipe details
-         * @return string of recipe details
+         * Try to visit the urls given, in this case adding to users cookbook.
+         * @param urls which will add the recipe to cookbook database.
+         * @return respone on outcome of succesful add or unsuccesful add to db
          */
         @Override
         protected String doInBackground(String... urls) {
@@ -313,6 +334,7 @@ public class RecipeDetailFragment extends Fragment {
         /**
          * Does appropriate actions to set/replace
          * recycler view and adapter.
+         * Will tell user status of database atempt via toast.
          * @param result result string to be be checked
          */
         @Override
@@ -341,13 +363,16 @@ public class RecipeDetailFragment extends Fragment {
 
 
     /**
-     * A class for retrieving ingredients for recipe.
+     * This class is what will call the database from the background.
+     * It uses the url given
+     * by the buildAddUrl for fb or husky cooking user.
+     * It adds the recipe ingredients to the database in background.
      */
     private class GetIngredients extends AsyncTask<String, Void, String> {
         /**
-         * Tells it to connect and read http responses for the cookbook.
-         * @param urls where to download recipe details
-         * @return string of recipe details
+         * Try to visit the urls given, in this case adding ingredients to recipe db.
+         * @param urls which will add the recipe ingredients to recipe database.
+         * @return respone on outcome of succesful add or unsuccesful add to db
          */
         @Override
         protected String doInBackground(String... urls) {
@@ -382,6 +407,7 @@ public class RecipeDetailFragment extends Fragment {
         /**
          * Does appropriate actions to set/replace
          * recycler view and adapter.
+         * Will tell user status of database atempt (adding ingredients) via toast.
          * @param result result string to be be checked
          */
         @Override

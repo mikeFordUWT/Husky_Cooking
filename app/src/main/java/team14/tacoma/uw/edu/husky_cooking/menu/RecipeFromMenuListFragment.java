@@ -1,3 +1,8 @@
+/*
+ * Mike Ford and Ian Skyles
+ * TCSS450 – Spring 2016
+ * Recipe Project
+ */
 package team14.tacoma.uw.edu.husky_cooking.menu;
 
 import android.content.Context;
@@ -29,33 +34,60 @@ import team14.tacoma.uw.edu.husky_cooking.R;
 import team14.tacoma.uw.edu.husky_cooking.model.Recipe;
 
 /**
- * A fragment representing a list of Items.
- * <p/>
- * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
- * interface.
+ * Deals with getting recipe list from recipes in menu.
+ * Pulls from menu recipe db on our database hosted on CSSGATE.
+ *
+ * @author Ian Skyles
+ * @author Mike Ford
+ * @version 6/3/2016
  */
 public class RecipeFromMenuListFragment extends Fragment {
+    /**
+     * The base url for accessing the recipe's ingredient list.
+     */
     private static final String MENU_URL = "http://cssgate.insttech.washington.edu/~_450atm14/husky_cooking/get_menu_recipes.php?menu=";
 
+    /**
+     * Number of columns to display recipe list in
+     */
     private int mColumnCount = 1;
 
+    /**
+     * Listener for interacting with the recipe list inside menu section of app.
+     */
     private OnListFragmentInteractionListener mListener;
 
+    /**
+     * Allows for continously flowing / recylcing the menu list if
+     * it is bigger than the device screen.
+     */
     private RecyclerView mRecyclerView;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
-     * fragment (e.g. upon screen orientation changes).
+     * fragment.
      */
     public RecipeFromMenuListFragment() {
     }
 
+    /**
+     * Used super to save and recover information for ingredient list.
+     * @param savedInstanceState
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
     }
 
+    /**
+     * Creates the view for the recipes list from recipes in the menu list.
+     * Eventually the recycle view will be instantiated on this screen.
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return what is to be displayed to user
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -102,6 +134,10 @@ public class RecipeFromMenuListFragment extends Fragment {
     }
 
 
+    /**
+     * Attaches menu list fragment interaction listener to mlistener.
+     * @param context what to attach
+     */
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -113,6 +149,10 @@ public class RecipeFromMenuListFragment extends Fragment {
         }
     }
 
+    /**
+     * Set listener to null when detatching,
+     * no longer want to listen for clicks on list.
+     */
     @Override
     public void onDetach() {
         super.onDetach();
@@ -120,14 +160,12 @@ public class RecipeFromMenuListFragment extends Fragment {
     }
 
     /**
+     * Must have onRecipeFromMenuListFragmentInteraction.
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
      * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
+     * activity (recycle view adapter).
+     *
      */
     public interface OnListFragmentInteractionListener {
 
@@ -135,10 +173,15 @@ public class RecipeFromMenuListFragment extends Fragment {
     }
 
 
-
+    /**
+     * Downloads recipes for specific foodMenu
+     * Asynchronously (in the background) from
+     * our db/webservice hosted on cssgate.
+     */
     private class DownloadRecipesTask extends AsyncTask<String, Void, String> {
         /**
-         * Tells it to connect and read http responses for the cookbook.
+         * Tells it to connect and read http responses for the recipes
+         * from the recipes in the menu.
          * @param urls where recipes are stored
          * @return list of recipes
          */
@@ -170,6 +213,7 @@ public class RecipeFromMenuListFragment extends Fragment {
         /**
          * Does appropriate actions to set/replace
          * recycler view and adapter.
+         * Gives user network toast if can't connect.
          * @param result result string to execute on
          */
         @Override

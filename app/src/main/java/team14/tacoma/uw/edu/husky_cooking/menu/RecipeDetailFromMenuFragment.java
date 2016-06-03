@@ -1,3 +1,8 @@
+/*
+ * Mike Ford and Ian Skyles
+ * TCSS450 – Spring 2016
+ * Recipe Project
+ */
 package team14.tacoma.uw.edu.husky_cooking.menu;
 
 
@@ -35,18 +40,32 @@ import team14.tacoma.uw.edu.husky_cooking.model.Recipe;
 
 
 /**
- * A simple {@link Fragment} subclass.
+ * This fragment is used to populate the recipe item text views. Also, it is
+ * used to update them.
+ *
+ * @author Mike Ford
+ * @author Ian Skyles
+ * @version 5/4/2016
  */
 public class RecipeDetailFromMenuFragment extends Fragment {
 
     /**
-     * Used to update view on start
+     * Used to update view on start. db table name.
      */
     public static final String RECIPE_ITEM_SELECTED = "RecipeItemSelected";
 
+    /**
+     * Used to connect with our recipe database from menu.
+     * Adding to recipe to cookbook for husky cooking user.
+     */
     private static final String ADD_TO_COOK_URL =
             "http://cssgate.insttech.washington.edu/~_450atm14/husky_cooking/cookbook_add.php?";
 
+
+    /**
+     * Used to connect with our recipe database from menu.
+     * Adding to recipe to cookbook for facebook user.
+     */
     private static final String FACE_ADD_TO_COOK_URL =
             "http://cssgate.insttech.washington.edu/~_450atm14/husky_cooking/facebook_cookbook_add.php?";
 
@@ -88,6 +107,7 @@ public class RecipeDetailFromMenuFragment extends Fragment {
 
     /**
      * Updates view with recipe item/ Serializable on starting this fragment.
+     * Updates shared preferences.
      */
     @Override
     public void onStart() {
@@ -112,7 +132,17 @@ public class RecipeDetailFromMenuFragment extends Fragment {
             Log.d(RECIPE_ITEM_SELECTED, r.toString());
         }
     }
-
+    /**
+     * Creates the view that will be shown to the user.
+     * Sets up all the buttons and listeners.
+     * Attaches listeners to the buttons defined in the XML.
+     * Sets the TextViews with appropriate data to display to
+     *
+     * @param inflater           instantiate layout XML file into its corresponding View object
+     * @param container          item to contain other views
+     * @param savedInstanceState save state so we can resume later
+     * @return The view (user interface)
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -182,7 +212,7 @@ public class RecipeDetailFromMenuFragment extends Fragment {
 
 
     /**
-     * Allows the recipe to update the view.
+     * Allows the recipe details to update the view.
      *
      * @param recipe recipe to add
      */
@@ -207,6 +237,12 @@ public class RecipeDetailFromMenuFragment extends Fragment {
                 .apply();
     }
 
+
+    /**
+     * Builds database access URL to add a recipe to husky cooking users cookbook.
+     * @param v What the url will be based on (the filled in prompts from view)
+     * @return URL to add an ingredient to husky cooking users cookbook.
+     */
     private String buildAddToUrl(View v){
         StringBuilder sb = new StringBuilder(ADD_TO_COOK_URL);
         try{
@@ -231,6 +267,12 @@ public class RecipeDetailFromMenuFragment extends Fragment {
         return sb.toString();
     }
 
+
+    /**
+     * Builds database access URL to add a recipe to facebook users cookbook.
+     * @param v What the url will be based on (the filled in prompts from view)
+     * @return URL to add an ingredient to facebook users cookbook.
+     */
     private String buildFaceAddUrl(View v){
         StringBuilder sb = new StringBuilder(FACE_ADD_TO_COOK_URL);
         try{
@@ -255,14 +297,17 @@ public class RecipeDetailFromMenuFragment extends Fragment {
         return sb.toString();
     }
 
+
     /**
-     * A class for adding a recipe to the User's Cookbook.
+     * This class is what will call the database from the background. It uses the url given
+     * by the buildAddUrl for fb or husky cooking user.
+     * It adds the recipe to the users cookbook in background.
      */
     private class AddToCookTask extends AsyncTask<String, Void, String> {
         /**
-         * Tells it to connect and read http responses for the cookbook.
-         * @param urls where to download recipe details
-         * @return string of recipe details
+         * Try to visit the urls given, in this case adding to users cookbook.
+         * @param urls which will add the recipe to cookbook database.
+         * @return respone on outcome of succesful add or unsuccesful add to db
          */
         @Override
         protected String doInBackground(String... urls) {
@@ -298,6 +343,7 @@ public class RecipeDetailFromMenuFragment extends Fragment {
         /**
          * Does appropriate actions to set/replace
          * recycler view and adapter.
+         * Will tell user status of database atempt via toast.
          * @param result result string to be be checked
          */
         @Override
@@ -327,13 +373,17 @@ public class RecipeDetailFromMenuFragment extends Fragment {
     }
 
     /**
-     * A class for retrieving ingredients for recipe.
+     * This class is what will call the database from the background.
+     * It uses the url given
+     * by the buildAddUrl for fb or husky cooking user.
+     * It gets the recipe ingredients from the database in background.
      */
     private class GetIngredients extends AsyncTask<String, Void, String> {
         /**
-         * Tells it to connect and read http responses for the cookbook.
-         * @param urls where to download recipe details
-         * @return string of recipe details
+         * Try to visit the urls given, in this case getting ingredients
+         * from recipe db.
+         * @param urls which will add the recipe ingredients to recipe database.
+         * @return respone on outcome of succesful get or unsuccesful get to db
          */
         @Override
         protected String doInBackground(String... urls) {
@@ -368,6 +418,7 @@ public class RecipeDetailFromMenuFragment extends Fragment {
         /**
          * Does appropriate actions to set/replace
          * recycler view and adapter.
+         * Will tell user status of database atempt (getting ingredients) via toast.
          * @param result result string to be be checked
          */
         @Override
