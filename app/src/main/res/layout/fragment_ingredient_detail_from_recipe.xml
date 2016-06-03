@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:id="@+id/from_recipe_detail"
-    tools:context="team14.tacoma.uw.edu.husky_cooking.IngredientDetailFromRecipeFragment">
+    tools:context=".recipe.IngredientDetailFromRecipeFragment">
 
     <TextView
         android:layout_width="match_parent"

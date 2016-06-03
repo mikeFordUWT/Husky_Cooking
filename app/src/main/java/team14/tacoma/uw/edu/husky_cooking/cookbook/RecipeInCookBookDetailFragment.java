@@ -1,11 +1,16 @@
-package team14.tacoma.uw.edu.husky_cooking;
-
+/*
+ * Mike Ford and Ian Skyles
+ * TCSS450 – Spring 2016
+ * Recipe Project
+ */
+package team14.tacoma.uw.edu.husky_cooking.cookbook;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,16 +19,23 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import team14.tacoma.uw.edu.husky_cooking.R;
+import team14.tacoma.uw.edu.husky_cooking.cookbook.IngredientsFromCookBookListFragment;
 import team14.tacoma.uw.edu.husky_cooking.model.Recipe;
 
-
 /**
- * A simple {@link Fragment} subclass.
+ * This class is used to display a recipe and its details in the cookbook.
+ * Binds data to our app / view. A flexible
+ * The data it binds is from recipes/cookbook on our DB.
+ *
+ * @author Mike Ford
+ * @author Ian Skyles
+ * @version 6/3/2016
  */
 public class RecipeInCookBookDetailFragment extends Fragment {
 
     /**
-     * Used to update view on start
+     * Used to unserilize ingredients. Table name fromm db.
      */
     public static final String RECIPE_ITEM_SELECTED = "RecipeItemSelected";
 
@@ -48,10 +60,12 @@ public class RecipeInCookBookDetailFragment extends Fragment {
      */
     private ListView mIngredientsListView;
 
+    /**
+     * Basic constructor for frgament. Calls super constructor for Fragment.
+     */
     public RecipeInCookBookDetailFragment() {
         // Required empty public constructor
     }
-
 
     /**
      * Updates view with recipe item/ Serializable on starting this fragment.
@@ -102,6 +116,9 @@ public class RecipeInCookBookDetailFragment extends Fragment {
         mCookTimeTextView = (TextView) view.findViewById(R.id.recipe_cook_time_in_cook);
         mDirectionsTextView = (TextView) view.findViewById(R.id.recipe_directions_in_cook);
 
+        //allows scrolling for long directions that will not fit on screen
+        mDirectionsTextView.setMovementMethod(new ScrollingMovementMethod());
+
         Button viewIngredients = (Button) view.findViewById(R.id.view_ingredients_button_in_cook);
         viewIngredients.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -142,6 +159,7 @@ public class RecipeInCookBookDetailFragment extends Fragment {
 
     /**
      * Allows the recipe to update the view.
+     * Edits shares preferences to keep track of recipe data.
      *
      * @param recipe recipe to add
      */
@@ -165,5 +183,4 @@ public class RecipeInCookBookDetailFragment extends Fragment {
         sharedPreferences.edit().putInt(getString(R.string.CURRENT_SERVINGS), recipe.getServings())
                 .commit();
     }
-
 }

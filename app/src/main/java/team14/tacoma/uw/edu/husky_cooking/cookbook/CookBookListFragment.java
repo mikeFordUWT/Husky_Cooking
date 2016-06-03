@@ -1,4 +1,9 @@
-package team14.tacoma.uw.edu.husky_cooking;
+/*
+ * Mike Ford and Ian Skyles
+ * TCSS450 – Spring 2016
+ * Recipe Project
+ */
+package team14.tacoma.uw.edu.husky_cooking.cookbook;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -16,52 +21,80 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
+import team14.tacoma.uw.edu.husky_cooking.R;
 import team14.tacoma.uw.edu.husky_cooking.model.Recipe;
 
 /**
- * A fragment representing a list of Items.
- * <p/>
- * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
- * interface.
+ * This fragment/class will be used to represent a list of recipes
+ * held in a users cookbook on our database hosted on CSSGATE.
+ *
+ * @author Mike Ford
+ * @author Ian Skyles
+ * @version 6/3/2016
  */
-public class RecipeFromMenuListFragment extends Fragment {
-    private static final String MENU_URL = "http://cssgate.insttech.washington.edu/~_450atm14/husky_cooking/get_menu_recipes.php?menu=";
+public class CookBookListFragment extends Fragment {
+    /**
+     * A url for husky cooking users cookbook. Used to connect to our db.
+     */
+    private static final String COOKBOOK_URL =
+            "http://cssgate.insttech.washington.edu/~_450atm14/husky_cooking/cookbook.php?user=";
 
+    /**
+     * A url for facebook users cookbook. Used to connect to our db.
+     */
+    private static final String FACE_COOKBOOK_URL =
+            "http://cssgate.insttech.washington.edu/~_450atm14/husky_cooking/facebook_cookbook.php?user=";
+
+    /** how many columns to make the list */
     private int mColumnCount = 1;
 
-    private OnListFragmentInteractionListener mListener;
+    /** Listener for cookbook */
+    private OnCookFragmentInteractionListener mListener;
+    /** List of recipes in cookbook.*/
+    private List<Recipe> mRecipeList;
 
+    /** A recyclerView to view our cookbook */
     private RecyclerView mRecyclerView;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public RecipeFromMenuListFragment() {
+    public CookBookListFragment() {
     }
 
+    /**
+     * Saves instance on creation of method of fragment/app.
+     * @param savedInstanceState state of the saved instance
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
     }
 
+    /**
+     * Creates the view that will be shown to the user.
+     * Attaches listeners to the buttons defined in the XML.
+     * It sets up recycler view and displays toast if no network connection.
+     * @param inflater instantiate layout XML file into its corresponding View object
+     * @param container item to contain other views
+     * @param savedInstanceState save state so we can resume later
+     * @return The view (user interface)
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-        View view = inflater.inflate(R.layout.fragment_recipe_from_menu_list, container, false);
-
+        View view = inflater.inflate(R.layout.fragment_item_cook_book_list, container, false);
+        TextView header = (TextView) view.findViewById(R.id.cook_book_header);
         // Set the adapter
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
@@ -71,48 +104,52 @@ public class RecipeFromMenuListFragment extends Fragment {
             } else {
                 mRecyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-//            recyclerView.setAdapter(new RecipeFromMenuRecyclerViewAdapter(DummyContent.ITEMS, mListener));
+//            mRecyclerView.setAdapter(new MyCookBookRecyclerViewAdapter(mRecipeList.ITEMS, mListener));
             ConnectivityManager connMgr = (ConnectivityManager) getActivity()
                     .getSystemService(Context.CONNECTIVITY_SERVICE);
             NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-
-            if(networkInfo != null && networkInfo.isConnected()){
+            if(networkInfo !=null && networkInfo.isConnected()){
                 SharedPreferences sharedPreferences = getActivity()
                         .getSharedPreferences(getString(R.string.LOGIN_PREFS), Context.MODE_PRIVATE);
-                String toEncode = sharedPreferences.getString(getString(R.string.CURRENT_MENU),"");
-                try{
-                    String menu = URLEncoder.encode(toEncode, "UTF-8");
-                    String menuURL = MENU_URL+ menu;
-                    DownloadRecipesTask task = new DownloadRecipesTask();
-                    task.execute(new String[]{menuURL});
-                }catch (Exception e){
-                    Toast.makeText(view.getContext(), "Something wrong with the url " + e.getMessage(),
-                            Toast.LENGTH_LONG).show();
+                String user = sharedPreferences.getString(getString(R.string.LOGGED_USER), "");
+                String face = sharedPreferences.getString(getString(R.string.LOGIN_METHOD), "");
+                String cookURL;
+                //select cookbook url based on fb user or husky cooking user
+                if(face.equals("facebook")){
+                    cookURL = FACE_COOKBOOK_URL + user;
+                }else{
+                    cookURL = COOKBOOK_URL + user;
                 }
 
-
+                DownloadCookbookTask task = new DownloadCookbookTask();
+                task.execute(new String[]{cookURL});
             }else{
                 Toast.makeText(view.getContext(),
-                        "No network connection available. Cannot display courses",
+                        "No network connection available. Please connect and try again.",
                         Toast.LENGTH_SHORT).show();
             }
-
         }
         return view;
     }
 
-
+    /**
+     * Attaches cookbook list fragment interaction listener to mlistener.
+     * @param context what to attach
+     */
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnListFragmentInteractionListener) {
-            mListener = (OnListFragmentInteractionListener) context;
+        if (context instanceof OnCookFragmentInteractionListener) {
+            mListener = (OnCookFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement OnListFragmentInteractionListener");
+                    + " must implement OnCookBookIngredientListFragmentInteractionListener");
         }
     }
-
+    /**
+     * makes cookbook listener (removes listener)
+     * null if onDetach() is called.
+     */
     @Override
     public void onDetach() {
         super.onDetach();
@@ -120,25 +157,24 @@ public class RecipeFromMenuListFragment extends Fragment {
     }
 
     /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
+     * An interface which requires implementing
+     * onCookBookFragmentInteraction(Recipe).
+     * It is used to ensure the cookbook listener
+     * is in place.
      */
-    public interface OnListFragmentInteractionListener {
-
-        void onRecipeFromMenuListFragmentInteraction(Recipe item);
+    public interface OnCookFragmentInteractionListener {
+        void onCookBookFragmentInteraction(Recipe recipe);
     }
 
-
-
-    private class DownloadRecipesTask extends AsyncTask<String, Void, String> {
+    /**
+     * Downloads recipes for user cookbook
+     * Asynchronously (in the background) from
+     * our db/webservice hosted on cssgate.
+     */
+    private class DownloadCookbookTask extends AsyncTask<String, Void, String>{
         /**
-         * Tells it to connect and read http responses for the cookbook.
+         * Tells it to connect and read http responses for the cookbook:
+         * (what is suppose to be in the users cookbook).
          * @param urls where recipes are stored
          * @return list of recipes
          */
@@ -179,7 +215,7 @@ public class RecipeFromMenuListFragment extends Fragment {
                         .show();
                 return;
             }
-            List<Recipe> mRecipeList = new ArrayList<>();
+            List<Recipe> mRecipeList = new ArrayList<Recipe>();
             result = Recipe.parseRecipeJSON(result, mRecipeList);
             //Something wrong with JSON returned
             if(result != null){
@@ -187,9 +223,8 @@ public class RecipeFromMenuListFragment extends Fragment {
                         .show();
                 return;
             }
-
             if(!mRecipeList.isEmpty()){
-                mRecyclerView.setAdapter(new RecipeFromMenuRecyclerViewAdapter(mRecipeList, mListener));
+                mRecyclerView.setAdapter(new MyCookBookRecyclerViewAdapter(mRecipeList, mListener));
             }
         }
     }

@@ -1,3 +1,8 @@
+/*
+ * Mike Ford and Ian Skyles
+ * TCSS450 – Spring 2016
+ * Recipe Project
+ */
 package team14.tacoma.uw.edu.husky_cooking.model;
 
 import org.json.JSONArray;
@@ -9,21 +14,37 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by michaelford on 5/28/16.
+ * This class was designed to model a food menu (multiple recipes).
+ *
+ * @author Mike Ford
+ * @author Ian Skyles
+ * @version 6/3/2016
  */
 public class FoodMenu implements Serializable{
 
+    /** Constant strings representing menu id, menu name.
+     * Used for the JSON
+     * */
     public static final String ID = "menu_id", NAME = "menu_name";
-    /**An integer for the id of the recipe*/
+    /** An integer to represent (unique) menu id number. */
     private int mMenuId;
 
-    /**A string representing menu name*/
+    /** A String which will store the recipe's name. */
     private String mMenuName;
 
-    /**A list of recipes in the menu*/
+    /**
+     * A list of ingredients necessary to make a recipe.
+     */
     private ArrayList<Recipe> mRecipeList;
 
 
+    /**
+     *
+     * This class was designed to model a food menu.
+     * Food menus house recipes that taste good together!
+     * @param id the id of the menu
+     * @param name the name of the menu
+     */
     public FoodMenu(int id, String name){
         this.mMenuId = id;
         this.mMenuName = name;
@@ -60,7 +81,6 @@ public class FoodMenu implements Serializable{
      * @param foodMenuList A list of menus.
      * @return reason for failure or null if JSON parsed successfully.
      */
-
     public static String parseMenuJSON(String menuJSON, List<FoodMenu> foodMenuList){
         String reason = null;
 

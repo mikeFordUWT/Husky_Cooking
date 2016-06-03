@@ -3,7 +3,7 @@
  * TCSS450 – Spring 2016
  * Recipe Project
  */
-package team14.tacoma.uw.edu.husky_cooking;
+package team14.tacoma.uw.edu.husky_cooking.shoppinglist;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -18,7 +18,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
@@ -29,7 +28,9 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import team14.tacoma.uw.edu.husky_cooking.model.Recipe;
+import team14.tacoma.uw.edu.husky_cooking.R;
+import team14.tacoma.uw.edu.husky_cooking.model.Ingredient;
+import team14.tacoma.uw.edu.husky_cooking.shoppinglist.MyShoppingListRecyclerViewAdapter;
 
 /**
  * This fragment/class will be used to represent a list of recipes
@@ -37,32 +38,41 @@ import team14.tacoma.uw.edu.husky_cooking.model.Recipe;
  *
  * @author Mike Ford
  * @author Ian Skyles
- * @version 5/4/2016
+ * @version 6/3/2016
  */
-public class CookBookListFragment extends Fragment {
-    private static final String COOKBOOK_URL =
-            "http://cssgate.insttech.washington.edu/~_450atm14/husky_cooking/cookbook.php?user=";
+public class ShoppingListFragment extends Fragment {
+    /**
+     * A url for husky cooking users shopping list. Used to connect to our db.
+     */
+    private static final String SHOPPING_LIST_URL=
+            "http://cssgate.insttech.washington.edu/~_450atm14/husky_cooking/shopping_list.php?user=";
 
-    private static final String FACE_COOKBOOK_URL =
-            "http://cssgate.insttech.washington.edu/~_450atm14/husky_cooking/facebook_cookbook.php?user=";
+    /**
+     * A url for facebook users shopping list. Used to connect to our db.
+     */
+    private static final String FACE_SHOPPING_LIST_URL =
+            "http://cssgate.insttech.washington.edu/~_450atm14/husky_cooking/facebook_shopping_list.php?user=";
 
     /** how many columns to make the list */
     private int mColumnCount = 1;
 
-    /** Listener for cookbook */
-    private OnCookFragmentInteractionListener mListener;
-    /** List of recipes in cookbook.*/
-    private List<Recipe> mRecipeList;
+    /**Listener for shopping list*/
+    private OnShoppingListFragmentInteractionListener mListener;
 
-    /** A recyclerView to view our cookbook */
+
+    /** List of ingredients in shopping list*/
+    private List<Ingredient> mIngredientList;
+
+    /** A recyclerView to view our shopping list fragment */
     private RecyclerView mRecyclerView;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public CookBookListFragment() {
+    public ShoppingListFragment() {
     }
+
 
     /**
      * Saves instance on creation of method of fragment/app.
@@ -86,8 +96,8 @@ public class CookBookListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_item_cook_book_list, container, false);
-        TextView header = (TextView) view.findViewById(R.id.cook_book_header);
+        View view = inflater.inflate(R.layout.fragment_ingredient_list, container, false);
+
         // Set the adapter
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
@@ -97,49 +107,53 @@ public class CookBookListFragment extends Fragment {
             } else {
                 mRecyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-//            mRecyclerView.setAdapter(new MyCookBookRecyclerViewAdapter(mRecipeList.ITEMS, mListener));
+//            recyclerView.setAdapter(new MyShoppingListRecyclerViewAdapter(mIngredientList.ITEMS, mListener));
             ConnectivityManager connMgr = (ConnectivityManager) getActivity()
                     .getSystemService(Context.CONNECTIVITY_SERVICE);
             NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-            if(networkInfo !=null && networkInfo.isConnected()){
+            if(networkInfo != null && networkInfo.isConnected()){
                 SharedPreferences sharedPreferences = getActivity()
                         .getSharedPreferences(getString(R.string.LOGIN_PREFS), Context.MODE_PRIVATE);
                 String user = sharedPreferences.getString(getString(R.string.LOGGED_USER), "");
-                String face = sharedPreferences.getString(getString(R.string.LOGIN_METHOD), "");
-                String cookURL;
-                if(face.equals("facebook")){
-                    cookURL = FACE_COOKBOOK_URL + user;
-                }else{
-                    cookURL = COOKBOOK_URL + user;
-                }
+                String face = sharedPreferences.getString(getString(R.string.LOGIN_METHOD),"");
 
-                DownloadCookbookTask task = new DownloadCookbookTask();
-                task.execute(new String[]{cookURL});
+                String shoppingListURL;
+
+                if(face.equals("facebook")){
+                    shoppingListURL = FACE_SHOPPING_LIST_URL + user;
+                }else{
+                    shoppingListURL = SHOPPING_LIST_URL + user;
+                }
+                DownloadShoppingListTask task = new DownloadShoppingListTask();
+                task.execute(new String[]{shoppingListURL});
             }else{
                 Toast.makeText(view.getContext(),
-                        "No network connection available. Cannot display courses",
+                        "No network connection available.  Please connect and try again.",
                         Toast.LENGTH_SHORT).show();
             }
         }
         return view;
     }
 
+
+
     /**
-     * Attaches cookbook list fragment interaction listener to mlistener.
+     * Attaches shopping list fragment interaction listener to mlistener.
      * @param context what to attach
      */
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnCookFragmentInteractionListener) {
-            mListener = (OnCookFragmentInteractionListener) context;
+        if (context instanceof OnShoppingListFragmentInteractionListener) {
+            mListener = (OnShoppingListFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnCookBookIngredientListFragmentInteractionListener");
         }
     }
+
     /**
-     * makes cookbook listener (removes listener)
+     * makes shopping list listener (removes listener)
      * null if onDetach() is called.
      */
     @Override
@@ -150,24 +164,25 @@ public class CookBookListFragment extends Fragment {
 
     /**
      * An interface which requires implementing
-     * onCookBookFragmentInteraction(Recipe).
+     * onShopListFragmentInteraction(Ingredient).
      * It is used to ensure the cookbook listener
      * is in place.
      */
-    public interface OnCookFragmentInteractionListener {
-        void onCookBookFragmentInteraction(Recipe recipe);
+    public interface OnShoppingListFragmentInteractionListener {
+        void onShopListFragmentInteraction(Ingredient item);
     }
 
     /**
-     * Downloads recipes for user cookbook
+     * Downloads ingredients for users shopping list
      * Asynchronously (in the background) from
      * our db/webservice hosted on cssgate.
      */
-    private class DownloadCookbookTask extends AsyncTask<String, Void, String>{
+    private class DownloadShoppingListTask extends AsyncTask<String, Void, String>{
         /**
-         * Tells it to connect and read http responses for the cookbook.
-         * @param urls where recipes are stored
-         * @return list of recipes
+         * Tells it to connect and read http responses for the shopping list:
+         * (Ingredients).
+         * @param urls where user shopping list is stored
+         * @return list of ingredients
          */
         @Override
         protected String doInBackground(String... urls) {
@@ -184,7 +199,7 @@ public class CookBookListFragment extends Fragment {
                         response += s;
                     }
                 }catch (Exception e) {
-                    response = "Unable to download the cookbook, Reason: " + e.getMessage();
+                    response = "Unable to download the shopping list, Reason: " + e.getMessage();
                 }finally {
                     if(urlConnection != null){
                         urlConnection.disconnect();
@@ -206,8 +221,8 @@ public class CookBookListFragment extends Fragment {
                         .show();
                 return;
             }
-            List<Recipe> mRecipeList = new ArrayList<Recipe>();
-            result = Recipe.parseRecipeJSON(result, mRecipeList);
+            List<Ingredient> mIngredientList = new ArrayList<Ingredient>();
+            result = Ingredient.parseIngredientJSON(result, mIngredientList);
             //Something wrong with JSON returned
             if(result != null){
                 Toast.makeText(getActivity().getApplicationContext(), result, Toast.LENGTH_LONG)
@@ -215,8 +230,8 @@ public class CookBookListFragment extends Fragment {
                 return;
             }
 
-            if(!mRecipeList.isEmpty()){
-                mRecyclerView.setAdapter(new MyCookBookRecyclerViewAdapter(mRecipeList, mListener));
+            if(!mIngredientList.isEmpty()){
+                mRecyclerView.setAdapter(new MyShoppingListRecyclerViewAdapter(mIngredientList, mListener));
             }
         }
     }
