@@ -29,7 +29,7 @@ public class RecipeActivityTest extends
     public void testRecipeList() {
         solo.clickOnButton("View All Recipes");
         solo.clickInRecyclerView(0);
-        boolean fragmentLoaded = solo.searchText("French Toast");
+        boolean fragmentLoaded = solo.searchText("All Recipes");
         assertTrue("Recipe List fragment loaded", fragmentLoaded);
     }
     public void testShoppingList() {
@@ -44,14 +44,14 @@ public class RecipeActivityTest extends
 
         solo.clickOnButton("Shopping List");
         solo.clickInRecyclerView(0);
-        boolean fragmentLoaded = solo.searchText("ground cinnamon");
+        boolean fragmentLoaded = solo.searchText("Shopping List");
         assertTrue("Can view items in shopping list!", fragmentLoaded);
     }
 
     public void testCookBook() {
         solo.clickOnButton("Cookbook");
         solo.clickInRecyclerView(0);
-        boolean fragmentLoaded = solo.searchText("Blueberry Pancakes");
+        boolean fragmentLoaded = solo.searchText("Cookbook");
         assertTrue("Can view cookbook recipes!", fragmentLoaded);
     }
     public void testMenu() {
