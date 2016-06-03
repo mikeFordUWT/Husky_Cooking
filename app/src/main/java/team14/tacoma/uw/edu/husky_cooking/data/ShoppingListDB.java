@@ -32,8 +32,12 @@ public class ShoppingListDB {
     /**
      * Database unique name.
      */
-    public static final String DB_NAME = "ShoppingList.db";
+    public static final String DB_NAME = "Ingredient.db";
 
+    /**
+     * Ingredient table name
+     */
+    private static final String INGREDIENT_TABLE = "Ingredient";
 
     /**
      * Database helper with creating, inserting, deleting/dropping from the table.
@@ -47,14 +51,81 @@ public class ShoppingListDB {
     /**
      * Constructor for the database. Makes the helper which creates table and does operations on it.
      * Also makes the SQLite db.
-     * @param context
+     * @param context the context
      */
     public ShoppingListDB(Context context) {
         mShoppingListDBHelper = new ShoppingListDBHelper(
-                context, DB_NAME, null, DB_VERSION);
+                context, DB_NAME, null, DB_VERSION
+        );
         mSQLiteDatabase = mShoppingListDBHelper.getWritableDatabase();
     }
 
+    /**
+     * Inserts the ingredient into the shoppingList sqlite table. Returns true if successful, false otherwise.
+     * @param id id for ingredient
+     * @param amount the amount of the ingredient
+     * @param ingredientName the name of the ingredient
+     * @param measurementType the type of measurement
+     * @return true or false
+     */
+    public boolean insertIngredient(int id, String amount, String ingredientName, String measurementType) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("id", id);
+        contentValues.put("amount", amount);
+        contentValues.put("ingredientName", ingredientName);
+        contentValues.put("measurementType", measurementType);
+
+        long rowId = mSQLiteDatabase.insert("Ingredient", null, contentValues);
+
+        return rowId != -1;
+    }
+
+    /**
+     * Closes the database.
+     */
+    public void closeDB() {
+        mSQLiteDatabase.close();
+    }
+
+    /**
+     * Delete all the data from the shopping list
+     */
+    public void deleteIngredients() {
+        mSQLiteDatabase.delete(INGREDIENT_TABLE, null, null);
+    }
+
+    /**
+     * Returns the list of Ingredient from the local shopping list table.
+     * @return list
+     */
+    public List<Ingredient> getIngredients() {
+
+        String[] columns = {
+                "id", "amount", "ingredientName", "measurementType"
+        };
+
+        Cursor c = mSQLiteDatabase.query(
+                INGREDIENT_TABLE,  // The table to query
+                columns,                               // The columns to return
+                null,                                // The columns for the WHERE clause
+                null,                            // The values for the WHERE clause
+                null,                                     // don't group the rows
+                null,                                     // don't filter by row groups
+                null                                 // The sort order
+        );
+        c.moveToFirst();
+        List<Ingredient> list = new ArrayList<Ingredient>();
+        for (int i=0; i<c.getCount(); i++) {
+            int id = c.getInt(0);
+            String amount = c.getString(1);
+            String ingredientName = c.getString(2);
+            String measurementType = c.getString(3);
+            Ingredient Ingredient = new Ingredient(id, amount, ingredientName, measurementType);
+            list.add(Ingredient);
+            c.moveToNext();
+        }
+        return list;
+    }
 
     /**
      * A helper class for our shopping list database.
@@ -67,13 +138,13 @@ public class ShoppingListDB {
          * sql command for creating table entry.
          */
         private static final String CREATE_ShoppingItem_SQL =
-                "CREATE TABLE IF NOT EXISTS ShoppingItem "
+                "CREATE TABLE IF NOT EXISTS Ingredient "
                         + "(id TEXT PRIMARY KEY, amount TEXT, ingredientName TEXT, measurementType TEXT)";
         /**
          * sql command for dropping from table.
          */
         private static final String DROP_ShoppingItem_SQL =
-                "DROP TABLE IF EXISTS ShoppingItem";
+                "DROP TABLE IF EXISTS Ingredient";
         /**
          *  Inherited sql lite open helper.
          */
@@ -98,75 +169,5 @@ public class ShoppingListDB {
             onCreate(sqLiteDatabase);
         }
 
-    }
-    /**
-     * Inserts the ingredient into the shoppingList sqlite table. Returns true if successful, false otherwise.
-     * @param id
-     * @param amount
-     * @param ingredientName
-     * @param measurementType
-     * @return true or false
-     */
-    public boolean insertIngredient(int id, String amount, String ingredientName, String measurementType) {
-        ContentValues contentValues = new ContentValues();
-        contentValues.put("id", id);
-        contentValues.put("amount", amount);
-        contentValues.put("ingredientName", ingredientName);
-        contentValues.put("measurementType", measurementType);
-
-        long rowId = mSQLiteDatabase.insert("Ingredient", null, contentValues);
-        return rowId != -1;
-    }
-
-    /**
-     * Closes the database.
-     */
-    public void closeDB() {
-        mSQLiteDatabase.close();
-    }
-
-    /**
-     * Ingredient table name
-     */
-    private static final String INGREDIENT_TABLE = "Ingredient";
-
-    /**
-     * Returns the list of Ingredient from the local shopping list table.
-     * @return list
-     */
-    public List<Ingredient> getIngredients() {
-
-        String[] columns = {
-                "id", "shortDesc", "longDesc", "prereqs"
-        };
-
-        Cursor c = mSQLiteDatabase.query(
-                INGREDIENT_TABLE,  // The table to query
-                columns,                               // The columns to return
-                null,                                // The columns for the WHERE clause
-                null,                            // The values for the WHERE clause
-                null,                                     // don't group the rows
-                null,                                     // don't filter by row groups
-                null                                 // The sort order
-        );
-        c.moveToFirst();
-        List<Ingredient> list = new ArrayList<Ingredient>();
-        for (int i=0; i<c.getCount(); i++) {
-            int id = c.getInt(0);
-            String amount = c.getString(1);
-            String ingredientName = c.getString(2);
-            String measurementType = c.getString(3);
-            Ingredient Ingredient = new Ingredient(id, amount, ingredientName, measurementType);
-            list.add(Ingredient);
-            c.moveToNext();
-        }
-
-        return list;
-    }
-    /**
-     * Delete all the data from the shopping list
-     */
-    public void deleteIngredients() {
-        mSQLiteDatabase.delete(INGREDIENT_TABLE, null, null);
     }
 }

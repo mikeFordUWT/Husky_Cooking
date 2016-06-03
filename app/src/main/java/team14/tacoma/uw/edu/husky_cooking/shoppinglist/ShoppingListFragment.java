@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import team14.tacoma.uw.edu.husky_cooking.R;
+import team14.tacoma.uw.edu.husky_cooking.data.ShoppingListDB;
 import team14.tacoma.uw.edu.husky_cooking.model.Ingredient;
 import team14.tacoma.uw.edu.husky_cooking.recipe.RecipeActivity;
 
@@ -62,6 +63,9 @@ public class ShoppingListFragment extends Fragment {
 
     /** List of ingredients in shopping list*/
     private List<Ingredient> mIngredientList;
+
+    /** A database object of ingredients*/
+    private ShoppingListDB mShoppingDB;
 
     /** A recyclerView to view our shopping list fragment */
     private RecyclerView mRecyclerView;
@@ -131,6 +135,37 @@ public class ShoppingListFragment extends Fragment {
                 Toast.makeText(view.getContext(),
                         "No network connection available.  Please connect and try again.",
                         Toast.LENGTH_SHORT).show();
+                if(mShoppingDB == null){
+                    mShoppingDB = new ShoppingListDB(getActivity());
+                }
+                if(mIngredientList == null){
+                    mIngredientList = mShoppingDB.getIngredients();
+                }
+
+                mRecyclerView.setAdapter(new MyShoppingListRecyclerViewAdapter(mIngredientList, mListener));
+            }
+
+            try{
+                InputStream inputStream = getActivity().openFileInput(
+                        getString(R.string.LOGIN_FILE));
+
+                if(inputStream != null){
+                    InputStreamReader inputStreamReader = new
+                            InputStreamReader(inputStream);
+                    BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                    String receiveString = "";
+                    StringBuilder stringBuilder = new StringBuilder();
+
+                    while((receiveString = bufferedReader.readLine()) != null){
+                        stringBuilder.append(receiveString);
+                    }
+                    inputStream.close();
+                    Toast.makeText(getActivity(), stringBuilder.toString(),
+                            Toast.LENGTH_SHORT)
+                            .show();
+                }
+            }catch (Exception e) {
+                e.printStackTrace();
             }
         }
         return view;
@@ -222,7 +257,7 @@ public class ShoppingListFragment extends Fragment {
                         .show();
                 return;
             }
-            List<Ingredient> mIngredientList = new ArrayList<Ingredient>();
+            mIngredientList = new ArrayList<Ingredient>();
             result = Ingredient.parseIngredientJSON(result, mIngredientList);
             //Something wrong with JSON returned
             if(result != null){
@@ -233,6 +268,19 @@ public class ShoppingListFragment extends Fragment {
 
             if(!mIngredientList.isEmpty()){
                 mRecyclerView.setAdapter(new MyShoppingListRecyclerViewAdapter(mIngredientList, mListener));
+
+                if(mShoppingDB == null){
+                    mShoppingDB = new ShoppingListDB(getActivity());
+                }
+
+                mShoppingDB.deleteIngredients();
+
+                for(int i = 0; i<mIngredientList.size(); i++){
+                    Ingredient ingredient = mIngredientList.get(i);
+                    mShoppingDB.insertIngredient(ingredient.getIngredientId(),
+                            ingredient.getIngredientName(),ingredient.getMeasurementType()
+                            , ingredient.getAmount());
+                }
             }
         }
     }
