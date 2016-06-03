@@ -145,7 +145,8 @@ public class Ingredient implements Serializable{
                         Ingredient ingredient;
 
                         ingredient = new Ingredient(obj.getInt(Ingredient.ID),
-                                obj.getString(Ingredient.NAME), obj.getString(Ingredient.AMOUNT));
+                                obj.getString(Ingredient.NAME),obj.getString(Ingredient.MEASURE_TYPE),
+                                obj.getString(Ingredient.AMOUNT));
 
 
                         ingredientList.add(ingredient);
