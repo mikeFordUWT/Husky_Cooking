@@ -27,7 +27,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.concurrent.ExecutionException;
 
 import team14.tacoma.uw.edu.husky_cooking.R;
 import team14.tacoma.uw.edu.husky_cooking.recipe.RecipeActivity;
@@ -114,9 +113,7 @@ public class SignInActivity extends AppCompatActivity
             String result = null;
             try {
                 result = task.execute(url).get();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (ExecutionException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
             if(result != null && result.contains("success")){
@@ -154,7 +151,7 @@ public class SignInActivity extends AppCompatActivity
      */
     public void addUser(String url){
         AddUserTask task = new AddUserTask();
-        task.execute(new String[]{url.toString()});
+        task.execute(url.toString());
         getSupportFragmentManager().popBackStackImmediate();
     }
 
@@ -221,7 +218,7 @@ public class SignInActivity extends AppCompatActivity
 
                 }else {
                     Toast.makeText(getApplicationContext(), "Failed to add: "
-                                    + jsonObject.get("error") + "\nPlease enter a different e-mail adress"
+                                    + jsonObject.get("error") + "\nPlease enter a different e-mail address"
                             ,Toast.LENGTH_LONG)
                             .show();
                 }
@@ -248,7 +245,7 @@ public class SignInActivity extends AppCompatActivity
         /**
          * Finds out if the user is in the database
          * @param urls A url to run in the background
-         * @return repsonse string
+         * @return response string
          */
         @Override
         protected String doInBackground(String... urls){

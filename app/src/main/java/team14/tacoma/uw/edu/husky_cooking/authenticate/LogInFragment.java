@@ -173,7 +173,7 @@ public class LogInFragment extends Fragment {
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             /**
              * This method handles a succesful logon with the facebook button
-             * @param loginResult
+             * @param loginResult did a user get logged in
              */
             @Override
             public void onSuccess(LoginResult loginResult) {
@@ -182,7 +182,6 @@ public class LogInFragment extends Fragment {
 
                 //get profile info and access token from fb
                 AccessToken accessToken = loginResult.getAccessToken();
-                Profile profile = Profile.getCurrentProfile();
 
 
 
@@ -258,7 +257,7 @@ public class LogInFragment extends Fragment {
         signInButton.setOnClickListener(new View.OnClickListener(){
             /**
              * Controls what happens when the user clicks the button.
-             * @param v
+             * @param v a view
              */
             @Override
             public void onClick(View v){
@@ -306,7 +305,7 @@ public class LogInFragment extends Fragment {
         signUp.setOnClickListener(new View.OnClickListener() {
             /**
              * Handles clicks on the button
-             * @param v
+             * @param v a view that has been clicked
              */
             @Override
             public void onClick(View v) {
@@ -327,9 +326,9 @@ public class LogInFragment extends Fragment {
 
     /**
      * forward the login results to the callbackManager created in onCreate():
-     * @param requestCode
-     * @param resultCode
-     * @param data
+     * @param requestCode code that has been requested
+     * @param resultCode code of a result
+     * @param data the intent's data
      */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -413,7 +412,7 @@ public class LogInFragment extends Fragment {
 
         /**
          * Checks the String returned from doInBackground to see if the log in was successful.
-         * @param result
+         * @param result the result of the ASyncTask
          */
         @Override
         protected void onPostExecute(String result) {
