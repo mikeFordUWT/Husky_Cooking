@@ -55,7 +55,7 @@ import team14.tacoma.uw.edu.husky_cooking.shoppinglist.ShoppingListFragment;
  *
  * @author Mike Ford
  * @author Ian Skyles
- * @version 5/4/2016
+ * @version 6/3/2016
  */
 public class RecipeActivity extends AppCompatActivity
         implements RecipeListFragment.OnListFragmentInteractionListener,
@@ -167,6 +167,11 @@ public class RecipeActivity extends AppCompatActivity
     }
 
 
+    /**
+     * Controls what happens when interacting with IngredientsFromRecipeListFragment
+     * Changes fragment smoothly.
+     * @param ingredient the Recipe to be used for the RecipeDetailFragment
+     */
     @Override
     public void onIngredientListFragmentInteraction(Ingredient ingredient){
         IngredientDetailFromRecipeFragment ingredientFrom = new IngredientDetailFromRecipeFragment();
@@ -179,7 +184,11 @@ public class RecipeActivity extends AppCompatActivity
                 .addToBackStack(null)
                 .commit();
     }
-
+    /**
+     * Controls what happens when interacting with IngredientsFromMenuListFragment
+     * Changes fragment smoothly.
+     * @param item the Recipe to be used for the RecipeDetailFragment
+     */
     @Override
     public void onIngredientFromMenuListFragmentInteraction(Ingredient item) {
         IngredientDetailFromMenuFragment ingredientFrom = new IngredientDetailFromMenuFragment();
@@ -193,6 +202,12 @@ public class RecipeActivity extends AppCompatActivity
                 .commit();
     }
 
+
+    /**
+     * Controls what happens when interacting with IngredientsFromCookBookListFragment
+     * Changes fragment smoothly.
+     * @param ingredient the Recipe to be used for the RecipeDetailFragment
+     */
     @Override
     public void onIngredientCookBookListFragmentInteraction(Ingredient ingredient){
         IngredientDetailFromCookBookFragment ingredientFrom = new IngredientDetailFromCookBookFragment();
@@ -205,7 +220,11 @@ public class RecipeActivity extends AppCompatActivity
                 .addToBackStack(null)
                 .commit();
     }
-
+    /**
+     * Controls what happens when interacting with IngredientDetailFromShoppingListFragment
+     * Changes fragment smoothly.
+     * @param ingredient the Recipe to be used for the RecipeDetailFragment
+     */
     @Override
     public void onShopListFragmentInteraction(Ingredient ingredient){
         IngredientDetailFromShoppingListFragment ingredientDetailFromShoppingListFragment = new IngredientDetailFromShoppingListFragment();
@@ -220,6 +239,7 @@ public class RecipeActivity extends AppCompatActivity
 
     /**
      * Updates (menu view) to show options bar..
+     * It has things such as quick navigagtion and logging out.
      * @param menu menu to be inflated
      * @return boolean
      */
@@ -284,11 +304,18 @@ public class RecipeActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * check if user is logged in via facebook
+     * @param url
+     */
     public void faceBookCheck(String url){
         FacebookCheck task = new FacebookCheck();
         task.execute(new String[]{url.toString()});
 
     }
+    /**
+     * log out facebook user
+     */
     private void facebookLogout(){
         if (AccessToken.getCurrentAccessToken() == null) {
             return; // already logged out
@@ -306,6 +333,7 @@ public class RecipeActivity extends AppCompatActivity
     }
     /**
      * Handles the actions of the prebuilt back button overrides behavior.
+     * Specified each flow for specific fragments.
      * Allows user to access correct fragments from a specific fragment.
      */
     @Override
@@ -364,7 +392,10 @@ public class RecipeActivity extends AppCompatActivity
             super.onBackPressed();
         }
     }
-
+    /**
+     * Checks if facebook user can connect (login).
+     * Controls response if they are or aren't in it.
+     */
     private class FacebookCheck extends AsyncTask<String, Void, String> {
         @Override
         protected void onPreExecute(){

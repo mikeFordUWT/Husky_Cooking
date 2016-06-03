@@ -33,9 +33,10 @@ import team14.tacoma.uw.edu.husky_cooking.recipe.MyRecipeRecyclerViewAdapter;
 
 /**
  * This fragment/class will be used to represent a list of recipes.
+ *
  * @author Mike Ford
  * @author Ian Skyles
- * @version 5/4/2016
+ * @version 6/3/2016
  */
 public class RecipeListFragment extends Fragment {
     /**
@@ -141,14 +142,10 @@ public class RecipeListFragment extends Fragment {
     }
 
     /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
+     * An interface which requires implementing
+     * onListFragmentInteraction(Recipe).
+     * It is used to ensure the recipe listener
+     * is in place.
      */
     public interface OnListFragmentInteractionListener {
         void onListFragmentInteraction(Recipe recipe);
@@ -160,8 +157,9 @@ public class RecipeListFragment extends Fragment {
      */
     private class DownloadRecipesTask extends AsyncTask<String, Void, String>{
         /**
-         * Tells it to connect and read http responses for the cookbook.
-         * @param urls where each recipe is stored
+         * Tells it to connect and read http responses for the recipes.
+         * (recipes names).
+         * @param urls where recipes are stored
          * @return list of recipes
          */
         @Override
@@ -192,7 +190,7 @@ public class RecipeListFragment extends Fragment {
         /**
          * Does appropriate actions to set/replace
          * recycler view and adapter.
-         * @param result result string to be be checked
+         * @param result result string to execute on
          */
         @Override
         protected void onPostExecute(String result) {

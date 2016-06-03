@@ -43,6 +43,11 @@ import team14.tacoma.uw.edu.husky_cooking.model.Ingredient;
 public class IngredientsFromCookBookListFragment extends Fragment {
 
     /**
+     * used for serialization of ingredient in recipe activity.
+     */
+    public static final String INGREDIENT_ITEM_SELECTED = "IngredientItemSelected";
+
+    /**
      * The base url for accessing the recipe's ingredient list.
      */
     private static final String RECIPE_LIST_URL ="http://cssgate.insttech.washington.edu/~_450atm14/husky_cooking/recipe_ingredient_list.php?recipe=";
@@ -58,7 +63,7 @@ public class IngredientsFromCookBookListFragment extends Fragment {
     private OnCookBookIngredientListFragmentInteractionListener mListener;
 
     /**
-     * Allows for continously flowing / recylcing the ingredient list if
+     * Allows for continuously flowing / recycling the ingredient list if
      * it is bigger than the device screen.
      */
     private RecyclerView mRecyclerView;

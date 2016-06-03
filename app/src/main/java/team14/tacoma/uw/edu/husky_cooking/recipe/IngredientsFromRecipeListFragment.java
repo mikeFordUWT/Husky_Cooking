@@ -1,3 +1,8 @@
+/*
+ * Mike Ford and Ian Skyles
+ * TCSS450 – Spring 2016
+ * Recipe Project
+ */
 package team14.tacoma.uw.edu.husky_cooking.recipe;
 
 import android.content.Context;
@@ -28,35 +33,65 @@ import team14.tacoma.uw.edu.husky_cooking.R;
 import team14.tacoma.uw.edu.husky_cooking.model.Ingredient;
 
 /**
- * A fragment representing a list of Items.
- * <p/>
- * Activities containing this fragment MUST implement the {@link OnRecipeIngredientListFragmentInteractionListener}
- * interface.
+ * Deals with getting ingredient lists from recipes in users cookbook.
+ * Pulls from users cookbook ingredients on our database hosted on CSSGATE.
+ *
+ * @author Ian Skyles
+ * @author Mike Ford
+ * @version 6/3/2016
  */
 public class IngredientsFromRecipeListFragment extends Fragment {
 
+    /**
+     * Used to specify each ingredient to display. DB table.
+     */
     public static final String INGREDIENT_ITEM_SELECTED = "IngredientItemSelected";
+    /**
+     * The base url for accessing the recipe's ingredient list.
+     */
     private static final String RECIPE_LIST_URL =
             "http://cssgate.insttech.washington.edu/~_450atm14/husky_cooking/recipe_ingredient_list.php?recipe=";
+    /**
+     * Number of columns to be dispalyed in ingredient list
+     */
     private int mColumnCount = 1;
 
+    /**
+     * Listener for interacting with the ingredient list.
+     */
     private OnRecipeIngredientListFragmentInteractionListener mListener;
 
+
+    /**
+     * Allows for continuously flowing / recycling the ingredient list if
+     * it is bigger than the device screen.
+     */
     private RecyclerView mRecyclerView;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
-     * fragment (e.g. upon screen orientation changes).
+     * fragment.
      */
     public IngredientsFromRecipeListFragment() {
     }
 
+    /**
+     * Used super to save and recover information for ingredient list.
+     * @param savedInstanceState
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
+    /**
+     * Creates the view for the ingredients list from all recipes.
+     * Eventually the recycle view will be instantiated on this screen.
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return what is to be displayed to user
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -101,7 +136,10 @@ public class IngredientsFromRecipeListFragment extends Fragment {
     }
 
 
-
+    /**
+     * Attaches recipe ingredient list fragment interaction listener to mlistener.
+     * @param context what to attach
+     */
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -113,6 +151,9 @@ public class IngredientsFromRecipeListFragment extends Fragment {
         }
     }
 
+    /**
+     * Set listener to null when detatching
+     */
     @Override
     public void onDetach() {
         super.onDetach();
@@ -123,11 +164,7 @@ public class IngredientsFromRecipeListFragment extends Fragment {
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
      * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
+     * activity (recycle view adapter).
      */
     public interface OnRecipeIngredientListFragmentInteractionListener {
         void onIngredientListFragmentInteraction(Ingredient item);
@@ -141,7 +178,8 @@ public class IngredientsFromRecipeListFragment extends Fragment {
      */
     private class DownloadIngredientListTask extends AsyncTask<String, Void, String> {
         /**
-         * Tells it to connect and read http responses for the cookbook.
+         * Tells it to connect and read http responses for the ingredients
+         * from the recipes.
          * @param urls where recipes are stored
          * @return list of recipes
          */

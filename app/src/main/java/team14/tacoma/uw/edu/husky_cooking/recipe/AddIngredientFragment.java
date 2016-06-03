@@ -1,3 +1,8 @@
+/*
+ * Mike Ford and Ian Skyles
+ * TCSS450 – Spring 2016
+ * Recipe Project
+ */
 package team14.tacoma.uw.edu.husky_cooking.recipe;
 
 
@@ -26,23 +31,42 @@ import java.net.URLEncoder;
 
 import team14.tacoma.uw.edu.husky_cooking.R;
 
-
 /**
- * A simple {@link Fragment} subclass.
+ * This class controls the user adding ingredients to our
+ * database hosted on CSSGATE.
+ *
+ * @author Mike Ford
+ * @author Ian Skyles
+ * @version 6/3/2016
  */
 public class AddIngredientFragment extends Fragment {
 
     /** the base url for adding an ingredient */
     private static final String ADD_INGREDIENT_URL =
             "http://cssgate.insttech.washington.edu/~_450atm14/husky_cooking/ingredient_add.php?";
-
+    /**
+     * Edit Texts for allowing entry of the ingredient info: name,amount, measure type.
+     */
     private EditText mIngredientName, mIngredientAmount, mIngredientMeasureType;
 
+    /**
+     * Empty class constructor
+     */
     public AddIngredientFragment() {
         // Required empty public constructor
     }
 
-
+    /**
+     * Creates the view that will be shown to the user.
+     * Attaches listeners to the buttons defined in the XML.
+     * It sets up edit text fields and a listener for add recipe button.
+     * View includes fields for user to input ingredient info
+     * and a button to finish or add more.
+     * @param inflater instantiate layout XML file into its corresponding View object
+     * @param container item to contain other views
+     * @param savedInstanceState save state so we can resume later
+     * @return The view (user interface)
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -112,6 +136,12 @@ public class AddIngredientFragment extends Fragment {
         return v;
     }
 
+    /**
+     * This builds a url for a new ingredient. It includes details on name,
+     * amount, measuring type.
+     * @param v the view to display error toasts in
+     * @return String of the url for logging in
+     */
     private String buildAddIngredientURL(View v){
         StringBuilder sb = new StringBuilder(ADD_INGREDIENT_URL);
         SharedPreferences sharedPreferences = getActivity()
@@ -142,7 +172,7 @@ public class AddIngredientFragment extends Fragment {
     }
 
     /**
-     * Adds the recipe to our database asynchronously.
+     * Adds the ingredient to our database asynchronously.
      */
     private class AddIngredientTask extends AsyncTask<String, Void, String> {
 
@@ -152,9 +182,10 @@ public class AddIngredientFragment extends Fragment {
         @Override
         protected void onPreExecute() {super.onPreExecute();}
         /**
-         * Adds recipe to our database.
+         * Adds ingredient to our database.
          * @param urls where to add recipe
-         * @return string of response details
+         * @return string of response details about status of
+         * adding it to db (eg error, success)
          */
         @Override
         protected String doInBackground(String... urls){
@@ -187,7 +218,7 @@ public class AddIngredientFragment extends Fragment {
         /**
          * Does appropriate actions to set/replace
          * recycler view and adapter.
-         * Lets user know if it was successful or unsuccessfully added.
+         * Lets user know if ingredient was successful or unsuccessfully added via toast.
          * @param result result string to be be checked
          */
         @Override

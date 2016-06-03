@@ -159,9 +159,10 @@ public class IngredientDetailFromCookBookFragment extends Fragment {
     }
 
     /**
-     * Builds database access URL to add an ingredient to facebook users shopping list.
+     * Builds database access URL to add an ingredient to shopping list.
+     * For fb users
      * @param v What the url will be based on (the filled in prompts from view)
-     * @return URL to add an ingredient to facebook users shopping list.
+     * @return URL to add an ingredient to shopping list.
      */
     private String buildFaceAddUrl(View v){
         StringBuilder sb = new StringBuilder(FACE_ADD_TO_SHOPPING);
@@ -197,10 +198,12 @@ public class IngredientDetailFromCookBookFragment extends Fragment {
         return sb.toString();
     }
 
+
     /**
-     * Builds database access URL to add an ingredient to husky cooking user's shopping list.
+     * Builds database access URL to add an ingredient to shopping list.
+     * This one is for hc users
      * @param v What the url will be based on (the filled in prompts from view)
-     * @return URL to add an ingredient to husky cooking users shopping list.
+     * @return URL to add an ingredient to shopping list.
      */
     private String buildAddUrl(View v){
         StringBuilder sb = new StringBuilder(ADD_TO_SHOPPING_LIST);
@@ -304,7 +307,6 @@ public class IngredientDetailFromCookBookFragment extends Fragment {
                 if(e.getMessage().contains("1")){
                     Toast.makeText(getActivity().getApplicationContext(), "Item removed from your shopping List!", Toast.LENGTH_LONG).show();
                 }
-
             }
         }
     }

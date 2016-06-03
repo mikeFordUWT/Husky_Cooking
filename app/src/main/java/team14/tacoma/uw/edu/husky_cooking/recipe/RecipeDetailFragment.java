@@ -40,9 +40,9 @@ import team14.tacoma.uw.edu.husky_cooking.recipe.IngredientsFromRecipeListFragme
  * This fragment is used to populate the recipe item text views. Also, it is
  * used to update them.
  *
- * @author Mike Ford
  * @author Ian Skyles
- * @version 5/4/2016
+ * @author Mike Ford
+ * @version 6/3/2016
  */
 public class RecipeDetailFragment extends Fragment {
     /**
