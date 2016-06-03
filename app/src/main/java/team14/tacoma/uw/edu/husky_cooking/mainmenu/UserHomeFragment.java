@@ -250,7 +250,7 @@ public class UserHomeFragment extends Fragment {
 
         /**
          * Checks the String returned from doInBackground to see if the log in was successful.
-         * @param result
+         * @param result answer to whether or not user is can connect/login to db
          */
         @Override
         protected void onPostExecute(String result) {

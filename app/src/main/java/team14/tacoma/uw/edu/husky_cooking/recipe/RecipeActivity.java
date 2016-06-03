@@ -324,7 +324,7 @@ public class RecipeActivity extends AppCompatActivity
 
     /**
      * check if user is logged in via facebook
-     * @param url
+     * @param url db url for our facebook table
      */
     public void faceBookCheck(String url){
         FacebookCheck task = new FacebookCheck();
@@ -461,7 +461,7 @@ public class RecipeActivity extends AppCompatActivity
 
         /**
          * Checks the String returned from doInBackground to see if the log in was successful.
-         * @param result
+         * @param result details on status of login
          */
         @Override
         protected void onPostExecute(String result) {
