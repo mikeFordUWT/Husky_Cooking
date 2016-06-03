@@ -28,7 +28,8 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/recipe_directions_in_cook"/>
+        android:id="@+id/recipe_directions_in_cook"
+        android:scrollbars="vertical"/>
 
     <LinearLayout
         android:layout_width="wrap_content"

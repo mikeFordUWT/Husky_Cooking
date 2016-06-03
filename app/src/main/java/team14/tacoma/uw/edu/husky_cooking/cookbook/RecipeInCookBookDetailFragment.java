@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -114,6 +115,9 @@ public class RecipeInCookBookDetailFragment extends Fragment {
         mServingsTextView = (TextView) view.findViewById(R.id.recipe_servings_in_cook);
         mCookTimeTextView = (TextView) view.findViewById(R.id.recipe_cook_time_in_cook);
         mDirectionsTextView = (TextView) view.findViewById(R.id.recipe_directions_in_cook);
+
+        //allows scrolling for long directions that will not fit on screen
+        mDirectionsTextView.setMovementMethod(new ScrollingMovementMethod());
 
         Button viewIngredients = (Button) view.findViewById(R.id.view_ingredients_button_in_cook);
         viewIngredients.setOnClickListener(new View.OnClickListener() {
