@@ -147,7 +147,7 @@ public class SignInActivity extends AppCompatActivity
 
     /**
      * Used to add a user to Database.
-     * @param url
+     * @param url url used to add user
      */
     public void addUser(String url){
         AddUserTask task = new AddUserTask();
@@ -203,7 +203,7 @@ public class SignInActivity extends AppCompatActivity
          * exception is caught. It tries to call the parse Method and checks to see if it was successful.
          * If not, it displays the exception.
          *
-         * @param result
+         * @param result status of login
          */
         @Override
         protected void onPostExecute(String result){
@@ -274,7 +274,7 @@ public class SignInActivity extends AppCompatActivity
 
         /**
          * Checks the String returned from doInBackground to see if the log in was successful.
-         * @param result
+         * @param result result of checking if login and password are valid
          */
         @Override
         protected void onPostExecute(String result) {

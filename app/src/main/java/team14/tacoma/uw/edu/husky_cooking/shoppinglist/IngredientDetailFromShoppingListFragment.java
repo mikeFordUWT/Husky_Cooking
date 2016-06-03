@@ -93,9 +93,9 @@ public class IngredientDetailFromShoppingListFragment extends Fragment {
 
     /**
      * Creates the view from viewing an ingredient item when inside of the shopping list.
-     * @param inflater
-     * @param container
-     * @param savedInstanceState
+     * @param inflater instantiate layout XML file into its corresponding View object
+     * @param container item to contain other views
+     * @param savedInstanceState save state so we can resume later
      * @return what is to be displayed to user
      */
     @Override
@@ -143,7 +143,7 @@ public class IngredientDetailFromShoppingListFragment extends Fragment {
     /**
      * Adds the relevant ingredient information to the users screen
      * based on ingredient details from db.
-     * @param ingredient
+     * @param ingredient info to populate view with
      */
     public void updateView(Ingredient ingredient) {
         mAmountTextView.setText(ingredient.getAmount());

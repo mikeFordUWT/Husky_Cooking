@@ -72,7 +72,7 @@ public class RecipeFromMenuListFragment extends Fragment {
 
     /**
      * Used super to save and recover information for ingredient list.
-     * @param savedInstanceState
+     * @param savedInstanceState save state so we can resume later
      */
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -83,9 +83,9 @@ public class RecipeFromMenuListFragment extends Fragment {
     /**
      * Creates the view for the recipes list from recipes in the menu list.
      * Eventually the recycle view will be instantiated on this screen.
-     * @param inflater
-     * @param container
-     * @param savedInstanceState
+     * @param inflater instantiate layout XML file into its corresponding View object
+     * @param container item to contain other views
+     * @param savedInstanceState save state so we can resume later
      * @return what is to be displayed to user
      */
     @Override
