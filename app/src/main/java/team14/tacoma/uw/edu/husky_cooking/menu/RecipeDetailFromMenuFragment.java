@@ -3,7 +3,7 @@
  * TCSS450 – Spring 2016
  * Recipe Project
  */
-package team14.tacoma.uw.edu.husky_cooking;
+package team14.tacoma.uw.edu.husky_cooking.menu;
 
 
 import android.content.Context;
@@ -12,6 +12,7 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,7 +31,12 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.List;
 
+import team14.tacoma.uw.edu.husky_cooking.R;
+import team14.tacoma.uw.edu.husky_cooking.data.ShoppingListDB;
+import team14.tacoma.uw.edu.husky_cooking.menu.IngredientsFromMenuListFragment;
+import team14.tacoma.uw.edu.husky_cooking.model.Ingredient;
 import team14.tacoma.uw.edu.husky_cooking.model.Recipe;
 
 
@@ -42,18 +48,27 @@ import team14.tacoma.uw.edu.husky_cooking.model.Recipe;
  * @author Ian Skyles
  * @version 5/4/2016
  */
-public class RecipeDetailFragment extends Fragment {
+public class RecipeDetailFromMenuFragment extends Fragment {
+
     /**
-     * Used to update view on start
+     * Used to update view on start. db table name.
      */
     public static final String RECIPE_ITEM_SELECTED = "RecipeItemSelected";
 
+    /**
+     * Used to connect with our recipe database from menu.
+     * Adding to recipe to cookbook for husky cooking user.
+     */
     private static final String ADD_TO_COOK_URL =
             "http://cssgate.insttech.washington.edu/~_450atm14/husky_cooking/cookbook_add.php?";
 
+
+    /**
+     * Used to connect with our recipe database from menu.
+     * Adding to recipe to cookbook for facebook user.
+     */
     private static final String FACE_ADD_TO_COOK_URL =
             "http://cssgate.insttech.washington.edu/~_450atm14/husky_cooking/facebook_cookbook_add.php?";
-    private String mParent;
 
     /**
      * TextView that displays recipe name
@@ -76,26 +91,33 @@ public class RecipeDetailFragment extends Fragment {
      */
     private ListView mIngredientsListView;
 
-    /**
-     * Required empty constructor.
-     */
-    public RecipeDetailFragment() {
+    public RecipeDetailFromMenuFragment() {
         // Required empty public constructor
     }
 
     /**
+     * Database for shopping list.
+     */
+    private ShoppingListDB mShoppingListDB;
+
+    /**
+     * List of ingredients.
+     */
+    private List<Ingredient> mIngredientList;
+
+
+    /**
      * Updates view with recipe item/ Serializable on starting this fragment.
+     * Updates shared preferences.
      */
     @Override
     public void onStart() {
         super.onStart();
-        Bundle args = getArguments();
-        mParent = "";
 
+        Bundle args = getArguments();
         if (args != null) {
-            Recipe current = (Recipe) args.getSerializable(RECIPE_ITEM_SELECTED);
-            updateView(current);
-        }else{
+            updateView((Recipe) args.getSerializable(RECIPE_ITEM_SELECTED));
+        }else {
             SharedPreferences sharedPreferences =
                     getActivity().getSharedPreferences(getString(R.string.LOGIN_PREFS),
                             Context.MODE_PRIVATE);
@@ -111,9 +133,9 @@ public class RecipeDetailFragment extends Fragment {
             Log.d(RECIPE_ITEM_SELECTED, r.toString());
         }
     }
-
     /**
      * Creates the view that will be shown to the user.
+     * Sets up all the buttons and listeners.
      * Attaches listeners to the buttons defined in the XML.
      * Sets the TextViews with appropriate data to display to
      *
@@ -126,20 +148,22 @@ public class RecipeDetailFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        View view  = inflater.inflate(R.layout.fragment_recipe_detail_from_menu, container, false);
 
-        View view = inflater.inflate(R.layout.fragment_recipe_detail, container, false);
         final SharedPreferences sharedPreferences =
                 getActivity().getSharedPreferences(getString(R.string.LOGIN_PREFS),
                         Context.MODE_PRIVATE);
-        mRecipeNameTextView = (TextView) view.findViewById(R.id.recipe_name);
-        mServingsTextView = (TextView) view.findViewById(R.id.recipe_servings);
-        mCookTimeTextView = (TextView) view.findViewById(R.id.recipe_cook_time);
-        mDirectionsTextView = (TextView) view.findViewById(R.id.recipe_directions);
-//        mIngredientsListView = (ListView) view.findViewById(R.id.ingredients_detail_list_view);
+        mRecipeNameTextView = (TextView) view.findViewById(R.id.recipe_name_from_menu);
+        mServingsTextView = (TextView) view.findViewById(R.id.recipe_servings_from_menu);
+        mCookTimeTextView = (TextView) view.findViewById(R.id.recipe_cook_time_from_menu);
+        mDirectionsTextView = (TextView) view.findViewById(R.id.recipe_directions_from_menu);
 
-        Button addToCookBook = (Button) view.findViewById(R.id.add_to_cookbook_button);
 
-        addToCookBook.setOnClickListener(new View.OnClickListener() {
+        //allows scrolling for long directions that will not fit on screen
+        mDirectionsTextView.setMovementMethod(new ScrollingMovementMethod());
+
+        Button addToCook = (Button) view.findViewById(R.id.add_to_cookbook_button_from_menu);
+        addToCook.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String url;
@@ -149,27 +173,24 @@ public class RecipeDetailFragment extends Fragment {
                 }else{
                     url = buildAddToUrl(v);
                 }
-
                 AddToCookTask task = new AddToCookTask();
                 task.execute(url);
             }
         });
 
-        Button viewIngredients = (Button) view.findViewById(R.id.view_ingredients_button);
+        Button viewIngredients = (Button) view.findViewById(R.id.view_ingredients_from_menu_button);
         viewIngredients.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                IngredientsFromRecipeListFragment ingredients = new IngredientsFromRecipeListFragment();
-
-
+                IngredientsFromMenuListFragment ingredients = new IngredientsFromMenuListFragment();
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragment_container, ingredients)
                         .addToBackStack(null).commit();
             }
         });
 
+        Button shareRecipe = (Button) view.findViewById(R.id.share_recipe_button_from_menu);
 
-        Button shareRecipe = (Button) view.findViewById(R.id.share_recipe_button);
         shareRecipe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -191,11 +212,12 @@ public class RecipeDetailFragment extends Fragment {
             }
         });
         return view;
-
     }
 
+
+
     /**
-     * Allows the recipe to update the view.
+     * Allows the recipe details to update the view.
      *
      * @param recipe recipe to add
      */
@@ -218,33 +240,14 @@ public class RecipeDetailFragment extends Fragment {
                 .apply();
         sharedPreferences.edit().putInt(getString(R.string.CURRENT_SERVINGS), recipe.getServings())
                 .apply();
-
-
     }
 
-    private String buildFaceAddUrl(View v){
-        StringBuilder sb = new StringBuilder(FACE_ADD_TO_COOK_URL);
-        try{
-            SharedPreferences sharedPreferences = getActivity()
-                    .getSharedPreferences(getString(R.string.LOGIN_PREFS), Context.MODE_PRIVATE);
 
-            String user = sharedPreferences.getString(getString(R.string.LOGGED_USER), "");
-
-            sb.append("user_name=");
-            sb.append(URLEncoder.encode(user, "UTF-8"));
-
-
-            String recipe = sharedPreferences.getString(getString(R.string.CURRENT_RECIPE), "");
-            sb.append("&recipe_name=");
-            sb.append(URLEncoder.encode(recipe, "UTF-8"));
-
-        }catch(Exception e){
-            Toast.makeText(v.getContext(), "Something wrong with the url " + e.getMessage(),
-                    Toast.LENGTH_LONG).show();
-        }
-
-        return sb.toString();
-    }
+    /**
+     * Builds database access URL to add a recipe to husky cooking users cookbook.
+     * @param v What the url will be based on (the filled in prompts from view)
+     * @return URL to add an ingredient to husky cooking users cookbook.
+     */
     private String buildAddToUrl(View v){
         StringBuilder sb = new StringBuilder(ADD_TO_COOK_URL);
         try{
@@ -269,14 +272,47 @@ public class RecipeDetailFragment extends Fragment {
         return sb.toString();
     }
 
+
     /**
-     * A class for adding a recipe to the User's Cookbook.
+     * Builds database access URL to add a recipe to facebook users cookbook.
+     * @param v What the url will be based on (the filled in prompts from view)
+     * @return URL to add an ingredient to facebook users cookbook.
+     */
+    private String buildFaceAddUrl(View v){
+        StringBuilder sb = new StringBuilder(FACE_ADD_TO_COOK_URL);
+        try{
+            SharedPreferences sharedPreferences = getActivity()
+                    .getSharedPreferences(getString(R.string.LOGIN_PREFS), Context.MODE_PRIVATE);
+
+            String user = sharedPreferences.getString(getString(R.string.LOGGED_USER), "");
+
+            sb.append("user_name=");
+            sb.append(URLEncoder.encode(user, "UTF-8"));
+
+
+            String recipe = sharedPreferences.getString(getString(R.string.CURRENT_RECIPE), "");
+            sb.append("&recipe_name=");
+            sb.append(URLEncoder.encode(recipe, "UTF-8"));
+
+        }catch(Exception e){
+            Toast.makeText(v.getContext(), "Something wrong with the url " + e.getMessage(),
+                    Toast.LENGTH_LONG).show();
+        }
+
+        return sb.toString();
+    }
+
+
+    /**
+     * This class is what will call the database from the background. It uses the url given
+     * by the buildAddUrl for fb or husky cooking user.
+     * It adds the recipe to the users cookbook in background.
      */
     private class AddToCookTask extends AsyncTask<String, Void, String> {
         /**
-         * Tells it to connect and read http responses for the cookbook.
-         * @param urls where to download recipe details
-         * @return string of recipe details
+         * Try to visit the urls given, in this case adding to users cookbook.
+         * @param urls which will add the recipe to cookbook database.
+         * @return respone on outcome of succesful add or unsuccesful add to db
          */
         @Override
         protected String doInBackground(String... urls) {
@@ -295,6 +331,7 @@ public class RecipeDetailFragment extends Fragment {
                         response += s;
                     }
                 } catch (Exception e) {
+
                     response = "Unable to add recipe to Cookbook, Reason: "
                             + e.getMessage();
                 } finally {
@@ -311,6 +348,7 @@ public class RecipeDetailFragment extends Fragment {
         /**
          * Does appropriate actions to set/replace
          * recycler view and adapter.
+         * Will tell user status of database atempt via toast.
          * @param result result string to be be checked
          */
         @Override
@@ -319,7 +357,9 @@ public class RecipeDetailFragment extends Fragment {
                 JSONObject jsonObject = new JSONObject(result);
                 String status = (String) jsonObject.get("result");
                 if (status.equals("success")) {
-                    Toast.makeText(getActivity().getApplicationContext(), "Recipe successfully added to your Cookbook!",
+                    Toast.makeText(getActivity().getApplicationContext(),
+                            mRecipeNameTextView.getText().toString()
+                                    +" successfully added to your Cookbook!",
                             Toast.LENGTH_LONG)
                             .show();
                 } else {
@@ -337,15 +377,18 @@ public class RecipeDetailFragment extends Fragment {
         }
     }
 
-
     /**
-     * A class for retrieving ingredients for recipe.
+     * This class is what will call the database from the background.
+     * It uses the url given
+     * by the buildAddUrl for fb or husky cooking user.
+     * It gets the recipe ingredients from the database in background.
      */
     private class GetIngredients extends AsyncTask<String, Void, String> {
         /**
-         * Tells it to connect and read http responses for the cookbook.
-         * @param urls where to download recipe details
-         * @return string of recipe details
+         * Try to visit the urls given, in this case getting ingredients
+         * from recipe db.
+         * @param urls which will add the recipe ingredients to recipe database.
+         * @return respone on outcome of succesful get or unsuccesful get to db
          */
         @Override
         protected String doInBackground(String... urls) {
@@ -380,6 +423,7 @@ public class RecipeDetailFragment extends Fragment {
         /**
          * Does appropriate actions to set/replace
          * recycler view and adapter.
+         * Will tell user status of database atempt (getting ingredients) via toast.
          * @param result result string to be be checked
          */
         @Override

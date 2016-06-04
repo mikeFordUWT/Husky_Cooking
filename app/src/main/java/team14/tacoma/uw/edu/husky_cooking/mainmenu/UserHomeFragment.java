@@ -3,7 +3,7 @@
  * TCSS450 – Spring 2016
  * Recipe Project
  */
-package team14.tacoma.uw.edu.husky_cooking;
+package team14.tacoma.uw.edu.husky_cooking.mainmenu;
 
 
 import android.content.Context;
@@ -25,14 +25,22 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import team14.tacoma.uw.edu.husky_cooking.R;
+import team14.tacoma.uw.edu.husky_cooking.cookbook.CookBookListFragment;
+import team14.tacoma.uw.edu.husky_cooking.menu.MenuListFragment;
+import team14.tacoma.uw.edu.husky_cooking.recipe.AddRecipeFragment;
+import team14.tacoma.uw.edu.husky_cooking.recipe.RecipeActivity;
+import team14.tacoma.uw.edu.husky_cooking.recipe.RecipeListFragment;
+import team14.tacoma.uw.edu.husky_cooking.shoppinglist.ShoppingListFragment;
+
 
 /**
  * This class will be the splash screen for users when they log in.
  * From here they can click a button to take them to Cookbook,
- * all recipes, Shopping List, or create a recipe.
+ * all recipes, Shopping List, view a menu, or create a recipe.
  * @author Mike Ford
  * @author Ian Skyles
- * @version 5/4/2016
+ * @version 6/3/2016
  */
 public class UserHomeFragment extends Fragment {
     /** URL for facebook user check*/
@@ -46,6 +54,16 @@ public class UserHomeFragment extends Fragment {
         // Required empty public constructor
     }
 
+    /**
+     * Saves instance on creation of method of fragment/app.
+     * @param savedInstanceState state of the saved instance
+     */
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        ((RecipeActivity)getActivity()).setActionBarTitle(getString(R.string.app_name));
+
+    }
 
     /**
      * Creates the view that will be shown to the user.
@@ -168,9 +186,10 @@ public class UserHomeFragment extends Fragment {
     }
 
     /**
-     * Return string for checking if a user is already in the database.
-     * If they aren't a new entry is inserted into appropriate table.
-     *
+     * Return string for accessing facebook users dadtabase based on log in
+     * and shared preferences.
+     * @param v where to build the string
+     * @return base string to access fb user db.
      */
     private String buildFaceString(View v){
         StringBuilder sb = new StringBuilder(FACEBOOK_CHECK);
@@ -187,6 +206,11 @@ public class UserHomeFragment extends Fragment {
         return sb.toString();
     }
 
+    /**
+     * Finds out if the user is in the database and connected.
+     * Handles errors (eg no connection).
+     * Ensures user is logged in.
+     */
     private class FacebookCheck extends AsyncTask<String, Void, String> {
         @Override
         protected void onPreExecute(){
@@ -195,7 +219,7 @@ public class UserHomeFragment extends Fragment {
         }
 
         /**
-         * Finds out if the user is in the database
+         * Finds out if the user is in the database and connected.
          * @param urls A url to run in the background
          * @return repsonse string
          */
@@ -226,7 +250,7 @@ public class UserHomeFragment extends Fragment {
 
         /**
          * Checks the String returned from doInBackground to see if the log in was successful.
-         * @param result
+         * @param result answer to whether or not user is can connect/login to db
          */
         @Override
         protected void onPostExecute(String result) {

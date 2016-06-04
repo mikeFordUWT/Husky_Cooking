@@ -1,4 +1,10 @@
-package team14.tacoma.uw.edu.husky_cooking;
+/*
+ * Mike Ford and Ian Skyles
+ * TCSS450 – Spring 2016
+ * Recipe Project
+ */
+package team14.tacoma.uw.edu.husky_cooking.recipe;
+
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -23,17 +29,38 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 
+import team14.tacoma.uw.edu.husky_cooking.R;
 import team14.tacoma.uw.edu.husky_cooking.model.Ingredient;
 
 
 /**
- * A simple {@link Fragment} subclass.
+ * This class is for the all recipes section of the app.
+ * Deals with getting ingredient details from recipe.
+ * Pulls ingredients details from recipe db on our database hosted on CSSGATE.
+ *
+ * @author Ian Skyles
+ * @author Mike Ford
+ * @version 6/3/2016
  */
-public class IngredientDetailFromCookBookFragment extends Fragment {
+public class IngredientDetailFromRecipeFragment extends Fragment {
+
+    /**
+     * Used to unserilize ingredients. Table name fromm db.
+     */
     public static final String INGREDIENT_ITEM_SELECTED = "IngredientItemSelected";
 
-    private static final String ADD_TO_SHOPPING_LIST = "http://cssgate.insttech.washington.edu/~_450atm14/husky_cooking/add_to_shopping_list.php?";
 
+    /**
+     * Used to connect with our shopping list database from cookbook.
+     * Adding to shopping list for husky cooking user.
+     */
+    private static final String ADD_TO_SHOPPING_LIST =
+            "http://cssgate.insttech.washington.edu/~_450atm14/husky_cooking/add_to_shopping_list.php?";
+
+    /**
+     * Used to connect with our shopping list database from cookbook.
+     * Adding to shopping list for facebook user.
+     */
     private static final String FACE_ADD_TO_SHOPPING =
             "http://cssgate.insttech.washington.edu/~_450atm14/husky_cooking/add_to_face_shopping.php?";
 
@@ -46,32 +73,44 @@ public class IngredientDetailFromCookBookFragment extends Fragment {
     /** TextView that displays measurement type of ingredient*/
     private TextView mMeasurementTypeTextView;
 
-
-    public IngredientDetailFromCookBookFragment() {
+    /**
+     * Basic constructor for frgament.
+     */
+    public IngredientDetailFromRecipeFragment() {
         // Required empty public constructor
     }
 
-
+    /**
+     * Details the behavior for when the fragment is started.
+     * This fragment is started when a user views ingredient details from the recipe.
+     * Gets info from ingredient item selected.
+     */
     @Override
     public void onStart(){
         super.onStart();
         Bundle args = getArguments();
-        if(args!=null){
+        if(args != null){
             updateView((Ingredient) args.getSerializable(INGREDIENT_ITEM_SELECTED));
         }
     }
 
+    /**
+     * Creates the view from viewing an ingredient item when inside of the all recipes list.
+     * @param inflater instantiate layout XML file into its corresponding View object
+     * @param container item to contain other views
+     * @param savedInstanceState save state so we can resume later
+     * @return what is to be displayed to user
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_ingredient_detail_from_cook_book, container, false);
+        View view =  inflater.inflate(R.layout.fragment_ingredient_detail_from_recipe, container, false);
+        mAmountTextView = (TextView) view.findViewById(R.id.ingredient_amount_from_recipe);
+        mIngredientNameTextView = (TextView) view.findViewById(R.id.ingredient_name_from_recipe);
+        mMeasurementTypeTextView = (TextView) view.findViewById(R.id.ingredient_measurement_type_from_recipe);
 
-        mAmountTextView = (TextView) view.findViewById(R.id.ingredient_amount_from_cookbook);
-        mIngredientNameTextView = (TextView) view.findViewById(R.id.ingredient_name_from_cookbook);
-        mMeasurementTypeTextView = (TextView) view.findViewById(R.id.ingredient_measurement_type_from_cookbook);
-
-        final Button addToShoppingList = (Button) view.findViewById(R.id.add_to_shopping_list_button_from_cook_button);
+        final Button addToShoppingList = (Button) view.findViewById(R.id.add_to_shopping_list_button);
 
         addToShoppingList.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -91,18 +130,23 @@ public class IngredientDetailFromCookBookFragment extends Fragment {
                 }
                 task.execute(url);
 
-                IngredientsFromCookBookListFragment frag = new IngredientsFromCookBookListFragment();
+                IngredientsFromRecipeListFragment newFrag = new IngredientsFromRecipeListFragment();
                 FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.fragment_container, frag).addToBackStack(null);
+                transaction.replace(R.id.fragment_container, newFrag).addToBackStack(null);
                 transaction.commit();
+
+
             }
         });
+
         return view;
     }
 
-
-
-    public void updateView(Ingredient ingredient){
+    /**
+     * Adds the relevant ingredient information to the users screen.
+     * @param ingredient ingredient info to populate screen with
+     */
+    public void updateView(Ingredient ingredient) {
         mAmountTextView.setText(ingredient.getAmount());
         mIngredientNameTextView.setText(ingredient.getIngredientName());
         mMeasurementTypeTextView.setText(ingredient.getMeasurementType());
@@ -117,12 +161,14 @@ public class IngredientDetailFromCookBookFragment extends Fragment {
                 .apply();
         sharedPreferences.edit().putString(getString(R.string.CURRENT_MEASURE_TYPE), ingredient.getMeasurementType())
                 .apply();
+
     }
 
     /**
-     * Helper method that retuns string if user logged in via custom login.
-     * @param v
-     * @return
+     * Builds database access URL to add an ingredient to shopping list.
+     * for fb users
+     * @param v What the url will be based on (the filled in prompts from view)
+     * @return URL to add an ingredient to shopping list.
      */
     private String buildFaceAddUrl(View v){
         StringBuilder sb = new StringBuilder(FACE_ADD_TO_SHOPPING);
@@ -158,6 +204,12 @@ public class IngredientDetailFromCookBookFragment extends Fragment {
         return sb.toString();
     }
 
+    /**
+     * Builds database access URL to add an ingredient to shopping list.
+     * This one is for hc users
+     * @param v What the url will be based on (the filled in prompts from view)
+     * @return URL to add an ingredient to shopping list.
+     */
     private String buildAddUrl(View v){
         StringBuilder sb = new StringBuilder(ADD_TO_SHOPPING_LIST);
 
@@ -191,12 +243,16 @@ public class IngredientDetailFromCookBookFragment extends Fragment {
 
         return sb.toString();
     }
-
+    /**
+     * This class is what will call the database from the background. It uses the url given
+     * by the buildAddUrl for fb or husky cooking user.
+     * It adds the ingredient to the users shopping list in background.
+     */
     private class AddIngredientToListTask extends AsyncTask<String, Void, String> {
         /**
-         * Tells it to connect and read http responses for the cookbook.
-         * @param urls where to download recipe details
-         * @return string of recipe details
+         * Try to visit the urls given, in this case adding to users shopping list.
+         * @param urls which will add ingredient to database.
+         * @return details on outcome of succesful add or unsuccesful add to db
          */
         @Override
         protected String doInBackground(String... urls) {
@@ -230,8 +286,8 @@ public class IngredientDetailFromCookBookFragment extends Fragment {
         }
 
         /**
-         * Does appropriate actions to set/replace
-         * recycler view and adapter.
+         * Lets the user know via toast whether or not the ingredient was added to the
+         * shopping list succesfully.
          * @param result result string to be be checked
          */
         @Override
@@ -255,7 +311,6 @@ public class IngredientDetailFromCookBookFragment extends Fragment {
                 if(e.getMessage().contains("1")){
                     Toast.makeText(getActivity().getApplicationContext(), "Item removed from your shopping List!", Toast.LENGTH_LONG).show();
                 }
-
             }
         }
     }

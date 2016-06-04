@@ -14,6 +14,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -26,10 +27,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.concurrent.ExecutionException;
 
 import team14.tacoma.uw.edu.husky_cooking.R;
-import team14.tacoma.uw.edu.husky_cooking.RecipeActivity;
+import team14.tacoma.uw.edu.husky_cooking.recipe.RecipeActivity;
 
 
 /**
@@ -38,7 +38,7 @@ import team14.tacoma.uw.edu.husky_cooking.RecipeActivity;
  *
  * @author Mike Ford
  * @author Ian Skyles
- * @version 5/2/2016
+ * @version 6/3/2016
  */
 public class SignInActivity extends AppCompatActivity
         implements LogInFragment.LoginInteractionListener
@@ -73,6 +73,7 @@ public class SignInActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         setContentView(R.layout.activity_sign_in);
 
         mRegisterEmail = (EditText) findViewById(R.id.new_user_email);
@@ -112,9 +113,7 @@ public class SignInActivity extends AppCompatActivity
             String result = null;
             try {
                 result = task.execute(url).get();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (ExecutionException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
             if(result != null && result.contains("success")){
@@ -139,28 +138,20 @@ public class SignInActivity extends AppCompatActivity
                 Toast.makeText(getApplicationContext(), "Log in failed!", Toast.LENGTH_LONG).show();
                 return;
             }
-
-
         } else {
             Toast.makeText(this, "No network connection available. Cannot authenticate user",
                     Toast.LENGTH_SHORT) .show();
             return;
         }
-
-
-
     }
-
-
-
 
     /**
      * Used to add a user to Database.
-     * @param url
+     * @param url url used to add user
      */
     public void addUser(String url){
         AddUserTask task = new AddUserTask();
-        task.execute(new String[]{url.toString()});
+        task.execute(url.toString());
         getSupportFragmentManager().popBackStackImmediate();
     }
 
@@ -212,7 +203,7 @@ public class SignInActivity extends AppCompatActivity
          * exception is caught. It tries to call the parse Method and checks to see if it was successful.
          * If not, it displays the exception.
          *
-         * @param result
+         * @param result status of login
          */
         @Override
         protected void onPostExecute(String result){
@@ -227,7 +218,7 @@ public class SignInActivity extends AppCompatActivity
 
                 }else {
                     Toast.makeText(getApplicationContext(), "Failed to add: "
-                                    + jsonObject.get("error") + "\nPlease enter a different e-mail adress"
+                                    + jsonObject.get("error") + "\nPlease enter a different e-mail address"
                             ,Toast.LENGTH_LONG)
                             .show();
                 }
@@ -236,7 +227,6 @@ public class SignInActivity extends AppCompatActivity
                         e.getMessage(), Toast.LENGTH_LONG).show();
             }
         }
-
     }
 
 
@@ -255,7 +245,7 @@ public class SignInActivity extends AppCompatActivity
         /**
          * Finds out if the user is in the database
          * @param urls A url to run in the background
-         * @return repsonse string
+         * @return response string
          */
         @Override
         protected String doInBackground(String... urls){
@@ -284,23 +274,18 @@ public class SignInActivity extends AppCompatActivity
 
         /**
          * Checks the String returned from doInBackground to see if the log in was successful.
-         * @param result
+         * @param result result of checking if login and password are valid
          */
         @Override
         protected void onPostExecute(String result) {
-
             if(result.startsWith("Unable to")){
                 Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG)
                         .show();
                 return;
             }
-
             if(result!=null){
                 Log.e("SignInActivity", result.toString());
             }
         }
     }
-
-
-
 }

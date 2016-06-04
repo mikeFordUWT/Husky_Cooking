@@ -45,7 +45,7 @@ import java.net.URL;
 import java.util.Arrays;
 
 import team14.tacoma.uw.edu.husky_cooking.R;
-import team14.tacoma.uw.edu.husky_cooking.RecipeActivity;
+import team14.tacoma.uw.edu.husky_cooking.recipe.RecipeActivity;
 
 /**
  * This class controls the user logging into our application.
@@ -55,7 +55,7 @@ import team14.tacoma.uw.edu.husky_cooking.RecipeActivity;
  *
  * @author Mike Ford
  * @author Ian Skyles
- * @version 5/2/2016
+ * @version 6/3/2016
  */
 public class LogInFragment extends Fragment {
     /** CSSGATE login url */
@@ -81,8 +81,14 @@ public class LogInFragment extends Fragment {
     private AccessTokenTracker mtracker = null;
     /**Facebook profile tracker*/
     private ProfileTracker mprofileTracker = null;
+    /**
+     * Holds the facebook user's name.
+     */
     private String Name;
 
+    /**
+     * String for holding facebook email.
+     */
     private String FEmail;
 
     /**
@@ -165,21 +171,27 @@ public class LogInFragment extends Fragment {
 
         // Callback registration
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+            /**
+             * This method handles a succesful logon with the facebook button
+             * @param loginResult did a user get logged in
+             */
             @Override
             public void onSuccess(LoginResult loginResult) {
                 final SharedPreferences sharedPreferences = getActivity().getSharedPreferences(getString(R.string.LOGIN_PREFS)
                         , Context.MODE_PRIVATE);
 
-                final String hello;
+                //get profile info and access token from fb
                 AccessToken accessToken = loginResult.getAccessToken();
-                Profile profile = Profile.getCurrentProfile();
 
 
 
-                // Facebook Email address
+                // Get Facebook Email address and name
                 GraphRequest request = GraphRequest.newMeRequest(
                         accessToken,
 
+                        /**
+                         * This handles making a request to facebook and parsing for user info.
+                         */
                         new GraphRequest.GraphJSONObjectCallback() {
                             @Override
                             public void onCompleted(
@@ -217,18 +229,20 @@ public class LogInFragment extends Fragment {
                 startActivity(i);
 
                 getActivity().finish();
-
-
-
-
-
             }
 
+            /**
+             * What happens if user hits the cancel button after clicking fb login.
+             */
             @Override
             public void onCancel() {
                 // App code
             }
 
+            /**
+             * What happens if fb login produces an exception.
+             * It deafults by telling the user they entered wrong information.
+             */
             @Override
             public void onError(FacebookException exception) {
                 // App code
@@ -237,29 +251,40 @@ public class LogInFragment extends Fragment {
 
 
         Button signInButton = (Button) v.findViewById(R.id.signin_button);
+        /**
+         * This on click listener handles the sign in button response.
+         */
         signInButton.setOnClickListener(new View.OnClickListener(){
+            /**
+             * Controls what happens when the user clicks the button.
+             * @param v a view
+             */
             @Override
             public void onClick(View v){
                 String userId = mUserName.getText().toString();
                 String pwd = mPwd.getText().toString();
+                //require some text for user id.
                 if(TextUtils.isEmpty(userId)){
                     Toast.makeText(v.getContext(), "Enter a userid",
                             Toast.LENGTH_SHORT).show();
                     mUserName.requestFocus();
                     return;
                 }
+                //require @ sign for user id
                 if(!userId.contains("@")){
                     Toast.makeText(v.getContext(), "Enter a valid email address",
                             Toast.LENGTH_SHORT).show();
                     mUserName.requestFocus();
                     return;
                 }
+                //require a password for  user account to sign in
                 if(TextUtils.isEmpty(pwd)){
                     Toast.makeText(v.getContext(), "Enter a password",
                             Toast.LENGTH_SHORT).show();
                     mPwd.requestFocus();
                     return;
                 }
+                //require password length over 6
                 if(pwd.length() < 6){
                     Toast.makeText(v.getContext(), "Enter a password of at least 6 characters"
                             , Toast.LENGTH_SHORT)
@@ -274,7 +299,14 @@ public class LogInFragment extends Fragment {
         });
 
         Button signUp = (Button) v.findViewById(R.id.sign_up_button);
+        /**
+         * Handles the sign up button events.
+         */
         signUp.setOnClickListener(new View.OnClickListener() {
+            /**
+             * Handles clicks on the button
+             * @param v a view that has been clicked
+             */
             @Override
             public void onClick(View v) {
                 RegisterUserFragment regUser = new RegisterUserFragment();
@@ -294,9 +326,9 @@ public class LogInFragment extends Fragment {
 
     /**
      * forward the login results to the callbackManager created in onCreate():
-     * @param requestCode
-     * @param resultCode
-     * @param data
+     * @param requestCode code that has been requested
+     * @param resultCode code of a result
+     * @param data the intent's data
      */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -337,6 +369,10 @@ public class LogInFragment extends Fragment {
     }
 
 
+    /**
+     * Checks if facebook user is in our facebook database.
+     * Controls response if they are or aren't in it.
+     */
     private class FacebookCheck extends AsyncTask<String, Void, String> {
         @Override
         protected void onPreExecute(){
@@ -376,7 +412,7 @@ public class LogInFragment extends Fragment {
 
         /**
          * Checks the String returned from doInBackground to see if the log in was successful.
-         * @param result
+         * @param result the result of the ASyncTask
          */
         @Override
         protected void onPostExecute(String result) {

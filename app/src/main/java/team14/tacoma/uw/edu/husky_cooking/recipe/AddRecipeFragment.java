@@ -3,7 +3,7 @@
  * TCSS450 – Spring 2016
  * Recipe Project
  */
-package team14.tacoma.uw.edu.husky_cooking;
+package team14.tacoma.uw.edu.husky_cooking.recipe;
 
 
 import android.content.Context;
@@ -30,6 +30,8 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+
+import team14.tacoma.uw.edu.husky_cooking.R;
 
 
 /**
@@ -63,6 +65,15 @@ public class AddRecipeFragment extends Fragment {
         // Required empty public constructor
     }
 
+    /**
+     * Saves instance on creation of method of fragment/app.
+     * @param savedInstanceState state of the saved instance
+     */
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        ((RecipeActivity)getActivity()).setActionBarTitle(getString(R.string.add_a_recipe));
+    }
 
     /**
      * Creates the view that will be shown to the user.

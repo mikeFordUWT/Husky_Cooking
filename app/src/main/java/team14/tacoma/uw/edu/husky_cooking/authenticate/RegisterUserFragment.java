@@ -28,7 +28,7 @@ import team14.tacoma.uw.edu.husky_cooking.R;
  * and be registered for an account.
  * @author Mike Ford
  * @author Ian Skyles
- * @version 5/4/2016
+ * @version 6/4/2016
  */
 public class RegisterUserFragment extends Fragment {
     /** Web url address for backend storage of users. */
@@ -104,6 +104,7 @@ public class RegisterUserFragment extends Fragment {
                 String pwd = mPassword.getText().toString();
                 String confirmPWD = mConfirmPassword.getText().toString();
 
+                //remind user to enter id
                 if(TextUtils.isEmpty(userId)){
                     Toast.makeText(v.getContext(), "Enter userid"
                             , Toast.LENGTH_SHORT)
@@ -112,6 +113,7 @@ public class RegisterUserFragment extends Fragment {
                     return;
                 }
 
+                //remind user to enter id with @
                 if(!userId.contains("@")){
                     Toast.makeText(v.getContext(), "Enter a valid email adresss"
                             , Toast.LENGTH_SHORT).show();
@@ -119,6 +121,7 @@ public class RegisterUserFragment extends Fragment {
                     return;
                 }
 
+                //remind user to enter password
                 if(TextUtils.isEmpty(pwd)){
                     Toast.makeText(v.getContext(), "Enter a password"
                             , Toast.LENGTH_SHORT)
@@ -127,6 +130,7 @@ public class RegisterUserFragment extends Fragment {
                     return;
                 }
 
+                //remind user to enter password with at least 6 characters
                 if(pwd.length() < 6){
                     Toast.makeText(v.getContext(), "Enter a passwork of at least 6 characters"
                             , Toast.LENGTH_SHORT)
@@ -136,6 +140,7 @@ public class RegisterUserFragment extends Fragment {
                     return;
                 }
 
+                //remind user to enter same pass in both prompts.
                 if(!pwd.equals(confirmPWD)){
                     Toast.makeText(v.getContext(), "Passwords don't match, please try again"
                             , Toast.LENGTH_SHORT)
@@ -159,6 +164,8 @@ public class RegisterUserFragment extends Fragment {
     /**
      * Builds a url (for the database/users php)
      * based on email and password.
+     * Basically inserts user into our table
+     * so they can sign in later.
      * @param v to create a toast incase of error
      * @return the url for adding a new user to the database
      */

@@ -1,4 +1,9 @@
-package team14.tacoma.uw.edu.husky_cooking;
+/*
+ * Mike Ford and Ian Skyles
+ * TCSS450 – Spring 2016
+ * Recipe Project
+ */
+package team14.tacoma.uw.edu.husky_cooking.cookbook;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -15,8 +20,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import team14.tacoma.uw.edu.husky_cooking.model.Ingredient;
-
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -26,41 +29,74 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
+import team14.tacoma.uw.edu.husky_cooking.R;
+import team14.tacoma.uw.edu.husky_cooking.model.Ingredient;
+
 /**
- * A fragment representing a list of Items.
- * <p/>
- * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
- * interface.
+ * Deals with getting ingredient lists from recipes in users cookbook.
+ * Pulls from users cookbook ingredients on our database hosted on CSSGATE.
+ *
+ * @author Ian Skyles
+ * @author Mike Ford
+ * @version 6/3/2016
  */
-public class IngredientsFromMenuListFragment extends Fragment {
+public class IngredientsFromCookBookListFragment extends Fragment {
 
-
+    /**
+     * used for serialization of ingredient in recipe activity.
+     */
     public static final String INGREDIENT_ITEM_SELECTED = "IngredientItemSelected";
-    private static final String RECIPE_LIST_URL =
-            "http://cssgate.insttech.washington.edu/~_450atm14/husky_cooking/recipe_ingredient_list.php?recipe=";
+
+    /**
+     * The base url for accessing the recipe's ingredient list.
+     */
+    private static final String RECIPE_LIST_URL ="http://cssgate.insttech.washington.edu/~_450atm14/husky_cooking/recipe_ingredient_list.php?recipe=";
+
+    /**
+     * Number of columns to be dispalyed in ingredient list
+     */
     private int mColumnCount = 1;
 
-    private OnListFragmentInteractionListener mListener;
+    /**
+     * Listener for interacting with the ingredient list.
+     */
+    private OnCookBookIngredientListFragmentInteractionListener mListener;
 
+    /**
+     * Allows for continuously flowing / recycling the ingredient list if
+     * it is bigger than the device screen.
+     */
     private RecyclerView mRecyclerView;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
-     * fragment (e.g. upon screen orientation changes).
+     * fragment.
      */
-    public IngredientsFromMenuListFragment() {
+    public IngredientsFromCookBookListFragment() {
     }
 
+    /**
+     * Used super to save and recover information for ingredient list.
+     * @param savedInstanceState save state so we can resume later
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
     }
 
+    /**
+     * Creates the view for the ingredients list from cookbook.
+     * Eventually the recycle view will be instantiated on this screen.
+     * @param inflater instantiate layout XML file into its corresponding View object
+     * @param container item to contain other views
+     * @param savedInstanceState save state so we can resume later
+     * @return what is to be displayed to user
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_ingredient_list_from_menu, container, false);
+        View view = inflater.inflate(R.layout.fragment_ingredient_list_from_shopping, container, false);
 
         // Set the adapter
         if (view instanceof RecyclerView) {
@@ -71,46 +107,56 @@ public class IngredientsFromMenuListFragment extends Fragment {
             } else {
                 mRecyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-//            mRecyclerView.setAdapter(new IngredientsFromMenuRecyclerViewAdapter(DummyContent.ITEMS, mListener));
-            ConnectivityManager connMgr = (ConnectivityManager) getActivity()
-                    .getSystemService(Context.CONNECTIVITY_SERVICE);
-            NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-            if(networkInfo != null && networkInfo.isConnected()){
-
-                StringBuilder sb = new StringBuilder(RECIPE_LIST_URL);
-
-                try{
-                    SharedPreferences sharedPreferences = getActivity()
-                            .getSharedPreferences(getString(R.string.LOGIN_PREFS), Context.MODE_PRIVATE);
-                    String toEncode = sharedPreferences.getString(getString(R.string.CURRENT_RECIPE),"");
-                    sb.append(URLEncoder.encode(toEncode,"UTF-8"));
-                }catch (Exception e){
-                    Toast.makeText(view.getContext(), "Something wrong with the url " + e.getMessage(),
-                            Toast.LENGTH_LONG).show();
-                }
-                DownloadIngredientListTask task = new DownloadIngredientListTask();
-                task.execute(new String[]{sb.toString()});
-            }else{
-                Toast.makeText(view.getContext(),
-                        "No network connection available. Cannot display courses",
-                        Toast.LENGTH_SHORT).show();
-            }
+//            recyclerView.setAdapter(new MyIngredientsFromCookBookRecyclerViewAdapter(DummyContent.ITEMS, mListener));
         }
+
+        ConnectivityManager connMgr = (ConnectivityManager) getActivity()
+                .getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        if(networkInfo != null && networkInfo.isConnected()){
+            StringBuilder sb = new StringBuilder(RECIPE_LIST_URL);
+
+            try{
+                SharedPreferences sharedPreferences = getActivity()
+                        .getSharedPreferences(getString(R.string.LOGIN_PREFS), Context.MODE_PRIVATE);
+                String toEncode = sharedPreferences.getString(getString(R.string.CURRENT_RECIPE), "");
+                sb.append(URLEncoder.encode(toEncode, "UTF-8"));
+
+            }catch (Exception e) {
+                Toast.makeText(view.getContext(), "Something wrong with the url " + e.getMessage(),
+                        Toast.LENGTH_LONG).show();
+            }
+
+            DownloadIngredientListTask task  = new DownloadIngredientListTask();
+            task.execute(new String[]{sb.toString()});
+
+        }else{
+            Toast.makeText(view.getContext(),
+                    "No network connection available.  Please connect and try again.",
+                    Toast.LENGTH_SHORT).show();
+        }
+
         return view;
     }
 
-
+    /**
+     * Attaches cookbook list ingredient list fragment interaction listener to mlistener.
+     * @param context what to attach
+     */
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnListFragmentInteractionListener) {
-            mListener = (OnListFragmentInteractionListener) context;
+        if (context instanceof OnCookBookIngredientListFragmentInteractionListener) {
+            mListener = (OnCookBookIngredientListFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnListFragmentInteractionListener");
         }
     }
 
+    /**
+     * Set listener to null when detatching
+     */
     @Override
     public void onDetach() {
         super.onDetach();
@@ -121,16 +167,12 @@ public class IngredientsFromMenuListFragment extends Fragment {
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
      * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
+     * activity (recycle view adapter).
      */
-    public interface OnListFragmentInteractionListener {
-
-        void onIngredientFromMenuListFragmentInteraction(Ingredient item);
+    public interface OnCookBookIngredientListFragmentInteractionListener {
+        void onIngredientCookBookListFragmentInteraction(Ingredient item);
     }
+
 
     /**
      * Downloads ingredients for recipe
@@ -139,7 +181,8 @@ public class IngredientsFromMenuListFragment extends Fragment {
      */
     private class DownloadIngredientListTask extends AsyncTask<String, Void, String> {
         /**
-         * Tells it to connect and read http responses for the cookbook.
+         * Tells it to connect and read http responses for the ingredients
+         * from the recipes in thecookbook.
          * @param urls where recipes are stored
          * @return list of recipes
          */
@@ -190,7 +233,7 @@ public class IngredientsFromMenuListFragment extends Fragment {
             }
 
             if(!mIngredientList.isEmpty()){
-                mRecyclerView.setAdapter(new IngredientsFromMenuRecyclerViewAdapter(mIngredientList, mListener));
+                mRecyclerView.setAdapter(new MyIngredientsFromCookBookRecyclerViewAdapter(mIngredientList, mListener));
             }
         }
     }

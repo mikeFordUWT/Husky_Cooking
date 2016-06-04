@@ -3,7 +3,7 @@
  * TCSS450 – Spring 2016
  * Recipe Project
  */
-package team14.tacoma.uw.edu.husky_cooking;
+package team14.tacoma.uw.edu.husky_cooking.cookbook;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -29,7 +29,9 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import team14.tacoma.uw.edu.husky_cooking.R;
 import team14.tacoma.uw.edu.husky_cooking.model.Recipe;
+import team14.tacoma.uw.edu.husky_cooking.recipe.RecipeActivity;
 
 /**
  * This fragment/class will be used to represent a list of recipes
@@ -37,12 +39,18 @@ import team14.tacoma.uw.edu.husky_cooking.model.Recipe;
  *
  * @author Mike Ford
  * @author Ian Skyles
- * @version 5/4/2016
+ * @version 6/3/2016
  */
 public class CookBookListFragment extends Fragment {
+    /**
+     * A url for husky cooking users cookbook. Used to connect to our db.
+     */
     private static final String COOKBOOK_URL =
             "http://cssgate.insttech.washington.edu/~_450atm14/husky_cooking/cookbook.php?user=";
 
+    /**
+     * A url for facebook users cookbook. Used to connect to our db.
+     */
     private static final String FACE_COOKBOOK_URL =
             "http://cssgate.insttech.washington.edu/~_450atm14/husky_cooking/facebook_cookbook.php?user=";
 
@@ -71,6 +79,7 @@ public class CookBookListFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ((RecipeActivity)getActivity()).setActionBarTitle(getString(R.string.cookbook_button_label));
 
     }
 
@@ -107,6 +116,7 @@ public class CookBookListFragment extends Fragment {
                 String user = sharedPreferences.getString(getString(R.string.LOGGED_USER), "");
                 String face = sharedPreferences.getString(getString(R.string.LOGIN_METHOD), "");
                 String cookURL;
+                //select cookbook url based on fb user or husky cooking user
                 if(face.equals("facebook")){
                     cookURL = FACE_COOKBOOK_URL + user;
                 }else{
@@ -117,7 +127,7 @@ public class CookBookListFragment extends Fragment {
                 task.execute(new String[]{cookURL});
             }else{
                 Toast.makeText(view.getContext(),
-                        "No network connection available. Cannot display courses",
+                        "No network connection available. Please connect and try again.",
                         Toast.LENGTH_SHORT).show();
             }
         }
@@ -165,7 +175,8 @@ public class CookBookListFragment extends Fragment {
      */
     private class DownloadCookbookTask extends AsyncTask<String, Void, String>{
         /**
-         * Tells it to connect and read http responses for the cookbook.
+         * Tells it to connect and read http responses for the cookbook:
+         * (what is suppose to be in the users cookbook).
          * @param urls where recipes are stored
          * @return list of recipes
          */
@@ -214,7 +225,6 @@ public class CookBookListFragment extends Fragment {
                         .show();
                 return;
             }
-
             if(!mRecipeList.isEmpty()){
                 mRecyclerView.setAdapter(new MyCookBookRecyclerViewAdapter(mRecipeList, mListener));
             }
