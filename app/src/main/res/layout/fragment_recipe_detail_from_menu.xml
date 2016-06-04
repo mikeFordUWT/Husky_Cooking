@@ -36,23 +36,27 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:orientation="horizontal">
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/add_to_cookbook_button_from_menu"
-            android:text="@string/add_to_cook_text"/>
+            android:text="@string/add_to_cook_text"
+            android:layout_gravity="center"/>
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/view_ingredients_from_menu_button"
-            android:text="@string/view_ingredients"/>
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/share_recipe_button_from_menu"
-            android:text="@string/share_recipe_button"/>
+            android:text="@string/view_ingredients"
+            android:layout_gravity="center"/>
     </LinearLayout>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/share_recipe_button_from_menu"
+        android:layout_gravity="center"
+        android:text="@string/share_recipe_button"/>
 </LinearLayout>

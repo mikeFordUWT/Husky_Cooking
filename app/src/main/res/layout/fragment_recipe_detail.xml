@@ -56,14 +56,14 @@
             android:layout_height="wrap_content"
             android:id="@+id/view_ingredients_button"
             android:text="@string/view_ingredients"/>
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/share_recipe_button"
-            android:text="@string/share_recipe_button"/>
-
     </LinearLayout>
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/share_recipe_button"
+        android:text="@string/share_recipe_button"
+        android:layout_gravity="center"/>
 
 
 </LinearLayout>
